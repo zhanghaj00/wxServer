@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info">
+
+    <appenders>
+
+        <!-- 拦截器单独日志 -->
+        <RollingFile name="interceptorRollingFileInfo" fileName="log/interceptor_info.log"
+                     filePattern="log/interceptor_info.%i.log">
+            <Filters>
+                <!--<ThresholdFilter level="WARN" onMatch="DENY"
+                   onMismatch="NEUTRAL" />-->
+                <ThresholdFilter level="INFO"/>
+            </Filters>
+            <PatternLayout charset="UTF-8" pattern="[%-5p] %d{yyyy-MM-dd HH:mm:ss,SSS} method:%l%n%m%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="500 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="50"/>
+        </RollingFile>
+
+        <RollingFile name="interceptorRollingFileDebug" fileName="log/interceptor_debug.log"
+                     filePattern="log/interceptor_debug-%i.log">
+            <Filters>
+                <ThresholdFilter level="ERROR" onMatch="DENY"
+                                 onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="DEBUG"/>
+            </Filters>
+            <PatternLayout charset="UTF-8" pattern="[%-5p] %d{yyyy-MM-dd HH:mm:ss,SSS} method:%l%n%m%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="500 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="interceptorRollingFileError" fileName="log/interceptor_error.log"
+                     filePattern="log/interceptor_error_%d{yyyy-MM-dd}_%i.log">
+            <ThresholdFilter level="ERROR"/>
+            <PatternLayout charset="UTF-8" pattern="[%-5p] %d{yyyy-MM-dd HH:mm:ss,SSS} method:%l%n%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+                <SizeBasedTriggeringPolicy size="500 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <console name="Console" target="SYSTEM_OUT">
+            <ThresholdFilter level="DEBUG" onMatch="ACCEPT"
+                             onMismatch="DENY"/>
+            <PatternLayout charset="UTF-8" pattern="[%-5p] %d{yyyy-MM-dd HH:mm:ss,SSS} method:%l%n%m%n"/>
+        </console>
+
+        <RollingFile name="RollingFileInfo" fileName="log/info.log"
+                     filePattern="log/info.%i.log">
+            <Filters>
+                <!--<ThresholdFilter level="WARN" onMatch="DENY"
+                   onMismatch="NEUTRAL" />-->
+                <ThresholdFilter level="INFO"/>
+            </Filters>
+            <PatternLayout charset="UTF-8" pattern="[%-5p] %d{yyyy-MM-dd HH:mm:ss,SSS} method:%l%n%m%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="500 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="50"/>
+        </RollingFile>
+
+        <RollingFile name="RollingFileDebug" fileName="log/debug.log"
+                     filePattern="log/debug-%i.log">
+            <Filters>
+                <ThresholdFilter level="ERROR" onMatch="DENY"
+                                 onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="DEBUG"/>
+            </Filters>
+            <PatternLayout charset="UTF-8" pattern="[%-5p] %d{yyyy-MM-dd HH:mm:ss,SSS} method:%l%n%m%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="500 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="RollingFileError" fileName="log/error.log"
+                     filePattern="log/error_%d{yyyy-MM-dd}_%i.log">
+            <ThresholdFilter level="ERROR"/>
+            <PatternLayout charset="UTF-8" pattern="[%-5p] %d{yyyy-MM-dd HH:mm:ss,SSS} method:%l%n%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+                <SizeBasedTriggeringPolicy size="500 MB"/>
+            </Policies>
+        </RollingFile>
+    </appenders>
+
+    <Loggers>
+        <!--<logger name="org.springframework" level="error"/>-->
+        <logger name="com.mchange.v2" level="debug"/>
+        <logger name="shop.haj.TimeCostInterceptor" level="debug">
+            <appender-ref ref="interceptorRollingFileInfo"/>
+            <appender-ref ref="interceptorRollingFileDebug"/>
+            <appender-ref ref="interceptorRollingFileError"/>
+        </logger>
+        <root level="debug">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="RollingFileInfo"/>
+            <appender-ref ref="RollingFileDebug"/>
+            <appender-ref ref="RollingFileError"/>
+        </root>
+    </Loggers>
+</Configuration>

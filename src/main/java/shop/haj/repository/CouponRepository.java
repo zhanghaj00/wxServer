@@ -44,36 +44,7 @@ public class CouponRepository {
 	 * @return
 	 */
 	public Coupon addCoupon(int shop_id, Coupon coupon) {
-		String sql = "insert into coupon(price, limit_price, shop_id, begin_time, \n" +
-				"due_time, stock, per_limit,suit_limit, create_time) \n" +
-				"values(?, ?, ?, ?, ?, ?, ?, ?, now())";
-		
-		logger.info("begin to addCoupon, shop_id:{}, coupon_info:{}, sql:{}", shop_id, coupon, sql);
-		
-		KeyHolder holder = new GeneratedKeyHolder();
-		jdbcTemplate.update(new PreparedStatementCreator() {
-			@Override
-			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-				
-				PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-				ps.setDouble(1, coupon.getPrice());
-				ps.setDouble(2, coupon.getLimit_price());
-				ps.setInt(3, shop_id);
-				ps.setString(4, coupon.getBegin_time());
-				ps.setString(5, coupon.getDue_time());
-				ps.setInt(6, coupon.getStock());
-				ps.setInt(7, coupon.getPer_limit());
-				ps.setInt(8, coupon.getSuit_limit());
-				return ps;
-			}
-		}, holder);
-		
-		coupon.setId(holder.getKey().intValue());
-		
-		logger.info("finish to addCoupon, generate_id:{}, shop_id:{}, coupon_info:{}, sql:{}",
-				coupon.getId(), shop_id, coupon, sql);
-		
-		return coupon;
+		return null;
 	}
 	
 	/**

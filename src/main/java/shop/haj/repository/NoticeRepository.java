@@ -39,13 +39,7 @@ public class NoticeRepository {
 	 * @return
 	 */
 	public List<Notice> findAllNotice(int shop_id, Pagination page){
-		String sql = "select id, shop_id, content, is_show, " +
-				" date_format(create_time, '%Y-%m-%d %H:%i:%s') create_time, " +
-				" date_format(create_time, '%Y-%m-%d %H:%i:%s') create_time  " +
-				" from notice where shop_id=? ";// + page.getOrderByLimitString();
-		
-		return jdbcTemplate.query(sql, new Object[]{shop_id},
-				new NoticeRowMapper());
+		return null;
 	}
 	
 	/**
@@ -70,25 +64,7 @@ public class NoticeRepository {
 	 * @return
 	 */
 	public Notice addNotice(Notice notice){
-		String sql = "insert into notice(shop_id, content, is_show, create_time, update_time)\n" +
-				"values(?, ?, ?, DATE_FORMAT(?, '%Y-%m-%d %H:%i:%s'),\n" +
-				"DATE_FORMAT(?, '%Y-%m-%d %H:%i:%s'))";
-		KeyHolder holder = new GeneratedKeyHolder();
-		jdbcTemplate.update(new PreparedStatementCreator() {
-			@Override
-			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-				PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-				ps.setInt(1, notice.getShop_id());
-				ps.setString(2, notice.getContent());
-				ps.setInt(3, notice.getIs_show());
-				ps.setString(4, notice.getCreate_time());
-				ps.setString(5, notice.getUpdate_time());
-				
-				return ps;
-			}
-		}, holder);
-		notice.setId(holder.getKey().intValue());
-		return notice;
+		return null;
 	}
 	
 	/**

@@ -114,50 +114,7 @@ public class CartRepository {
 	 */
 	public Cart addCart(Cart cart){
 		
-		String sql = "insert into cart(\n" +
-				"      customer_id,\n" +
-				"      shop_id,\n" +
-				"      shop_name,\n" +
-				"      goods_id,\n" +
-				"      goods_name,\n" +
-				"      goods_price,\n" +
-				"      goods_num,\n" +
-				"      goods_image,\n" +
-				"      goods_sku,\n" +
-				"      note,\n" +
-				"      create_time,\n" +
-				"      update_time)\n" +
-				"values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now(), now())";
-		
-		logger.info("addCart >>> sql={}, args=({})", sql, cart);
-		
-		KeyHolder keyHolder = new GeneratedKeyHolder();
-		
-		jdbcTemplate.update(new PreparedStatementCreator() {
-
-			@Override
-			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-
-				PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-
-				ps.setInt(1, cart.getCustomer_id());
-				ps.setInt(2, cart.getShop_id());
-				ps.setString(3, cart.getShop_name());
-				ps.setInt(4, cart.getGoods_id());
-				ps.setString(5, cart.getGoods_name());
-				ps.setDouble(6, cart.getGoods_price());
-				ps.setInt(7, cart.getGoods_num());
-				ps.setString(8, cart.getGoods_image());
-				ps.setString(9, cart.getGoods_sku());
-				ps.setString(10, cart.getNote());
-
-				return ps;
-			}
-		}, keyHolder);
-
-		cart.setCart_id(keyHolder.getKey().intValue());
-		
-		return cart;
+		return null;
 	}
 	
 	/**

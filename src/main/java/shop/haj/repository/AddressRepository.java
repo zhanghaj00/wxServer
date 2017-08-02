@@ -41,31 +41,7 @@ public class AddressRepository {
 	 * @return
 	 */
 	public Address addAddress(Address address){
-		String sql = "insert into address(province, city, country, town, detail, is_default, customer_id,\n" +
-				"`name`, phone, create_time, update_time) values(?, ?, ?, ?, ?, ?, ?, ?, ?, now(), now())";
-		
-		KeyHolder holder = new GeneratedKeyHolder();
-		
-		jdbcTemplate.update( (con) -> {
-			
-				PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-				/*ps.setString(1, address.getProvince());
-				ps.setString(2, address.getCity());
-				ps.setString(3, address.getCountry());
-				ps.setString(4, address.getTown());
-				ps.setString(5, address.getDetail());
-				ps.setInt(6, address.getIs_default());
-				ps.setInt(7, address.getCustomer_id());
-				ps.setString(8, address.getName());
-				ps.setString(9, address.getPhone());*/
-				
-				return ps;
-				
-		}, holder);
-		
-		address.setId(holder.getKey().intValue());
-		
-		return address;
+		return null;
 	}
 	
 	/**
@@ -155,25 +131,7 @@ public class AddressRepository {
 	 * @return
 	 */
 	public int updateAddress(Address address){
-		String sql = "update address set province=?, city=?, country=?, town=?, detail=?,\n" +
-				"is_default=?, `name`=?, phone=?, update_time=now() where id=?";
-		
-		int result = jdbcTemplate.update(sql, new PreparedStatementSetter() {
-			@Override
-			public void setValues(PreparedStatement ps) throws SQLException {
-				ps.setString(1, address.getProvince());
-				ps.setString(2, address.getCity());
-				ps.setString(3, address.getCountry());
-				ps.setString(4, address.getTown());
-				ps.setString(5, address.getDetail());
-				ps.setInt(6, address.getIs_default());
-				ps.setString(7, address.getName());
-				ps.setString(8, address.getPhone());
-				ps.setInt(9, address.getId());
-			}
-		});
-		if(result <= 0) return 0;
-		return 1;
+		return 0;
 	}
 	
 	/**

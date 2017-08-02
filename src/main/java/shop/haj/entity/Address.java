@@ -1,5 +1,8 @@
 package shop.haj.entity;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.io.Serializable;
 
 /**
@@ -13,16 +16,18 @@ import java.io.Serializable;
  * @author hao
  *         CreateTime：3/21/17
  */
+@Document(collection = "wx_address")
 public class Address implements Serializable{
-	
-	private int id;
+
+	@Id
+	private String id;
 	private String province;//省份
 	private String city;//城市
 	private String country;//县城
 	private String town;//城镇
 	private String detail;//详细地址
 	private int is_default;//是否默认地址
-	private int customer_id;
+	private String customer_id;
 	private String name;
 	private String phone;
 	private String create_time;
@@ -36,11 +41,11 @@ public class Address implements Serializable{
 		return province + city + country + town + detail;
 	}
 	
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 	
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	
@@ -95,11 +100,11 @@ public class Address implements Serializable{
 		this.is_default = is_default;
 	}
 	
-	public int getCustomer_id() {
+	public String getCustomer_id() {
 		return customer_id;
 	}
 	
-	public void setCustomer_id(int customer_id) {
+	public void setCustomer_id(String customer_id) {
 		this.customer_id = customer_id;
 	}
 	

@@ -95,7 +95,7 @@ public class CartController {
 				cart.setShop_id(1);
 				cart.setShop_name(shop.getName());
 				
-				Goods goods = goodsService.findGoodsByID(1, cart.getGoods_id());
+				Goods goods = goodsService.findGoodsByID("1", String.valueOf(cart.getGoods_id()));
 				cart.setGoods_name(goods.getName());
 				cart.setGoods_price(goods.getSell_price());
 				cart.setGoods_image(goods.getImages().get(0).getUrl());

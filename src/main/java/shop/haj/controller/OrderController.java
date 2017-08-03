@@ -1,5 +1,8 @@
 package shop.haj.controller;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.ImmutableMap;
 import io.swagger.annotations.ApiOperation;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -21,6 +24,7 @@ import shop.haj.utils.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -372,32 +376,35 @@ public class OrderController extends BaseController {
 
 
 	@ApiOperation(value = "卖家订单统计", notes = "卖家的订单状态统计")
-	@PatchMapping("/seller/count/order")
+	@GetMapping("/seller/count/order")
 	public Map<String, Object> countOrderNumByStatus(@RequestHeader("shop_id") String shop_id) {
 
 		if (StringUtils.isEmpty(shop_id)) return rtnParam(0, null);
 		//orderService.findOrderListByCustomerID();
-		return null;
+
+
+		return rtnParam(0, new ArrayList<>());
 
 	}
 
 	@ApiOperation(value = "卖家日均统计", notes = "卖家的日均订单状态统计")
-	@PatchMapping("/seller/count/daily")
+	@GetMapping("/seller/count/{count_type}")
 	public Map<String, Object> countOrderNumByTime(@RequestHeader("shop_id") String shop_id,
-												   @RequestAttribute(value = "count_type", required = false) String count_type) {
+												   @PathVariable(value = "count_type") String count_type) {
 
 		if (StringUtils.isEmpty(shop_id)) return rtnParam(0, null);
 		switch (count_type) {
 			case "TODAY":
-				break;
-
+				ImmutableMap result = new ImmutableMap.Builder<>().put("income",10).build();
+				return rtnParam(0,result);
 			case "MONTH":
-				break;
+				ImmutableMap result1 = new ImmutableMap.Builder<>().put("income",20).build();
+				return rtnParam(0,result1);
 			default:
-				return null;
+				ImmutableMap result3 = new ImmutableMap.Builder<>().put("income",4).build();
+				return rtnParam(0,result3);
 
 		}
 
-		return null;
 	}
 }

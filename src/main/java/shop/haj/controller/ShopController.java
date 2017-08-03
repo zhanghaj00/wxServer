@@ -41,16 +41,16 @@ public class ShopController extends BaseController{
 	 */
 	@ApiOperation(value = "查找所有店铺信息", notes = "查找所有店铺信息")
 	@GetMapping(value = "/manager/shops")
-	public List<Shop> findAll(@RequestParam(value = "from", defaultValue = "0") int from,
-	                          @RequestParam(value = "limit", defaultValue = "20") int to,
+	public List<Shop> findAll(@RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
+	                          @RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
 	                          @RequestParam(value = "by", defaultValue = "id") String by,
 	                          @RequestParam(value = "sort", defaultValue = "asc") String sort){
 		
 		Pagination page = new Pagination();
-		page.setPagenumber(from);
-		page.setPagesize(to);
-		//page.setBy(by);
-		//page.set(sort);
+		page.setFrom(pageNum);
+		page.setLimit(pageSize);
+		page.setBy(by);
+		page.setSort(sort);
 		
 		List<Shop> shops = shopService.findAll(page);
 		

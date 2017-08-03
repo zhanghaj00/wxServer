@@ -33,12 +33,12 @@ public class GoodsServiceImplTest {
 	public void findAll() throws Exception {
 		
 		Pagination page = new Pagination();
-		/*page.setFrom(0);
+		page.setFrom(0);
 		page.setLimit(10);
 		page.setBy("id");
-		page.setSort("desc");*/
+		page.setSort("desc");
 		
-		List<Goods> goodsList = goodsService.findAll(3, page);
+		List<Goods> goodsList = goodsService.findAll("598189c0763a1b23446d6b57", page);
 		
 		System.out.println(goodsList);
 	}
@@ -46,16 +46,16 @@ public class GoodsServiceImplTest {
 	@Test
 	public void findGoodsByID(){
 		
-		Goods goods = goodsService.findGoodsByID(3, 276552);
+		Goods goods = goodsService.findGoodsByID("3", "276552");
 		System.out.println(goods);
 	}
 	
 	@Test
 	public void addGoods(){
 		
-		int shop_id = 3;
+		String shop_id = "1";
 		
-		for (int i = 100; i < 101; i++) {
+		for (int i = 90; i < 100; i++) {
 			Goods goods = new Goods();
 			
 			goods.setName("测试商品" + i);
@@ -71,15 +71,12 @@ public class GoodsServiceImplTest {
 			List<Image> images = Lists.newArrayList();
 			
 			Image image1 = new Image();
-			image1.setId("");
 			image1.setUrl("/img/aa.jpg");
 			
 			Image image2 = new Image();
-			image2.setId("");
 			image2.setUrl("/img/bb.jpg");
 			
 			Image image3 = new Image();
-			image3.setId("");
 			image3.setUrl("/img/cc.jpg");
 			
 			images.add(image1);
@@ -88,7 +85,7 @@ public class GoodsServiceImplTest {
 			
 			goods.setImages(images);
 			
-			goods.setShop_id(shop_id);
+			goods.setShopId(shop_id);
 			
 			GoodsSkuDetailBase skuDetailBase = new GoodsSkuDetailBase();
 			skuDetailBase.setPrice(100.11);
@@ -123,7 +120,7 @@ public class GoodsServiceImplTest {
 		}
 	}
 	
-	private Goods getGoods(int i, int shop_id){
+	private Goods getGoods(String i, String shop_id){
 		Goods goods = new Goods();
 		
 		goods.setName("测试商品" + i);
@@ -156,7 +153,7 @@ public class GoodsServiceImplTest {
 		
 		goods.setImages(images);
 		
-		goods.setShop_id(shop_id);
+		goods.setShopId(shop_id);
 		
 		GoodsSkuDetailBase skuDetailBase = new GoodsSkuDetailBase();
 		skuDetailBase.setPrice(100.11);
@@ -192,8 +189,8 @@ public class GoodsServiceImplTest {
 	
 	@Test
 	public void updateGoods(){
-		Goods goods = getGoods(1000, 3);
-		goods.setId(276552);
+		Goods goods = getGoods("", "1");
+		goods.setId("1");
 		goodsService.updateGoods(goods);
 		
 	}
@@ -201,6 +198,6 @@ public class GoodsServiceImplTest {
 	@Test
 	public void deleteGoods(){
 		
-		goodsService.deleteGoods(3, 276552);
+		goodsService.deleteGoods("", "276552");
 	}
 }

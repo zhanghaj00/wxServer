@@ -197,7 +197,7 @@ public class GoodsRepository {
 		}, holder);
 		int id = holder.getKey().intValue();
 		
-		goods.setId(id);
+		goods.setId(String.valueOf(id));
 		
 		return goods;
 	}
@@ -309,8 +309,8 @@ public class GoodsRepository {
 				ps.setInt(7, goods.getInner_cid());
 				ps.setInt(8, goods.getGlobal_cid());
 				ps.setInt(9, goods.getIs_recommend());
-				ps.setInt(10, goods.getShop_id());
-				ps.setInt(11, goods.getId());
+				ps.setString(10, goods.getShopId());
+				ps.setString(11, goods.getId());
 			}
 		});
 		if(result <= 0){

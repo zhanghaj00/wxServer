@@ -95,6 +95,6 @@ public class GoodsDetailServiceImpl implements GoodsDetailService{
 	 */
 	private void clearGoodsCache(int goods_id){
 		
-		cacheManage.clearGoodsCache(goods_id);
+		cacheManage.clearGoodsCache(String.valueOf(goods_id));
 	}
 }

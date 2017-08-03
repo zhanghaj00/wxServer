@@ -1,5 +1,8 @@
 package shop.haj.entity;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -14,15 +17,17 @@ import java.util.List;
  * @author hao
  *         CreateTime：3/4/17
  */
+@Document(collection = "wx_goods")
 public class Goods implements Serializable{
-	
-	private int id;
+
+	@Id
+	private String id;
 	
 	private String uuid;
 	
 	private String name;
 	
-	private int shop_id;
+	private String shopId;
 	
 	private int status;
 	
@@ -55,11 +60,11 @@ public class Goods implements Serializable{
 	public Goods() {
 	}
 	
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 	
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	
@@ -79,12 +84,12 @@ public class Goods implements Serializable{
 		this.name = name;
 	}
 	
-	public int getShop_id() {
-		return shop_id;
+	public String getShopId() {
+		return shopId;
 	}
 	
-	public void setShop_id(int shop_id) {
-		this.shop_id = shop_id;
+	public void setShopId(String shopId) {
+		this.shopId = shopId;
 	}
 	
 	public int getStatus() {
@@ -199,13 +204,13 @@ public class Goods implements Serializable{
 		this.goodsSkuInfo = goodsSkuInfo;
 	}
 	
-	@Override
+	/*@Override
 	public String toString() {
 		return "Goods{" +
 				"id=" + id +
 				", uuid='" + uuid + '\'' +
 				", name='" + name + '\'' +
-				", shop_id=" + shop_id +
+				", shopId=" + shopId +
 				", status=" + status +
 				", original_price=" + original_price +
 				", sell_price=" + sell_price +
@@ -221,5 +226,5 @@ public class Goods implements Serializable{
 				", goodsDetails=" + goodsDetails +
 				", goodsSkuInfo=" + goodsSkuInfo +
 				'}';
-	}
+	}*/
 }

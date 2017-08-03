@@ -24,10 +24,10 @@ public class GoodsRowMapper implements RowMapper<Goods>{
 	public Goods mapRow(ResultSet rs, int rowNum) throws SQLException {
 		
 		Goods goods = new Goods();
-		goods.setId(rs.getInt("id"));
+		goods.setId(String.valueOf(rs.getInt("id")));
 		goods.setUuid(rs.getString("uuid"));
 		goods.setName(rs.getString("name"));
-		goods.setShop_id(rs.getInt("shop_id"));
+		goods.setShopId(rs.getString("shop_id"));
 		goods.setStatus(rs.getInt("status"));
 		goods.setOriginal_price(rs.getDouble("original_price"));
 		goods.setSell_price(rs.getDouble("sell_price"));

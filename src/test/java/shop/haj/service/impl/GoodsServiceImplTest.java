@@ -38,7 +38,7 @@ public class GoodsServiceImplTest {
 		page.setBy("id");
 		page.setSort("desc");
 		
-		List<Goods> goodsList = goodsService.findAll("598189c0763a1b23446d6b57", page);
+		List<Goods> goodsList = goodsService.findAll(new Goods(), page);
 		
 		System.out.println(goodsList);
 	}
@@ -64,8 +64,8 @@ public class GoodsServiceImplTest {
 			goods.setSellPrice(69.99);
 			goods.setStock(99);
 			goods.setSalesVolume(1);
-			goods.setInnerCid(2);
-			goods.setGlobalCid(2);
+			goods.setInnerCid("2");
+			goods.setGlobalCid("2");
 			goods.setIsRecommend(0);
 			
 			List<Image> images = Lists.newArrayList();
@@ -129,8 +129,8 @@ public class GoodsServiceImplTest {
 		goods.setSellPrice(69.99);
 		goods.setStock(99);
 		goods.setSalesVolume(1);
-		goods.setInnerCid(2);
-		goods.setGlobalCid(2);
+		goods.setInnerCid("2");
+		goods.setGlobalCid("2");
 		goods.setIsRecommend(0);
 		
 		List<Image> images = Lists.newArrayList();

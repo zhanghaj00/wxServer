@@ -1,5 +1,8 @@
 package shop.haj.entity;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.io.Serializable;
 
 /**
@@ -14,157 +17,150 @@ import java.io.Serializable;
  * @author hao
  *         CreateTime：3/12/17
  */
+@Document(collection = "wx_order_singleinfo")
 public class OrderListSingleInfo implements Serializable {
-	
-	private int order_id;
-	
-	private String order_time;
+
+	@Id
+	private String id;
+
+	private String orderId;
+
+	private String orderTime;
 	
 	private int status;
 	
-	private double final_price;//本次订单总价格
+	private double finalPrice;//本次订单总价格
 	
-	private int goods_id;
+	private String goodsId;
 	
-	private String image_url;
+	private String imageUrl;
 	
-	private String goods_name;
+	private String goodsName;
 	
-	private String goods_sku;//商品规格
+	private String goodsSku;//商品规格
 	
-	private double goods_price;//商品成交单价
+	private double goodsPrice;//商品成交单价
 	
 	private int count;//商品个数
 	
-	private int shop_id;
+	private String shopId;
 	
-	private String shop_name;
+	private String shopName;
 	
-	private int customer_id;
+	private String customerId;
 	
 	public OrderListSingleInfo() {
 	}
-	
-	public int getOrder_id() {
-		return order_id;
+
+	public String getId() {
+		return id;
 	}
-	
-	public void setOrder_id(int order_id) {
-		this.order_id = order_id;
+
+	public void setId(String id) {
+		this.id = id;
 	}
-	
-	public String getOrder_time() {
-		return order_time;
+
+	public String getOrderId() {
+		return orderId;
 	}
-	
-	public void setOrder_time(String order_time) {
-		this.order_time = order_time;
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
 	}
-	
+
+	public String getOrderTime() {
+		return orderTime;
+	}
+
+	public void setOrderTime(String orderTime) {
+		this.orderTime = orderTime;
+	}
+
 	public int getStatus() {
 		return status;
 	}
-	
+
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	
-	public double getFinal_price() {
-		return final_price;
+
+	public double getFinalPrice() {
+		return finalPrice;
 	}
-	
-	public void setFinal_price(double final_price) {
-		this.final_price = final_price;
+
+	public void setFinalPrice(double finalPrice) {
+		this.finalPrice = finalPrice;
 	}
-	
-	public int getGoods_id() {
-		return goods_id;
+
+	public String getGoodsId() {
+		return goodsId;
 	}
-	
-	public void setGoods_id(int goods_id) {
-		this.goods_id = goods_id;
+
+	public void setGoodsId(String goodsId) {
+		this.goodsId = goodsId;
 	}
-	
-	public String getImage_url() {
-		return image_url;
+
+	public String getImageUrl() {
+		return imageUrl;
 	}
-	
-	public void setImage_url(String image_url) {
-		this.image_url = image_url;
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
-	
-	public String getGoods_name() {
-		return goods_name;
+
+	public String getGoodsName() {
+		return goodsName;
 	}
-	
-	public void setGoods_name(String goods_name) {
-		this.goods_name = goods_name;
+
+	public void setGoodsName(String goodsName) {
+		this.goodsName = goodsName;
 	}
-	
-	public String getGoods_sku() {
-		return goods_sku;
+
+	public String getGoodsSku() {
+		return goodsSku;
 	}
-	
-	public void setGoods_sku(String goods_sku) {
-		this.goods_sku = goods_sku;
+
+	public void setGoodsSku(String goodsSku) {
+		this.goodsSku = goodsSku;
 	}
-	
-	public double getGoods_price() {
-		return goods_price;
+
+	public double getGoodsPrice() {
+		return goodsPrice;
 	}
-	
-	public void setGoods_price(double goods_price) {
-		this.goods_price = goods_price;
+
+	public void setGoodsPrice(double goodsPrice) {
+		this.goodsPrice = goodsPrice;
 	}
-	
+
 	public int getCount() {
 		return count;
 	}
-	
+
 	public void setCount(int count) {
 		this.count = count;
 	}
-	
-	public int getShop_id() {
-		return shop_id;
+
+	public String getShopId() {
+		return shopId;
 	}
-	
-	public void setShop_id(int shop_id) {
-		this.shop_id = shop_id;
+
+	public void setShopId(String shopId) {
+		this.shopId = shopId;
 	}
-	
-	public String getShop_name() {
-		return shop_name;
+
+	public String getShopName() {
+		return shopName;
 	}
-	
-	public void setShop_name(String shop_name) {
-		this.shop_name = shop_name;
+
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
 	}
-	
-	public int getCustomer_id() {
-		return customer_id;
+
+	public String getCustomerId() {
+		return customerId;
 	}
-	
-	public void setCustomer_id(int customer_id) {
-		this.customer_id = customer_id;
-	}
-	
-	@Override
-	public String toString() {
-		return "OrderListSingleInfo{" +
-				"order_id=" + order_id +
-				", order_time='" + order_time + '\'' +
-				", status=" + status +
-				", final_price=" + final_price +
-				", goods_id=" + goods_id +
-				", image_url='" + image_url + '\'' +
-				", goods_name='" + goods_name + '\'' +
-				", goods_sku='" + goods_sku + '\'' +
-				", goods_price=" + goods_price +
-				", count=" + count +
-				", shop_id=" + shop_id +
-				", shop_name='" + shop_name + '\'' +
-				", customer_id=" + customer_id +
-				'}';
+
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
 	}
 }

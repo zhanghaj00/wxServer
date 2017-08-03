@@ -29,27 +29,27 @@ public class Goods implements Serializable{
 	
 	private String shopId;
 	
-	private int status;
+	private Integer status;
 	
-	private double original_price;
+	private Double originalPrice;
 	
-	private double sell_price;
+	private Double sellPrice;
 	
-	private int stock;
+	private Integer stock;
 	
-	private int sales_volume;
+	private Integer salesVolume;
 	
-	private int inner_cid;
+	private Integer innerCid;
 	
-	private int global_cid;
+	private Integer globalCid;
 	
-	private int is_recommend;
+	private Integer isRecommend;
 	
-	private int is_deleted;
+	private Integer isDeleted;
 	
-	private String create_time;
+	private String createTime;
 	
-	private String update_time;
+	private String updateTime;
 	
 	private List<Image> images;
 	
@@ -59,172 +59,148 @@ public class Goods implements Serializable{
 	
 	public Goods() {
 	}
-	
+
 	public String getId() {
 		return id;
 	}
-	
+
 	public void setId(String id) {
 		this.id = id;
 	}
-	
+
 	public String getUuid() {
 		return uuid;
 	}
-	
+
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public String getShopId() {
 		return shopId;
 	}
-	
+
 	public void setShopId(String shopId) {
 		this.shopId = shopId;
 	}
-	
-	public int getStatus() {
+
+	public Integer getStatus() {
 		return status;
 	}
-	
-	public void setStatus(int status) {
+
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
-	
-	public double getOriginal_price() {
-		return original_price;
+
+	public Double getOriginalPrice() {
+		return originalPrice;
 	}
-	
-	public void setOriginal_price(double original_price) {
-		this.original_price = original_price;
+
+	public void setOriginalPrice(Double originalPrice) {
+		this.originalPrice = originalPrice;
 	}
-	
-	public double getSell_price() {
-		return sell_price;
+
+	public Double getSellPrice() {
+		return sellPrice;
 	}
-	
-	public void setSell_price(double sell_price) {
-		this.sell_price = sell_price;
+
+	public void setSellPrice(Double sellPrice) {
+		this.sellPrice = sellPrice;
 	}
-	
-	public int getStock() {
+
+	public Integer getStock() {
 		return stock;
 	}
-	
-	public void setStock(int stock) {
+
+	public void setStock(Integer stock) {
 		this.stock = stock;
 	}
-	
-	public int getSales_volume() {
-		return sales_volume;
+
+	public Integer getSalesVolume() {
+		return salesVolume;
 	}
-	
-	public void setSales_volume(int sales_volume) {
-		this.sales_volume = sales_volume;
+
+	public void setSalesVolume(Integer salesVolume) {
+		this.salesVolume = salesVolume;
 	}
-	
-	public int getInner_cid() {
-		return inner_cid;
+
+	public Integer getInnerCid() {
+		return innerCid;
 	}
-	
-	public void setInner_cid(int inner_cid) {
-		this.inner_cid = inner_cid;
+
+	public void setInnerCid(Integer innerCid) {
+		this.innerCid = innerCid;
 	}
-	
-	public int getGlobal_cid() {
-		return global_cid;
+
+	public Integer getGlobalCid() {
+		return globalCid;
 	}
-	
-	public void setGlobal_cid(int global_cid) {
-		this.global_cid = global_cid;
+
+	public void setGlobalCid(Integer globalCid) {
+		this.globalCid = globalCid;
 	}
-	
-	public int getIs_recommend() {
-		return is_recommend;
+
+	public Integer getIsRecommend() {
+		return isRecommend;
 	}
-	
-	public void setIs_recommend(int is_recommend) {
-		this.is_recommend = is_recommend;
+
+	public void setIsRecommend(Integer isRecommend) {
+		this.isRecommend = isRecommend;
 	}
-	
-	public int getIs_deleted() {
-		return is_deleted;
+
+	public Integer getIsDeleted() {
+		return isDeleted;
 	}
-	
-	public void setIs_deleted(int is_deleted) {
-		this.is_deleted = is_deleted;
+
+	public void setIsDeleted(Integer isDeleted) {
+		this.isDeleted = isDeleted;
 	}
-	
-	public String getCreate_time() {
-		return create_time;
+
+	public String getCreateTime() {
+		return createTime;
 	}
-	
-	public void setCreate_time(String create_time) {
-		this.create_time = create_time;
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
 	}
-	
-	public String getUpdate_time() {
-		return update_time;
+
+	public String getUpdateTime() {
+		return updateTime;
 	}
-	
-	public void setUpdate_time(String update_time) {
-		this.update_time = update_time;
+
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
 	}
-	
+
 	public List<Image> getImages() {
 		return images;
 	}
-	
+
 	public void setImages(List<Image> images) {
 		this.images = images;
 	}
-	
+
 	public List<GoodsDetail> getGoodsDetails() {
 		return goodsDetails;
 	}
-	
+
 	public void setGoodsDetails(List<GoodsDetail> goodsDetails) {
 		this.goodsDetails = goodsDetails;
 	}
-	
+
 	public GoodsSkuInfo getGoodsSkuInfo() {
 		return goodsSkuInfo;
 	}
-	
+
 	public void setGoodsSkuInfo(GoodsSkuInfo goodsSkuInfo) {
 		this.goodsSkuInfo = goodsSkuInfo;
 	}
-	
-	/*@Override
-	public String toString() {
-		return "Goods{" +
-				"id=" + id +
-				", uuid='" + uuid + '\'' +
-				", name='" + name + '\'' +
-				", shopId=" + shopId +
-				", status=" + status +
-				", original_price=" + original_price +
-				", sell_price=" + sell_price +
-				", stock=" + stock +
-				", sales_volume=" + sales_volume +
-				", inner_cid=" + inner_cid +
-				", global_cid=" + global_cid +
-				", is_recommend=" + is_recommend +
-				", is_deleted=" + is_deleted +
-				", create_time='" + create_time + '\'' +
-				", update_time='" + update_time + '\'' +
-				", images=" + images +
-				", goodsDetails=" + goodsDetails +
-				", goodsSkuInfo=" + goodsSkuInfo +
-				'}';
-	}*/
 }

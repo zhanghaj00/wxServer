@@ -45,15 +45,9 @@ public class GoodsServiceImpl implements GoodsService{
 	@Autowired
 	private MongoGoodsRepository mongoGoodsRepository;
 	
-	//@Autowired
-	//private GoodsSkuRepository goodsSkuRepository;
-	
 	@Autowired
 	private MongoImageRepository mongoImageRepository;
-	
-	//@Autowired
-	//private GoodsDetailRepository goodsDetailRepository;
-	
+
 	@Autowired
 	private CacheManage cacheManage;
 	
@@ -65,22 +59,18 @@ public class GoodsServiceImpl implements GoodsService{
 		Goods condition = new Goods();
 		condition.setShopId(shop_id);
 		Example<Goods> example = Example.of(condition);
-		PageRequest request = new PageRequest(0,10,page.getSort());
-		Page<Goods> goodsList = mongoGoodsRepository.findAll(example,request);
-
+		Page<Goods> goodsList = mongoGoodsRepository.findAll(example,page.getRequest());
 		if(goodsList.getContent() == null && goodsList.getContent().size() <= 0) return goodsList.getContent();
-
 		//cacheManage.addGoodsPageKeysMapData(shop_id, page.getOrderByLimitString());
-		
 		return goodsList.getContent();
 	}
 	
 	@Override
 //	@Cacheable(value = "goods", key = "#goods_id")
 	public Goods findGoodsByID(String shop_id, String goods_id) {
-		Goods goods = mongoGoodsRepository.findByIdAndShopId(shop_id, goods_id);
+		Goods goods = mongoGoodsRepository.findByIdAndShopId(goods_id, shop_id);
 		
-		if(goods == null) return null;
+		if(goods == null) return new Goods();
 
 		return goods;
 	}
@@ -122,9 +112,9 @@ public class GoodsServiceImpl implements GoodsService{
 		
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
-		goods.setCreate_time(format.format(System.currentTimeMillis()));
-		goods.setUpdate_time(format.format(System.currentTimeMillis()));
-		
+		goods.setCreateTime(format.format(System.currentTimeMillis()));
+		goods.setUpdateTime(format.format(System.currentTimeMillis()));
+
 		//首先添加商品基本信息，如果成功，goods的id会被设置
 		goods = mongoGoodsRepository.insert(goods);
 		

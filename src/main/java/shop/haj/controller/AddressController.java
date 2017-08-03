@@ -39,11 +39,11 @@ public class AddressController {
 	 */
 	@ApiOperation(value = "新增地址", notes = "新增买家地址信息")
 	@PostMapping(value = "/customer/addresses")
-	public Address addAddress(@RequestAttribute(value = "customer_id", required = false) int customer_id,
+	public Address addAddress(@RequestAttribute(value = "customer_id", required = false) String customer_id,
 	                          @RequestBody Address address){
 		logger.info("PostMapping request addAddress , address is {}, customer_id is {}", address, customer_id);
 		
-		address.setCustomer_id(customer_id);
+		address.setCustomerId(customer_id);
 		
 		return addressService.addAddress(address);
 	}
@@ -55,7 +55,7 @@ public class AddressController {
 	 */
 	@ApiOperation(value = "查找买家地址列表", notes = "根据买家ID查找买家地址列表")
 	@GetMapping(value = "/customer/addresses")
-	public List<Address> findAddressListByCustomerID(@RequestAttribute(value = "customer_id", required = false) int customer_id,
+	public List<Address> findAddressListByCustomerID(@RequestAttribute(value = "customer_id", required = false) String customer_id,
 	                                                 @RequestParam(value = "from", defaultValue = "0") int from,
 	                                                 @RequestParam(value = "limit", defaultValue = "20") int to,
 	                                                 @RequestParam(value = "by", defaultValue = "is_default desc, id") String by,
@@ -79,8 +79,8 @@ public class AddressController {
 	 */
 	@ApiOperation(value = "查找买家地址", notes = "根据地址ID查找买家地址")
 	@GetMapping(value = "/customer/addresses/{address_id}")
-	public Address findAddressByID(@RequestAttribute(value = "customer_id", required = false) int customer_id,
-	                               @PathVariable("address_id") int address_id){
+	public Address findAddressByID(@RequestAttribute(value = "customer_id", required = false) String customer_id,
+	                               @PathVariable("address_id") String address_id){
 		logger.info("GetMapping request findAddressByID , customer_id is {}, address_id is {}",
 				customer_id, address_id);
 		return addressService.findAddressByID(address_id);
@@ -88,7 +88,7 @@ public class AddressController {
 	
 	@ApiOperation(value = "查找买家默认地址", notes = "查找买家默认地址")
 	@GetMapping(value = "/customer/addresses/default")
-	public Address findDefaultAddress(@RequestAttribute(value = "customer_id", required = false) int customer_id){
+	public Address findDefaultAddress(@RequestAttribute(value = "customer_id", required = false) String customer_id){
 		
 		logger.info("findDefaultAddress controller >>> customer_id={}", customer_id);
 		
@@ -102,25 +102,25 @@ public class AddressController {
 	 */
 	@ApiOperation(value = "修改地址", notes = "根据地址ID修改买家地址")
 	@PutMapping(value = "/customer/addresses/{address_id}")
-	public String updateAddress(@RequestAttribute(value = "customer_id", required = false) int customer_id,
-	                            @PathVariable("address_id") int address_id,
+	public String updateAddress(@RequestAttribute(value = "customer_id", required = false) String customer_id,
+	                            @PathVariable("address_id") String address_id,
 	                            @RequestBody Address address){
 		
 		logger.info("PutMapping request updateAddress , customer_id is {}, address_id is {}, address is {}",
 				customer_id, address_id, address);
 		
-		address.setCustomer_id(customer_id);
+		address.setCustomerId(customer_id);
 		address.setId(address_id);
 		
-		int state = addressService.updateAddress(address);
+		//int state = addressService.updateAddress(address);
 		
-		return ResultUtil.getJson(state);
+		return ResultUtil.getJson(9);
 	}
 	
 	@ApiOperation(value = "设置默认地址", notes = "将某个地址设置为默认地址")
 	@PatchMapping(value = "/customer/addresses/{address_id}/default")
-	public String setDefaultAddress(@RequestAttribute(value = "customer_id", required = false) int customer_id,
-	                         @PathVariable("address_id") int address_id){
+	public String setDefaultAddress(@RequestAttribute(value = "customer_id", required = false) String customer_id,
+	                         @PathVariable("address_id") String address_id){
 		logger.info("setDefaultAddress controller >>> customer_id={}, address_id={}",
 				customer_id, address_id);
 		
@@ -136,8 +136,8 @@ public class AddressController {
 	 */
 	@ApiOperation(value = "删除地址", notes = "根据地址ID删除买家地址")
 	@DeleteMapping(value = "/customer/addresses/{address_id}")
-	public String deleteAddress(@RequestAttribute(value = "customer_id", required = false) int customer_id,
-	                            @PathVariable("address_id") int address_id){
+	public String deleteAddress(@RequestAttribute(value = "customer_id", required = false) String customer_id,
+	                            @PathVariable("address_id") String address_id){
 		
 		logger.info("DeleteMapping request deleteAddress , customer_id is {}, address_id is {}",
 						customer_id, address_id);

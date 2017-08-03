@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.haj.entity.GoodsDetail;
 import shop.haj.entity.Pagination;
 import shop.haj.manage.CacheManage;
+import shop.haj.mongo_repository.MongoGoodsDetailRepository;
 import shop.haj.repository.GoodsDetailRepository;
 import shop.haj.service.GoodsDetailService;
 
@@ -27,74 +28,93 @@ import java.util.List;
 @Service
 @Transactional
 public class GoodsDetailServiceImpl implements GoodsDetailService{
+	@Override
+	public List<GoodsDetail> findGoodsDetailByGoodsID(int goods_id, Pagination page) {
+		return null;
+	}
+
+	@Override
+	public List<GoodsDetail> addGoodsDetailList(List<GoodsDetail> goodsDetails, int goods_id) {
+		return null;
+	}
+
+	@Override
+	public int updateGoodsDetail(int goods_id, List<GoodsDetail> goodsDetails) {
+		return 0;
+	}
+
+	@Override
+	public int deleteGoodsDetail(int goods_id, int goodsdetail_id) {
+		return 0;
+	}
 	
-	private Logger logger = LogManager.getLogger(GoodsDetailServiceImpl.class);
+	/*private Logger logger = LogManager.getLogger(GoodsDetailServiceImpl.class);
 	
 	@Autowired
-	private GoodsDetailRepository goodsDetailRepository;
+	private MongoGoodsDetailRepository mongoGoodsDetailRepository;
 	
 	@Autowired
 	private CacheManage cacheManage;
 	
-	/**
+	*//**
 	 * 根据商品ID查找全部的商品详情
 	 *
 	 * @param goods_id
 	 * @return
-	 */
+	 *//*
 	@Override
-	public List<GoodsDetail> findGoodsDetailByGoodsID(int goods_id, Pagination page) {
-		return goodsDetailRepository.findGoodsDetailByGoodsID(goods_id, page);
+	public List<GoodsDetail> findGoodsDetailByGoodsID(String goods_id, Pagination page) {
+		return mongoGoodsDetailRepository.findByGoodsId(goods_id, page).getContent();
 	}
 	
-	/**
+	*//**
 	 * 批量新增商品详情
 	 *
 	 * @param goodsDetails
 	 * @return
-	 */
+	 *//*
 	@Override
-	public List<GoodsDetail> addGoodsDetailList(List<GoodsDetail> goodsDetails, int goods_id) {
+	public List<GoodsDetail> addGoodsDetailList(List<GoodsDetail> goodsDetails, String goods_id) {
 		
 		clearGoodsCache(goods_id);
-		
-		return goodsDetailRepository.addGoodsDetailList(goodsDetails, goods_id);
+
+		return mongoGoodsDetailRepository.addGoodsDetailList(goodsDetails, goods_id);
 	}
 	
-	/**
+	*//**
 	 * 更新商品详情
 	 *
 	 * @param goodsDetails
 	 * @return
-	 */
+	 *//*
 	@Override
-	public int updateGoodsDetail(int goods_id, List<GoodsDetail> goodsDetails) {
+	public int updateGoodsDetail(String goods_id, List<GoodsDetail> goodsDetails) {
 		
 		clearGoodsCache(goods_id);
 		
-		return goodsDetailRepository.updateGoodsDetail(goodsDetails);
+		return mongoGoodsDetailRepository.updateGoodsDetail(goodsDetails);
 	}
 	
-	/**
+	*//**
 	 * 删除商品详情
 	 *
 	 * @param goodsdetail_id
 	 * @return
-	 */
+	 *//*
 	@Override
-	public int deleteGoodsDetail(int goods_id, int goodsdetail_id) {
+	public int deleteGoodsDetail(String goods_id, String goodsdetail_id) {
 		
 		clearGoodsCache(goods_id);
 		
-		return goodsDetailRepository.deleteGoodsDetail(goodsdetail_id);
+		return mongoGoodsDetailRepository.deleteGoodsDetail(goodsdetail_id);
 	}
 	
-	/**
+	*//**
 	 * 清除商品缓存
 	 * @param goods_id
-	 */
-	private void clearGoodsCache(int goods_id){
+	 *//*
+	private void clearGoodsCache(String goods_id){
 		
 		cacheManage.clearGoodsCache(String.valueOf(goods_id));
-	}
+	}*/
 }

@@ -63,7 +63,7 @@ public interface OrderService {
 	 * @param order_id
 	 * @return
 	 */
-	int updateOrderStatusToWaitingSend(int customer_id, int order_id, int onlinePayType);
+	int updateOrderStatusToWaitingSend(String customer_id, String order_id, int onlinePayType);
 	
 	/**
 	 * 将订单状态修改为待收货

@@ -46,7 +46,7 @@ public class CacheManage {
 	 * @param shop_id
 	 * @param value
 	 */
-	public void addGoodsPageKeysMapData(int shop_id, String value){
+	public void addGoodsPageKeysMapData(String shop_id, String value){
 		
 		String key = GOODS_LIST_KEY_REFIX + shop_id;
 		
@@ -64,7 +64,7 @@ public class CacheManage {
 	 * @param customer_id
 	 * @param value
 	 */
-	public void addOrderPageKeysMapData(int customer_id, String value){
+	public void addOrderPageKeysMapData(String customer_id, String value){
 		
 		String key = ORDER_LIST_KEY_PREFIX + customer_id;
 		
@@ -83,7 +83,7 @@ public class CacheManage {
 	 * @param shop_id
 	 * @param value
 	 */
-	public void addShopCartPageKeysMapData(int customer_id, int shop_id, String value){
+	public void addShopCartPageKeysMapData(String customer_id, String shop_id, String value){
 		
 		String key = SHOPCART_LIST_KEY_PREFIX + customer_id + shop_id;
 		
@@ -107,14 +107,14 @@ public class CacheManage {
 		return  goodsPageCacheKeyMap.get(key);
 	}
 	
-	public List<String> getOrderPageCacheKeys(int customer_id){
+	public List<String> getOrderPageCacheKeys(String customer_id){
 		
 		String key = ORDER_LIST_KEY_PREFIX + customer_id;
 		
 		return  orderPageCacheKeyMap.get(key);
 	}
 	
-	public List<String> getShopCartPageCacheKeys(int customer_id, int shop_id){
+	public List<String> getShopCartPageCacheKeys(String customer_id, String shop_id){
 		
 		String key = SHOPCART_LIST_KEY_PREFIX + customer_id + shop_id;
 		
@@ -155,7 +155,7 @@ public class CacheManage {
 	}
 	
 	@CacheEvict(value = "{shopCartPages}", key = "{#customer_id, #shop_id, #pageInfo}")
-	public void clearShopCartPageCache(int customer_id, int shop_id, String pageInfo){
+	public void clearShopCartPageCache(String customer_id, String shop_id, String pageInfo){
 		logger.info("clearShopCartPageCache >>> Cache Evict : value=shopCartPages, key={{}, {}, {}}, pageMap={}",
 				customer_id, shop_id, pageInfo, shopCartPageCacheKeyMap);
 	}
@@ -169,7 +169,7 @@ public class CacheManage {
 	}
 	
 	@CacheEvict(value = "shopCart", key = "#cart_id")
-	public void clearShopCartCache(int cart_id){
+	public void clearShopCartCache(String cart_id){
 		logger.info("clearShopCartCache >>> Cache Evict : value=shopCart, key={{}}", cart_id);
 	}
 }

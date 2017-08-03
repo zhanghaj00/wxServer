@@ -49,8 +49,8 @@ public class CartController {
 	
 	@ApiOperation(value = "查找店铺购物车列表", notes = "该用户在该店铺的购物车列表")
 	@GetMapping("/customer/carts")
-	public List<Cart> findShopCarts(@RequestAttribute(value = "customer_id", required = false) int customer_id,
-	                                @RequestHeader("shop_id") int shop_id,
+	public List<Cart> findShopCarts(@RequestAttribute(value = "customer_id", required = false) String customer_id,
+	                                @RequestHeader("shop_id") String shop_id,
 	                                @RequestParam(value = "from", defaultValue = "0") int from,
 	                                @RequestParam(value = "limit", defaultValue = "20") int to,
 	                                @RequestParam(value = "by", defaultValue = "create_time") String by,
@@ -67,7 +67,7 @@ public class CartController {
 	
 	@ApiOperation(value = "添加商品到购物车", notes = "添加商品到购物车")
 	@PostMapping("/customer/carts")
-	public String addCart(@RequestAttribute(value = "customer_id", required = false) int customer_id,
+	public String addCart(@RequestAttribute(value = "customer_id", required = false) String customer_id,
 	                    @RequestHeader("shop_id") String shop_id,
 	                    @RequestBody Cart cart){
 		
@@ -83,28 +83,28 @@ public class CartController {
 		
 		int result;
 		try {
-			Cart checkCart = shopCartService.findShopCart(customer_id, 1,
-					cart.getGoods_id(), cart.getGoods_sku());
+			Cart checkCart = shopCartService.findShopCart(customer_id, "1",
+					cart.getGoodsId(), cart.getGoodsSku());
 			
 			//如果该商品规格在购物车中不存在，则新增，否则数量+1
 			if(null == checkCart) {
 				
 				Shop shop = shopService.findById(shop_id);
 				
-				cart.setCustomer_id(customer_id);
-				cart.setShop_id(1);
-				cart.setShop_name(shop.getName());
+				cart.setCustomerId(customer_id);
+				cart.setShopId("1");
+				cart.setShopName(shop.getName());
 				
-				Goods goods = goodsService.findGoodsByID("1", String.valueOf(cart.getGoods_id()));
-				cart.setGoods_name(goods.getName());
-				cart.setGoods_price(goods.getSell_price());
-				cart.setGoods_image(goods.getImages().get(0).getUrl());
+				Goods goods = goodsService.findGoodsByID("1", String.valueOf(cart.getGoodsId()));
+				cart.setGoodsName(goods.getName());
+				cart.setGoodsPrice(goods.getSellPrice());
+				cart.setGoodsImage(goods.getImages().get(0).getUrl());
 				
 				result = shopCartService.addCart(cart);
 				
 			} else {
-				int increaseNum = cart.getGoods_num() == 0 ? 1 : cart.getGoods_num();
-				result = shopCartService.updateCartNum(customer_id, 1, checkCart.getCart_id(), (checkCart.getGoods_num() + increaseNum));
+				int increaseNum = cart.getGoodsNum() == 0 ? 1 : cart.getGoodsNum();
+				result = shopCartService.updateCartNum(customer_id, "1", checkCart.getId(), (checkCart.getGoodsNum() + increaseNum));
 			}
 		} finally {
 			
@@ -117,9 +117,9 @@ public class CartController {
 	
 	@ApiOperation(value = "更新购物车数量", notes = "更新购物车数量")
 	@PutMapping("/customer/carts/{cart_id}")
-	public String updateCartNum(@RequestAttribute(value = "customer_id", required = false) int customer_id,
-	                            @RequestHeader("shop_id") int shop_id,
-	                            @PathVariable("cart_id") int cart_id,
+	public String updateCartNum(@RequestAttribute(value = "customer_id", required = false) String customer_id,
+	                            @RequestHeader("shop_id") String shop_id,
+	                            @PathVariable("cart_id") String cart_id,
 	                            @RequestBody Cart cart){
 		
 		String key = customer_id + "_" + shop_id;
@@ -134,7 +134,7 @@ public class CartController {
 		
 		int result;
 		try {
-			result = shopCartService.updateCartNum(customer_id, shop_id, cart_id, cart.getGoods_num());
+			result = shopCartService.updateCartNum(customer_id, shop_id, cart_id, cart.getGoodsNum());
 		} finally {
 			shopCartUsedMap.remove(key);
 		}
@@ -144,9 +144,9 @@ public class CartController {
 	
 	@ApiOperation(value = "从购物车中删除商品", notes = "从购物车中删除商品")
 	@DeleteMapping("/customer/carts/{cart_id}")
-	public String removeGoodsFromCart(@RequestAttribute(value = "customer_id", required = false) int customer_id,
-	                                  @RequestHeader("shop_id") int shop_id,
-	                                  @PathVariable("cart_id") int cart_id){
+	public String removeGoodsFromCart(@RequestAttribute(value = "customer_id", required = false) String customer_id,
+	                                  @RequestHeader("shop_id") String shop_id,
+	                                  @PathVariable("cart_id") String cart_id){
 		
 		int result = shopCartService.removeGoodsFromCart(customer_id, shop_id, cart_id);
 		return ResultUtil.getJson(result);
@@ -154,8 +154,8 @@ public class CartController {
 	
 	@ApiOperation(value = "清空购物车", notes = "清空该用户在该店铺的购物车信息")
 	@DeleteMapping("/customer/carts")
-	public String clearShopCart(@RequestAttribute(value = "customer_id", required = false) int customer_id,
-	                            @RequestHeader("shop_id") int shop_id){
+	public String clearShopCart(@RequestAttribute(value = "customer_id", required = false) String customer_id,
+	                            @RequestHeader("shop_id") String shop_id){
 		
 		int result = shopCartService.clearShopCart(customer_id, shop_id);
 		return ResultUtil.getJson(result);

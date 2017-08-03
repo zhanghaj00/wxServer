@@ -27,14 +27,14 @@ public class CouponRowMapper implements RowMapper<Coupon> {
 		
 		Coupon coupon = new Coupon();
 		
-		coupon.setId(rs.getInt("id"));
+		/*coupon.setId(rs.getInt("id"));
 		coupon.setPrice(rs.getDouble("price"));
 		coupon.setLimit_price(rs.getDouble("limit_price"));
 		coupon.setBegin_time(rs.getString("begin_time"));
 		coupon.setDue_time(rs.getString("due_time"));
 		coupon.setStock(rs.getInt("stock"));
 		coupon.setPer_limit(rs.getInt("per_limit"));
-		coupon.setSuit_limit(rs.getInt("suit_limit"));
+		coupon.setSuit_limit(rs.getInt("suit_limit"));*/
 		
 		return coupon;
 	}

@@ -31,19 +31,19 @@ public interface CouponService {
 	 * @param shop_id
 	 * @return
 	 */
-	List<Coupon> findCouponByShopID(int shop_id, Pagination page);
+	List<Coupon> findCouponByShopID(String shop_id, Pagination page);
 	
 	/**
 	 * 卖家删除优惠券
 	 * @return
 	 */
-	String deleteCouponByID(int shop_id, int coupon_id);
+	String deleteCouponByID(String shop_id, String coupon_id);
 	
 	/**
 	 * 买家查询已领取的优惠券
 	 * @param customer_id
 	 * @return
 	 */
-	List<CouponCustomerInfo> findCustomerCouponInfo(int customer_id, Pagination page);
+	List<CouponCustomerInfo> findCustomerCouponInfo(String customer_id, Pagination page);
 	
 }

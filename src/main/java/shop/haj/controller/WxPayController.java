@@ -83,18 +83,18 @@ public class WxPayController extends BaseController{
 		List<OrderGoodsInfo> orderGoodsInfos = order.getOrderGoodsInfos();
 		
 		//设置body字段信息
-		String body = order.getShop_name() + "-默认商品";
+		String body = order.getShopName() + "-默认商品";
 		if(orderGoodsInfos != null && orderGoodsInfos.size() > 0){
 			OrderGoodsInfo orderGoodsInfo = orderGoodsInfos.get(0);
-			body = order.getShop_name() + "-" + orderGoodsInfo.getGoods_name();
+			body = order.getShopName() + "-" + orderGoodsInfo.getGoodsName();
 		}
 		
 		WxPayUnifiedOrderRequest wxPayUnifiedOrderRequest = WxPayUnifiedOrderRequest.builder()
 				.body(body)
-				.deviceInfo(String.valueOf(order.getShop_id()))
+				.deviceInfo(String.valueOf(order.getShopId()))
 				.nonceStr(RandomStringUtils.randomAlphanumeric(32).toUpperCase())
 				.outTradeNo(order.getUuid())
-				.totalFee((int)(order.getFinal_price() * 100))
+				.totalFee((int)(order.getFinalPrice() * 100))
 				.spbillCreateIp("127.0.0.1")
 				.notifyURL(notifyURL)
 				.tradeType("JSAPI")
@@ -154,17 +154,17 @@ public class WxPayController extends BaseController{
 				logger.info("wxPayNotify >>> deal with success notify, order={}, result={}", order, wxPayOrderNotifyResult);
 				
 				//更新订单状态，并且记录支付时间
-				orderService.updateOrderStatusToWaitingSend(order.getCustomer_id(), order.getOrder_id(), OnlinePayType.wxpay.ordinal());
+				orderService.updateOrderStatusToWaitingSend(order.getCustomerId(), order.getId(), OnlinePayType.wxpay.ordinal());
 				
 				//更新微信支付表数据
-				wxPayService.saveOrderSuccessNotifyResult(wxPayOrderNotifyResult, order.getOrder_id());
+				wxPayService.saveOrderSuccessNotifyResult(wxPayOrderNotifyResult, order.getId());
 				
 				return_msg = WxPayOrderNotifyResponse.success("OK");
 			}else {//失败时处理
 				
 				logger.error("wxPayNotify >>> deal with fail notify, order={}, result={}", order, wxPayOrderNotifyResult);
 				
-				wxPayService.saveOrderFailNotifyResult(wxPayOrderNotifyResult, order.getOrder_id());
+				wxPayService.saveOrderFailNotifyResult(wxPayOrderNotifyResult, order.getId());
 				
 				return_msg = WxPayOrderNotifyResponse.fail("OK");
 			}

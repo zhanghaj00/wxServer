@@ -7,7 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class AddressRowMapper implements RowMapper<Address>{
-	
+	@Override
+	public Address mapRow(ResultSet resultSet, int i) throws SQLException {
+		return null;
+	}
+
 	/**
 	 * Implementations must implement this method to map each row of data
 	 * in the ResultSet. This method should not call {@code next()} on
@@ -18,7 +22,7 @@ public class AddressRowMapper implements RowMapper<Address>{
 	 * @return the result object for the current row
 	 * @throws SQLException if a SQLException is encountered getting
 	 *                      column values (that is, there's no need to catch SQLException)
-	 */
+	 *//*
 	@Override
 	public Address mapRow(ResultSet rs, int rowNum) throws SQLException {
 		
@@ -35,5 +39,5 @@ public class AddressRowMapper implements RowMapper<Address>{
 		address.setPhone(rs.getString("phone"));
 		
 		return address;
-	}
+	}*/
 }

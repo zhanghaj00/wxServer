@@ -27,7 +27,7 @@ public class OrderListSingleInfoRowMapper implements RowMapper<OrderListSingleIn
 		
 		OrderListSingleInfo singleInfo = new OrderListSingleInfo();
 		
-		singleInfo.setOrder_id(rs.getInt("order_id"));
+	/*	singleInfo.setOrder_id(rs.getInt("order_id"));
 		singleInfo.setOrder_time(rs.getString("order_time"));
 		singleInfo.setStatus(rs.getInt("status"));
 		singleInfo.setFinal_price(rs.getDouble("final_price"));
@@ -39,7 +39,7 @@ public class OrderListSingleInfoRowMapper implements RowMapper<OrderListSingleIn
 		singleInfo.setCount(rs.getInt("count"));
 		singleInfo.setShop_id(rs.getInt("shop_id"));
 		singleInfo.setCustomer_id(rs.getInt("customer_id"));
-		singleInfo.setShop_name(rs.getString("shop_name"));
+		singleInfo.setShop_name(rs.getString("shop_name"));*/
 		
 		return singleInfo;
 	}

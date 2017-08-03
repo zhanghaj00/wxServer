@@ -117,7 +117,7 @@ public interface WxPayService {
 	 * @param wxPayOrderNotifyResult
 	 * @return
 	 */
-  boolean saveOrderSuccessNotifyResult(WxPayOrderNotifyResult wxPayOrderNotifyResult, int order_id);
+  boolean saveOrderSuccessNotifyResult(WxPayOrderNotifyResult wxPayOrderNotifyResult, String order_id);
 	
 	/**
 	 * 保存订单支付失败结果
@@ -125,7 +125,7 @@ public interface WxPayService {
 	 * @param order_id
 	 * @return
 	 */
-  boolean saveOrderFailNotifyResult(WxPayOrderNotifyResult wxPayOrderNotifyResult, int order_id);
+  boolean saveOrderFailNotifyResult(WxPayOrderNotifyResult wxPayOrderNotifyResult, String order_id);
   
   /**
    * 发送微信红包给个人用户

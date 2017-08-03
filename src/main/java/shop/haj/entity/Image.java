@@ -28,15 +28,15 @@ public class Image implements Serializable{
 
 	private String url;
 	
-	private String create_time;
+	private String createTime;
 	
 	public Image() {
 	}
 	
-	public Image(String id, String url, String create_time) {
+	public Image(String id, String url, String createTime) {
 		this.id = id;
 		this.url = url;
-		this.create_time = create_time;
+		this.createTime = createTime;
 	}
 
 	public String getGoodsId() {
@@ -71,12 +71,12 @@ public class Image implements Serializable{
 		this.url = url;
 	}
 	
-	public String getCreate_time() {
-		return create_time;
+	public String getCreateTime() {
+		return createTime;
 	}
 	
-	public void setCreate_time(String create_time) {
-		this.create_time = create_time;
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
 	}
 	
 	@Override
@@ -84,7 +84,7 @@ public class Image implements Serializable{
 		return "Image{" +
 				"id=" + id +
 				", url='" + url + '\'' +
-				", create_time='" + create_time + '\'' +
+				", createTime='" + createTime + '\'' +
 				'}';
 	}
 }

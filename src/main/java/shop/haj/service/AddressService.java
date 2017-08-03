@@ -30,28 +30,28 @@ public interface AddressService {
 	 * @param customer_id
 	 * @return
 	 */
-	List<Address> findAddressListByCustomerID(int customer_id, Pagination page);
+	List<Address> findAddressListByCustomerID(String customer_id, Pagination page);
 	
 	/**
 	 * 根据地址ID查找
 	 * @param address_id
 	 * @return
 	 */
-	Address findAddressByID(int address_id);
+	Address findAddressByID(String address_id);
 	
 	/**
 	 * 查找用户默认地址
 	 * @param customer_id
 	 * @return
 	 */
-	Address findDefaultAddress(int customer_id);
+	Address findDefaultAddress(String customer_id);
 	
 	/**
 	 * 更新地址信息
 	 * @param address
 	 * @return
 	 */
-	int updateAddress(Address address);
+	Address updateAddress(Address address);
 	
 	/**
 	 * 设置默认地址
@@ -62,13 +62,13 @@ public interface AddressService {
 	 * @param address_id
 	 * @return
 	 */
-	int setDefaultAddress(int customer_id, int address_id);
+	int setDefaultAddress(String customer_id, String address_id);
 	
 	/**
 	 * 删除某个地址信息
 	 * @param address_id
 	 * @return
 	 */
-	int deleteAddress(int address_id);
+	int deleteAddress(String address_id);
 	
 }

@@ -21,10 +21,10 @@ public class FavoriteGoods implements Serializable{
 
 	@Id
 	private String id;
-	private String customer_id;
-	private String shop_id;
-	private String goods_id;
-	private String create_time;
+	private String customerId;
+	private String shopId;
+	private String goodsId;
+	private String createTime;
 
 	public String getId() {
 		return id;
@@ -34,35 +34,35 @@ public class FavoriteGoods implements Serializable{
 		this.id = id;
 	}
 
-	public String getCustomer_id() {
-		return customer_id;
+	public String getCustomerId() {
+		return customerId;
 	}
 
-	public void setCustomer_id(String customer_id) {
-		this.customer_id = customer_id;
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
 	}
 
-	public String getShop_id() {
-		return shop_id;
+	public String getShopId() {
+		return shopId;
 	}
 
-	public void setShop_id(String shop_id) {
-		this.shop_id = shop_id;
+	public void setShopId(String shopId) {
+		this.shopId = shopId;
 	}
 
-	public String getGoods_id() {
-		return goods_id;
+	public String getGoodsId() {
+		return goodsId;
 	}
 
-	public void setGoods_id(String goods_id) {
-		this.goods_id = goods_id;
+	public void setGoodsId(String goodsId) {
+		this.goodsId = goodsId;
 	}
 
-	public String getCreate_time() {
-		return create_time;
+	public String getCreateTime() {
+		return createTime;
 	}
 
-	public void setCreate_time(String create_time) {
-		this.create_time = create_time;
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
 	}
 }

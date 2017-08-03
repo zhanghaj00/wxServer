@@ -23,7 +23,7 @@ public class CustomerRowMapper implements RowMapper<Customer>{
 	public Customer mapRow(ResultSet rs, int rowNum) throws SQLException {
 		
 		Customer customer = new Customer();
-		customer.setId(rs.getString("id"));
+		/*customer.setId(rs.getString("id"));
 		customer.setNickName(rs.getString("nick_name"));
 		customer.setOpenId(rs.getString("open_id"));
 		customer.setUnionId(rs.getString("union_id"));
@@ -36,7 +36,7 @@ public class CustomerRowMapper implements RowMapper<Customer>{
 		customer.setProvince(rs.getString("province"));
 		customer.setCountry(rs.getString("country"));
 		customer.setCreate_time(rs.getString("create_time"));
-		customer.setUpdate_time(rs.getString("update_time"));
+		customer.setUpdate_time(rs.getString("update_time"));*/
 		
 		return customer;
 	}

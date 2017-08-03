@@ -24,7 +24,7 @@ public class GoodsRowMapper implements RowMapper<Goods>{
 	public Goods mapRow(ResultSet rs, int rowNum) throws SQLException {
 		
 		Goods goods = new Goods();
-		goods.setId(String.valueOf(rs.getInt("id")));
+		/*goods.setId(String.valueOf(rs.getInt("id")));
 		goods.setUuid(rs.getString("uuid"));
 		goods.setName(rs.getString("name"));
 		goods.setShopId(rs.getString("shop_id"));
@@ -37,7 +37,7 @@ public class GoodsRowMapper implements RowMapper<Goods>{
 		goods.setGlobal_cid(rs.getInt("global_cid"));
 		goods.setIs_recommend(rs.getInt("is_recommend"));
 		goods.setCreate_time(rs.getString("create_time"));
-		goods.setUpdate_time(rs.getString("update_time"));
+		goods.setUpdate_time(rs.getString("update_time"));*/
 		
 		return goods;
 	}

@@ -117,9 +117,10 @@ public class WxPayServiceImpl implements WxPayService {
 	 * @return
 	 */
 	@Override
-	public boolean saveOrderSuccessNotifyResult(WxPayOrderNotifyResult wxPayOrderNotifyResult, int order_id) {
-		
-		return wxPayRepository.updateOrderSucccessNotifyInfo(wxPayOrderNotifyResult, order_id);
+	public boolean saveOrderSuccessNotifyResult(WxPayOrderNotifyResult wxPayOrderNotifyResult, String order_id) {
+
+		return true;
+		//return wxPayRepository.updateOrderSucccessNotifyInfo(wxPayOrderNotifyResult, order_id);
 		
 	}
 	
@@ -131,8 +132,9 @@ public class WxPayServiceImpl implements WxPayService {
 	 * @return
 	 */
 	@Override
-	public boolean saveOrderFailNotifyResult(WxPayOrderNotifyResult wxPayOrderNotifyResult, int order_id) {
-		return wxPayRepository.updateOrderFailNotiftyInfo(wxPayOrderNotifyResult, order_id);
+	public boolean saveOrderFailNotifyResult(WxPayOrderNotifyResult wxPayOrderNotifyResult, String order_id) {
+		return true;
+		//return wxPayRepository.updateOrderFailNotiftyInfo(wxPayOrderNotifyResult, order_id);
 	}
 	
 	

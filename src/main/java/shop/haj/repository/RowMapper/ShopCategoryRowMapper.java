@@ -35,11 +35,11 @@ public class ShopCategoryRowMapper implements RowMapper<ShopCategory> {
 		
 		ShopCategory shopCategory = new ShopCategory();
 		
-		shopCategory.setId(rs.getString("id"));
+		/*shopCategory.setId(rs.getString("id"));
 		shopCategory.setName(rs.getString("name"));
 		shopCategory.setPid(rs.getString("pid"));
 		shopCategory.setCreate_time(rs.getString("create_time"));
-		shopCategory.setUpdate_time(rs.getString("update_time"));
+		shopCategory.setUpdate_time(rs.getString("update_time"));*/
 		
 		return shopCategory;
 	}

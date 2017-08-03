@@ -1,8 +1,5 @@
 package shop.haj.service.impl;
 
-import com.google.common.collect.Lists;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,17 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.haj.entity.*;
 import shop.haj.manage.CacheManage;
-import shop.haj.repository.GoodsRepository;
-import shop.haj.repository.OrderListRepository;
+import shop.haj.mongo_repository.MongoGoodsRepository;
+import shop.haj.mongo_repository.MongoOrderListRepository;
+import shop.haj.mongo_repository.MongoOrderRepository;
 import shop.haj.repository.OrderRefundRepository;
-import shop.haj.repository.OrderRepository;
 import shop.haj.service.OrderService;
-import shop.haj.utils.DefaultPagination;
-import shop.haj.utils.OrderPayType;
-import shop.haj.utils.OrderStatus;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -42,13 +34,13 @@ public class OrderServiceImpl implements OrderService {
 	private Logger logger = LogManager.getLogger(OrderServiceImpl.class);
 	
 	@Autowired
-	private OrderRepository orderRepository;
+	private MongoOrderRepository mongoOrderRepository;
 	
 	@Autowired
-	private OrderListRepository orderListRepository;
+	private MongoOrderListRepository mongoOrderListRepository;
 	
 	@Autowired
-	private GoodsRepository goodsRepository;
+	private MongoGoodsRepository mongoGoodsRepository;
 	
 	@Autowired
 	private CacheManage cacheManage;
@@ -64,13 +56,14 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	@Override
 	public List<OrderListInfo> findOrderListByShopAndCustomerID(int shop_id, int customer_id, int status, Pagination page) {
-		
-		List<OrderListSingleInfo> orderListSingleInfoList = orderListRepository.findOrderListSingleByShopAndCustomerID(shop_id, customer_id, status, page);
-		
+
+		/*List<OrderListSingleInfo> orderListSingleInfoList = mongoOrderListRepository.findByShopIdAndCustomerIdAndStatus(shop_id, customer_id, status, page).getContent();
+
 		//处理订单数据
 		if(orderListSingleInfoList == null || orderListSingleInfoList.size() == 0) return Lists.newArrayList();
-		
-		return this.groupByOrderListInfo(orderListSingleInfoList);
+
+		return this.groupByOrderListInfo(orderListSingleInfoList);*/
+		return null;
 	}
 	
 	/**
@@ -82,14 +75,15 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 //	@Cacheable(value = "orderPages", key = "{#customer_id, #status + '_' + #page.orderByLimitString}")
 	public List<OrderListInfo> findOrderListByCustomerID(int customer_id, int status, Pagination page) {
-		List<OrderListSingleInfo> orderListSingleInfoList = orderListRepository.findOrderListSingleByCustomerID(customer_id, status, page);
-		
+		/*List<OrderListSingleInfo> orderListSingleInfoList = orderListRepository.findOrderListSingleByCustomerID(customer_id, status, page);
+
 		//处理订单数据
 		if(orderListSingleInfoList == null || orderListSingleInfoList.size() == 0) return Lists.newArrayList();
-		
+
 		cacheManage.addOrderPageKeysMapData(customer_id, status + "_") ;//+ page.getOrderByLimitString());
-		
-		return this.groupByOrderListInfo(orderListSingleInfoList);
+
+		return this.groupByOrderListInfo(orderListSingleInfoList);*/
+		return null;
 	}
 	
 	/**
@@ -99,7 +93,7 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	private List<OrderListInfo> groupByOrderListInfo(List<OrderListSingleInfo> orderListSingleInfoList){
 		
-		//订单号集合
+		/*//订单号集合
 		List<Integer> orderIDList = Lists.newArrayList();
 		int temp_order_id = 0;
 		
@@ -145,18 +139,20 @@ public class OrderServiceImpl implements OrderService {
 			orderListInfos.add(orderListInfo);
 		}
 		
-		return orderListInfos;
+		return orderListInfos;*/
+		return null;
 	}
 	
 	
 	@Override
 //	@Cacheable(value = "order", key = "#order_id")
 	public Order findShopOrderByID(int order_id, Pagination page) {
-		Order order = orderRepository.findShopOrderByID(order_id);
+		/*Order order = orderRepository.findShopOrderByID(order_id);
 		
 		fillOrderGoodsInfo(order);
 		
-		return order;
+		return order;*/
+		return null;
 	}
 	
 	/**
@@ -169,11 +165,12 @@ public class OrderServiceImpl implements OrderService {
 //	@Cacheable(value = "order", key = "#uuid")
 	public Order findShopOrderByUUID(String uuid) {
 		
-		Order order = orderRepository.findShopOrderByUUID(uuid);
+		/*Order order = orderRepository.findShopOrderByUUID(uuid);
 		
 		fillOrderGoodsInfo(order);
 		
-		return order;
+		return order;*/
+		return null;
 	}
 	
 	/**
@@ -182,7 +179,7 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	private void fillOrderGoodsInfo(Order order){
 		
-		List<OrderListSingleInfo> orderListSingleInfos = orderListRepository.findOrderGoodsInfoListByOrderID(order.getOrder_id(), DefaultPagination.getOrder());
+		/*List<OrderListSingleInfo> orderListSingleInfos = orderListRepository.findOrderGoodsInfoListByOrderID(order.getOrder_id(), DefaultPagination.getOrder());
 		
 		List<OrderGoodsInfo> orderGoodsInfos = Lists.newArrayList();
 		
@@ -202,13 +199,13 @@ public class OrderServiceImpl implements OrderService {
 		//设置订单的商品信息
 		order.setOrderGoodsInfos(orderGoodsInfos);
 		
-		order.setShop_name(orderListSingleInfos.get(0).getShop_name());
+		order.setShop_name(orderListSingleInfos.get(0).getShop_name());*/
 	}
 	
 	@Override
 	public Order addOrder(Order order) {
 		
-		//当支付方式为线下支付时，初始支付状态为待发货， 否则初始状态为待支付
+		/*//当支付方式为线下支付时，初始支付状态为待发货， 否则初始状态为待支付
 		if(order.getPayment_type() == OrderPayType.OFFLINEPAY.ordinal()){
 			order.setStatus(OrderStatus.WAITING_SEND.ordinal());
 		}else {
@@ -277,7 +274,8 @@ public class OrderServiceImpl implements OrderService {
 		//清空该买家订单缓存
 		clearOrderPagesCache(order.getCustomer_id());
 		
-		return order;
+		return order;*/
+		return null;
 	}
 	
 	/**
@@ -289,9 +287,9 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	@Transactional
 	@CacheEvict(value = "order", key = "#order_id")
-	public int updateOrderStatusToWaitingSend(int customer_id, int order_id, int onlinePayType) {
+	public int updateOrderStatusToWaitingSend(String customer_id, String order_id, int onlinePayType) {
 		
-		logger.info("updateOrderStatusToWaitingSend >>> customer_id={}, order_id={}", customer_id, order_id);
+		/*logger.info("updateOrderStatusToWaitingSend >>> customer_id={}, order_id={}", customer_id, order_id);
 		
 		orderRepository.updateOrderStatusToWaitingSend(order_id, onlinePayType);
 		
@@ -299,7 +297,8 @@ public class OrderServiceImpl implements OrderService {
 		int result = orderRepository.updateOrderGoodsInfoStatus(order_id, OrderStatus.WAITING_SEND.ordinal());
 		clearOrderPagesCache(customer_id);
 		
-		return result;
+		return result;*/
+		return 0;
 	}
 	
 	/**
@@ -313,7 +312,7 @@ public class OrderServiceImpl implements OrderService {
 	@CacheEvict(value = "order", key = "#order_id")
 	public int updateOrderStatusToWaitingReceive(int customer_id, int order_id) {
 		
-		logger.info("updateOrderStatusToWaitingReceive >>> customer_id={}, order_id={}", customer_id, order_id);
+		/*logger.info("updateOrderStatusToWaitingReceive >>> customer_id={}, order_id={}", customer_id, order_id);
 		
 		orderRepository.updateOrderStatusToWaitingReceive(order_id);
 		
@@ -321,7 +320,8 @@ public class OrderServiceImpl implements OrderService {
 		int result = orderRepository.updateOrderGoodsInfoStatus(order_id, OrderStatus.WAITING_RECEIVE.ordinal());
 		clearOrderPagesCache(customer_id);
 		
-		return result;
+		return result;*/
+		return  0;
 	}
 	
 	/**
@@ -335,7 +335,7 @@ public class OrderServiceImpl implements OrderService {
 	@CacheEvict(value = "order", key = "#order_id")
 	public int updateOrderStatusToWaitingComments(int customer_id, int order_id) {
 		
-		logger.info("updateOrderStatusToComments >>> customer_id={}, order_id={}", customer_id, order_id);
+		/*logger.info("updateOrderStatusToComments >>> customer_id={}, order_id={}", customer_id, order_id);
 		
 		orderRepository.updateOrderStatusToWaitingComments(order_id);
 		
@@ -343,7 +343,8 @@ public class OrderServiceImpl implements OrderService {
 		int result = orderRepository.updateOrderGoodsInfoStatus(order_id, OrderStatus.WAITING_COMMENT.ordinal());
 		clearOrderPagesCache(customer_id);
 		
-		return result;
+		return result;*/
+		return 0;
 	}
 	
 	/**
@@ -356,7 +357,7 @@ public class OrderServiceImpl implements OrderService {
 	@CacheEvict(value = "order", key = "#orderRefund.getOrder_id()")
 	public int updateOrderStatusToRefund(OrderRefund orderRefund, int customer_id) {
 		
-		logger.info("updateOrderStatusToRefund >>> OrderRefund={}", orderRefund);
+		/*logger.info("updateOrderStatusToRefund >>> OrderRefund={}", orderRefund);
 		
 		//新增退款记录
 		orderRefundRepository.addOrderRefund(orderRefund);
@@ -367,7 +368,8 @@ public class OrderServiceImpl implements OrderService {
 		int result = orderRepository.updateOrderGoodsInfoStatus(orderRefund.getOrder_id(), OrderStatus.REFUND.ordinal());
 		clearOrderPagesCache(customer_id);
 		
-		return result;
+		return result;*/
+		return 0;
 	}
 	
 	/**
@@ -380,7 +382,7 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public int updateOrderStatusToFinish(int customer_id, int order_id) {
 		
-		logger.info("updateOrderStatusToFinish >>> customer_id={}, order_id={}", customer_id, order_id);
+		/*logger.info("updateOrderStatusToFinish >>> customer_id={}, order_id={}", customer_id, order_id);
 		
 		orderRepository.updateOrderStatusToFinish(order_id);
 		
@@ -388,7 +390,8 @@ public class OrderServiceImpl implements OrderService {
 		int result = orderRepository.updateOrderGoodsInfoStatus(order_id, OrderStatus.FINISHED.ordinal());
 		clearOrderPagesCache(customer_id);
 		
-		return result;
+		return result;*/
+		return 0;
 	}
 	
 	/**
@@ -402,15 +405,15 @@ public class OrderServiceImpl implements OrderService {
 	@CacheEvict(value = "order", key = "#order_id")
 	public int updateOrderStatusToClose(int customer_id, int order_id) {
 		
-		logger.info("updateOrderStatusToClose >>> customer_id={}, order_id={}", customer_id, order_id);
+		/*logger.info("updateOrderStatusToClose >>> customer_id={}, order_id={}", customer_id, order_id);
 		
 		orderRepository.updateOrderStatusToClose(order_id);
 		
 		//修改订单商品关系表状态
 		int result = orderRepository.updateOrderGoodsInfoStatus(order_id, OrderStatus.CLOSED.ordinal());
 		clearOrderPagesCache(customer_id);
-		
-		return result;
+		*/
+		return 0;
 	}
 	
 	/**
@@ -470,7 +473,7 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	private void clearOrderPagesCache(int customer_id){
 		
-		List<String> keys = cacheManage.getOrderPageCacheKeys(customer_id);
+		/*List<String> keys = cacheManage.getOrderPageCacheKeys(customer_id);
 		
 		if(keys == null || keys.size() == 0) {
 			cacheManage.clearAllOrderPagesCache();
@@ -481,7 +484,7 @@ public class OrderServiceImpl implements OrderService {
 				cacheManage.clearOrderPageCache(customer_id, pageKey);
 			}
 			keys.clear();
-		}
+		}*/
 		
 	}
 	

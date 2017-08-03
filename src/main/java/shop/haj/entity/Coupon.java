@@ -23,31 +23,32 @@ public class Coupon implements Serializable {
 	@Id
 	private String id;
 	private double price;//优惠券面额
-	private double limit_price;//最低消费多少时可使用
-	private String shop_id;
-	private String begin_time;//优惠券可领取时间
-	private String due_time;//优惠券失效时间
+	private double limitPrice;//最低消费多少时可使用
+	private String shopId;
+	private String beginTime;//优惠券可领取时间
+	private String dueTime;//优惠券失效时间
 	private int stock;//库存
-	private int per_limit;//每人限制领取个数
-	private int suit_limit;//使用限制：0：全店适用，1：部分商品适用
-	private String create_time;
+	private int perLimit;//每人限制领取个数
+	private int suitLimit;//使用限制：0：全店适用，1：部分商品适用
+	private String createTime;
 	private List<String> goodsIdList;//当为部分商品适用时，保存所有商品的ID
 	
 	public Coupon() {
 	}
 
 
-	public Coupon(String id, double price, double limit_price, String shop_id, String begin_time, String due_time, int stock, int per_limit, int suit_limit, String create_time, List<String> goodsIdList) {
+	public Coupon(String id, double price, double limitPrice, String shopId, String beginTime, String dueTime, int stock, int perLimit, int suitLimit, String createTime, List<String> goodsIdList) {
+
 		this.id = id;
 		this.price = price;
-		this.limit_price = limit_price;
-		this.shop_id = shop_id;
-		this.begin_time = begin_time;
-		this.due_time = due_time;
+		this.limitPrice = limitPrice;
+		this.shopId = shopId;
+		this.beginTime = beginTime;
+		this.dueTime = dueTime;
 		this.stock = stock;
-		this.per_limit = per_limit;
-		this.suit_limit = suit_limit;
-		this.create_time = create_time;
+		this.perLimit = perLimit;
+		this.suitLimit = suitLimit;
+		this.createTime = createTime;
 		this.goodsIdList = goodsIdList;
 	}
 
@@ -67,36 +68,36 @@ public class Coupon implements Serializable {
 		this.price = price;
 	}
 
-	public double getLimit_price() {
-		return limit_price;
+	public double getLimitPrice() {
+		return limitPrice;
 	}
 
-	public void setLimit_price(double limit_price) {
-		this.limit_price = limit_price;
+	public void setLimitPrice(double limitPrice) {
+		this.limitPrice = limitPrice;
 	}
 
-	public String getShop_id() {
-		return shop_id;
+	public String getShopId() {
+		return shopId;
 	}
 
-	public void setShop_id(String shop_id) {
-		this.shop_id = shop_id;
+	public void setShopId(String shopId) {
+		this.shopId = shopId;
 	}
 
-	public String getBegin_time() {
-		return begin_time;
+	public String getBeginTime() {
+		return beginTime;
 	}
 
-	public void setBegin_time(String begin_time) {
-		this.begin_time = begin_time;
+	public void setBeginTime(String beginTime) {
+		this.beginTime = beginTime;
 	}
 
-	public String getDue_time() {
-		return due_time;
+	public String getDueTime() {
+		return dueTime;
 	}
 
-	public void setDue_time(String due_time) {
-		this.due_time = due_time;
+	public void setDueTime(String dueTime) {
+		this.dueTime = dueTime;
 	}
 
 	public int getStock() {
@@ -107,28 +108,28 @@ public class Coupon implements Serializable {
 		this.stock = stock;
 	}
 
-	public int getPer_limit() {
-		return per_limit;
+	public int getPerLimit() {
+		return perLimit;
 	}
 
-	public void setPer_limit(int per_limit) {
-		this.per_limit = per_limit;
+	public void setPerLimit(int perLimit) {
+		this.perLimit = perLimit;
 	}
 
-	public int getSuit_limit() {
-		return suit_limit;
+	public int getSuitLimit() {
+		return suitLimit;
 	}
 
-	public void setSuit_limit(int suit_limit) {
-		this.suit_limit = suit_limit;
+	public void setSuitLimit(int suitLimit) {
+		this.suitLimit = suitLimit;
 	}
 
-	public String getCreate_time() {
-		return create_time;
+	public String getCreateTime() {
+		return createTime;
 	}
 
-	public void setCreate_time(String create_time) {
-		this.create_time = create_time;
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
 	}
 
 	public List<String> getGoodsIdList() {

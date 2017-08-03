@@ -23,8 +23,8 @@ public class ShopCategory implements Serializable {
 	private String id;
 	private String name;
 	private String pid;
-	private String create_time;
-	private String update_time;
+	private String createTime;
+	private String updateTime;
 	
 	public ShopCategory() {
 	}
@@ -52,31 +52,20 @@ public class ShopCategory implements Serializable {
 	public void setPid(String pid) {
 		this.pid = pid;
 	}
-	
-	public String getCreate_time() {
-		return create_time;
+
+	public String getCreateTime() {
+		return createTime;
 	}
-	
-	public void setCreate_time(String create_time) {
-		this.create_time = create_time;
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
 	}
-	
-	public String getUpdate_time() {
-		return update_time;
+
+	public String getUpdateTime() {
+		return updateTime;
 	}
-	
-	public void setUpdate_time(String update_time) {
-		this.update_time = update_time;
-	}
-	
-	@Override
-	public String toString() {
-		return "ShopCategory{" +
-				"id=" + id +
-				", name='" + name + '\'' +
-				", pid=" + pid +
-				", create_time='" + create_time + '\'' +
-				", update_time='" + update_time + '\'' +
-				'}';
+
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
 	}
 }

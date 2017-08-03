@@ -39,7 +39,7 @@ public class NoticeController {
 	 */
 	@ApiOperation(value = "查找店内所有公告", notes = "卖家查找店内所有公告")
 	@GetMapping(value = "/seller/notices")
-	public List<Notice> findAllNotice(@RequestHeader("shop_id") int shop_id,
+	public List<Notice> findAllNotice(@RequestHeader("shop_id") String shop_id,
 	                                  @RequestParam(value = "from", defaultValue = "0") int from,
 	                                  @RequestParam(value = "limit", defaultValue = "20") int to,
 	                                  @RequestParam(value = "by", defaultValue = "id") String by,
@@ -65,7 +65,7 @@ public class NoticeController {
 	 */
 	@ApiOperation(value = "查找店内所有需要显示的公告", notes = "卖家查找店内所有需要显示的公告")
 	@GetMapping(value = {"/seller/notices/shows", "/customer/notices/shows"})
-	public List<Notice> findAllShowedNotice(@RequestHeader("shop_id") int shop_id,
+	public List<Notice> findAllShowedNotice(@RequestHeader("shop_id") String shop_id,
 	                                        @RequestParam(value = "from", defaultValue = "0") int from,
 	                                        @RequestParam(value = "limit", defaultValue = "20") int to,
 	                                        @RequestParam(value = "by", defaultValue = "id") String by,
@@ -88,9 +88,9 @@ public class NoticeController {
 	 */
 	@ApiOperation(value = "卖家新增公告", notes = "卖家新增公告")
 	@PostMapping(value = {"/seller/notices"})
-	public Notice addNotice(@RequestHeader("shop_id") int shop_id,
+	public Notice addNotice(@RequestHeader("shop_id") String shop_id,
 	                        @RequestBody Notice notice){
-		notice.setShop_id(shop_id);
+		notice.setShopId(shop_id);
 		return noticeService.addNotice(notice);
 	}
 	
@@ -102,8 +102,8 @@ public class NoticeController {
 	 */
 	@ApiOperation(value = "卖家删除公告", notes = "卖家删除公告")
 	@DeleteMapping(value = {"/seller/notices/{notice_id}"})
-	public String deleteNotice(@RequestHeader("shop_id") int shop_id,
-	                        @PathVariable("notice_id") int notice_id){
+	public String deleteNotice(@RequestHeader("shop_id") String shop_id,
+	                        @PathVariable("notice_id") String notice_id){
 		int result = noticeService.deleteNotice(shop_id, notice_id);
 		return ResultUtil.getJson(result);
 	}

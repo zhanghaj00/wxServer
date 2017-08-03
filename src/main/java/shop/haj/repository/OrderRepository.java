@@ -1,3 +1,4 @@
+/*
 package shop.haj.repository;
 
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +20,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+*/
 /**
  * <p>Title: shop.ha.repository</p>
  * <p/>
@@ -29,7 +31,8 @@ import java.sql.Statement;
  *
  * @author hao
  *         CreateTime：3/4/17
- */
+ *//*
+
 @Repository
 public class OrderRepository {
 	
@@ -39,12 +42,14 @@ public class OrderRepository {
 	private JdbcTemplate jdbcTemplate;
 	
 	
-	/**
+	*/
+/**
 	 * 查询单个订单的信息
 	 *
 	 * @param order_id
 	 * @return
-	 */
+	 *//*
+
 	public Order findShopOrderByID(int order_id) {
 		String sql = "select \n" +
 				"    id, \n" +
@@ -71,11 +76,13 @@ public class OrderRepository {
 		return jdbcTemplate.queryForObject(sql, new Object[]{order_id}, new OrderRowMapper());
 	}
 	
-	/**
+	*/
+/**
 	 * 根据订单号查询订单信息
 	 * @param uuid
 	 * @return
-	 */
+	 *//*
+
 	public Order findShopOrderByUUID(String uuid){
 		
 		String sql = "select \n" +
@@ -103,12 +110,14 @@ public class OrderRepository {
 		return jdbcTemplate.queryForObject(sql, new Object[]{uuid}, new OrderRowMapper());
 	}
 	
-	/**
+	*/
+/**
 	 * 新增订单信息
 	 *
 	 * @param order
 	 * @return
-	 */
+	 *//*
+
 	@Transactional
 	public Order addOrder(Order order) {
 		String sql = "insert into `order`(\n" +
@@ -174,12 +183,14 @@ public class OrderRepository {
 		return order;
 	}
 	
-	/**
+	*/
+/**
 	 * 当用户支付成功后，将订单状态修改为待发货
 	 * @param order_id
 	 * @param onlinePayType 在线支付类型
 	 * @return
-	 */
+	 *//*
+
 	public int updateOrderStatusToWaitingSend(int order_id, int onlinePayType){
 		
 		String sql = "update `order` set status=?, update_time=now(), payment_time=now(), onlinepay_type=? where id=?";
@@ -192,11 +203,13 @@ public class OrderRepository {
 		return 1;
 	}
 	
-	/**
+	*/
+/**
 	 * 当卖家发货后，将订单状态修改为待收货
 	 * @param order_id
 	 * @return
-	 */
+	 *//*
+
 	public int updateOrderStatusToWaitingReceive(int order_id){
 		String sql = "update `order` set status=?, update_time=now(), sended_time=now() where id=?";
 		
@@ -208,12 +221,14 @@ public class OrderRepository {
 		return 1;
 	}
 	
-	/**
+	*/
+/**
 	 * 当买家确认收货，或者超过收货期限后，将订单状态修改为待评价
 	 *
 	 * @param order_id
 	 * @return
-	 */
+	 *//*
+
 	public int updateOrderStatusToWaitingComments(int order_id){
 		
 		String sql = "update `order` set status=?, update_time=now(), received_time=now() where id=?";
@@ -226,12 +241,14 @@ public class OrderRepository {
 		return 1;
 	}
 	
-	/**
+	*/
+/**
 	 * 当买家开始退款/售后时，将订单状态修改为退款/售后中
 	 *
 	 * @param order_id
 	 * @return
-	 */
+	 *//*
+
 	public int updateOrderStatusToRefund(int order_id){
 		
 		String sql = "update `order` set status=?, update_time=now(), reqrefund_time=now() where id=?";
@@ -244,12 +261,14 @@ public class OrderRepository {
 		return 1;
 	}
 	
-	/**
+	*/
+/**
 	 * 将订单状态修改为已完成
 	 *
 	 * @param order_id
 	 * @return
-	 */
+	 *//*
+
 	public int updateOrderStatusToFinish(int order_id){
 		
 		String sql = "update `order` set status=?, update_time=now(), finish_time=now() where id=?";
@@ -267,12 +286,14 @@ public class OrderRepository {
 		return 1;
 	}
 	
-	/**
+	*/
+/**
 	 * 将订单状态修改为已关闭
 	 *
 	 * @param order_id
 	 * @return
-	 */
+	 *//*
+
 	public int updateOrderStatusToClose(int order_id){
 		
 		String sql = "update `order` set status=?, update_time=now(), close_time=now() where id=?";
@@ -291,12 +312,14 @@ public class OrderRepository {
 	}
 	
 	
-	/**
+	*/
+/**
 	 * 修改订单商品表状态信息
 	 * @param order_id
 	 * @param status
 	 * @return
-	 */
+	 *//*
+
 	public int updateOrderGoodsInfoStatus(int order_id, int status){
 		String sql = "update order_goods_info set status=? where order_id=?";
 		int result = jdbcTemplate.update(sql, new Object[]{status, order_id});
@@ -304,4 +327,4 @@ public class OrderRepository {
 		if(result <= 0) return 0;
 		return 1;
 	}
-}
+}*/

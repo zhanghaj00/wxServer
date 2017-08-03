@@ -32,7 +32,7 @@ public class ShopCartServiceImplTest {
 	
 	@Test
 	public void findShopCarts() throws Exception {
-		List<Cart> carts = shopCartService.findShopCarts(1, 4, DefaultPagination.getCart());
+		List<Cart> carts = shopCartService.findShopCarts("10","10", DefaultPagination.getCart());
 		for (Cart cart : carts) {
 			System.out.println(cart);
 		}
@@ -41,15 +41,15 @@ public class ShopCartServiceImplTest {
 	@Test
 	public void addCart() throws Exception {
 		Cart cart = new Cart();
-		cart.setCustomer_id(1);
-		cart.setShop_id(3);
+		/*cart.setCustomer_id("10");
+		cart.setShop_id("10");
 		cart.setShop_name("hello");
-		cart.setGoods_id(1);
+		cart.setGoods_id("10");
 		cart.setGoods_name("test");
 		cart.setGoods_price(12.22);
 		cart.setGoods_num(12);
 		cart.setGoods_image("http");
-		cart.setGoods_sku("http");
+		cart.setGoods_sku("http");*/
 		cart.setNote("test");
 		
 		int result = shopCartService.addCart(cart);
@@ -58,18 +58,18 @@ public class ShopCartServiceImplTest {
 	
 	@Test
 	public void updateCartNum() throws Exception {
-		Assert.assertEquals(1, shopCartService.updateCartNum(1, 3,
-				4, 100));
+		Assert.assertEquals(1, shopCartService.updateCartNum("10", "10",
+				"10", 100));
 	}
 	
 	@Test
 	public void removeGoodsFromCart() throws Exception {
-		Assert.assertEquals(1, shopCartService.removeGoodsFromCart(1, 3,4));
+		Assert.assertEquals(1, shopCartService.removeGoodsFromCart("10", "10","10"));
 	}
 	
 	@Test
 	public void clearShopCart() throws Exception {
-		Assert.assertEquals(1, shopCartService.clearShopCart(1, 3));
+		Assert.assertEquals(1, shopCartService.clearShopCart("10", "10"));
 	}
 	
 }

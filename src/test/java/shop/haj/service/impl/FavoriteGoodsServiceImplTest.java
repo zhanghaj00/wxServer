@@ -31,7 +31,7 @@ public class FavoriteGoodsServiceImplTest {
 	
 	@Test
 	public void findFavoriteGoodsByCustomer() throws Exception {
-		int customer_id = 10;
+		String customer_id = "10";
 		List<FavoriteGoods> favoriteGoodss = service.findFavoriteGoodsByCustomer(customer_id, DefaultPagination.getFavoriteGoods());
 		
 		for (FavoriteGoods favoriteGoods : favoriteGoodss) {
@@ -41,8 +41,8 @@ public class FavoriteGoodsServiceImplTest {
 	
 	@Test
 	public void findFavoriteGoodsByCustomerShop() throws Exception {
-		int customer_id = 10;
-		int shop_id = 3;
+		String customer_id = "";
+		String shop_id = "";
 		List<FavoriteGoods> favoriteGoodss = service.findFavoriteGoodsByCustomerShop(customer_id, shop_id, DefaultPagination.getFavoriteGoods());
 		
 		for (FavoriteGoods favoriteGoods : favoriteGoodss) {
@@ -54,16 +54,16 @@ public class FavoriteGoodsServiceImplTest {
 	public void addFavoriteGoods() throws Exception {
 		
 		FavoriteGoods favoriteGoods = new FavoriteGoods();
-		favoriteGoods.setCustomer_id(10);
-		favoriteGoods.setShop_id(3);
-		favoriteGoods.setGoods_id(2);
+		favoriteGoods.setCustomerId("10");
+		favoriteGoods.setShopId("10");
+		favoriteGoods.setGoodsId("10");
 		
 		service.addFavoriteGoods(favoriteGoods);
 	}
 	
 	@Test
 	public void removeFavoriteGoods() throws Exception {
-		service.removeFavoriteGoods(10, 2);
+		service.removeFavoriteGoods("","");
 	}
 	
 }

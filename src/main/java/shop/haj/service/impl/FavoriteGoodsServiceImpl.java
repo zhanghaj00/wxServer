@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import shop.haj.entity.FavoriteGoods;
 import shop.haj.entity.Pagination;
+import shop.haj.mongo_repository.MongoFavoriteGoodsRepository;
 import shop.haj.repository.FavoriteGoodsRepository;
 import shop.haj.service.FavoriteGoodsService;
 
@@ -32,7 +33,7 @@ public class FavoriteGoodsServiceImpl implements FavoriteGoodsService{
 	private Logger logger = LogManager.getLogger(FavoriteGoodsServiceImpl.class);
 	
 	@Autowired
-	private FavoriteGoodsRepository favoriteGoodsRepository;
+	private MongoFavoriteGoodsRepository mongoFavoriteGoodsRepository;
 	
 	/**
 	 * 查找卖家全部收藏的商品
@@ -41,9 +42,9 @@ public class FavoriteGoodsServiceImpl implements FavoriteGoodsService{
 	 * @return
 	 */
 	@Override
-	public List<FavoriteGoods> findFavoriteGoodsByCustomer(int customer_id, Pagination page) {
+	public List<FavoriteGoods> findFavoriteGoodsByCustomer(String customer_id, Pagination page) {
 		logger.info("findFavoriteGoodsByCustomer >>> customer_id={}", customer_id);
-		return favoriteGoodsRepository.findFavoriteGoodsByCustomer(customer_id, page);
+		return mongoFavoriteGoodsRepository.findByCustomerId(customer_id, page.getRequest()).getContent();
 	}
 	
 	/**
@@ -54,10 +55,10 @@ public class FavoriteGoodsServiceImpl implements FavoriteGoodsService{
 	 * @return
 	 */
 	@Override
-	public List<FavoriteGoods> findFavoriteGoodsByCustomerShop(int customer_id, int shop_id, Pagination page) {
+	public List<FavoriteGoods> findFavoriteGoodsByCustomerShop(String customer_id, String shop_id, Pagination page) {
 		logger.info("findFavoriteGoodsByCustomerShop >>> customer_id={}," +
 				" shop_id={}", customer_id, shop_id);
-		return favoriteGoodsRepository.findFavoriteGoodsByCustomerShop(customer_id, shop_id, page);
+		return mongoFavoriteGoodsRepository.findByCustomerIdAndShopId(customer_id, shop_id, page.getRequest()).getContent();
 	}
 	
 	/**
@@ -67,9 +68,9 @@ public class FavoriteGoodsServiceImpl implements FavoriteGoodsService{
 	 * @return
 	 */
 	@Override
-	public int addFavoriteGoods(FavoriteGoods favoriteGoods) {
+	public FavoriteGoods addFavoriteGoods(FavoriteGoods favoriteGoods) {
 		logger.info("addFavoriteGoods >>> favoriteGoods={}", favoriteGoods);
-		return favoriteGoodsRepository.addFavoriteGoods(favoriteGoods);
+		return mongoFavoriteGoodsRepository.insert(favoriteGoods);
 	}
 	
 	/**
@@ -80,9 +81,11 @@ public class FavoriteGoodsServiceImpl implements FavoriteGoodsService{
 	 * @return
 	 */
 	@Override
-	public int removeFavoriteGoods(int customer_id, int goods_id) {
+	public int removeFavoriteGoods(String customer_id, String goods_id) {
 		logger.info("removeFavoriteGoods >>> customer_id={}, goods_id={}",
 				customer_id, goods_id);
-		return favoriteGoodsRepository.removeFavoriteGoods(customer_id, goods_id);
+		mongoFavoriteGoodsRepository.deleteByCustomerIdAndGoodsId(customer_id, goods_id);
+		return 1;
+
 	}
 }

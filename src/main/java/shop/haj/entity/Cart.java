@@ -20,101 +20,101 @@ import java.io.Serializable;
 public class Cart implements Serializable {
 
 	@Id
-	private String cart_id;//购物车ID
-	private String customer_id;//用户ID
-	private String shop_id;//店铺ID
-	private String shop_name;//店铺名称
-	private String goods_id;//商品ID
-	private String goods_name;//商品名称
-	private double goods_price;//商品价格
-	private int goods_num;//商品数量
-	private String goods_image;//商品图片
-	private String goods_sku;//规格说明
+	private String id;//购物车ID
+	private String customerId;//用户ID
+	private String shopId;//店铺ID
+	private String shopName;//店铺名称
+	private String goodsId;//商品ID
+	private String goodsName;//商品名称
+	private double goodsPrice;//商品价格
+	private int goodsNum;//商品数量
+	private String goodsImage;//商品图片
+	private String goodsSku;//规格说明
 	private String note;//商品备注
-	private String create_time;//添加到购物车的时间
-	private String update_time;//购物车更新时间
+	private String createTime;//添加到购物车的时间
+	private String updateTime;//购物车更新时间
 	
 	public Cart() {
 	}
 
-	public String getCart_id() {
-		return cart_id;
+	public String getId() {
+		return id;
 	}
 
-	public void setCart_id(String cart_id) {
-		this.cart_id = cart_id;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public String getCustomer_id() {
-		return customer_id;
+	public String getCustomerId() {
+		return customerId;
 	}
 
-	public void setCustomer_id(String customer_id) {
-		this.customer_id = customer_id;
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
 	}
 
-	public String getShop_id() {
-		return shop_id;
+	public String getShopId() {
+		return shopId;
 	}
 
-	public void setShop_id(String shop_id) {
-		this.shop_id = shop_id;
+	public void setShopId(String shopId) {
+		this.shopId = shopId;
 	}
 
-	public String getShop_name() {
-		return shop_name;
+	public String getShopName() {
+		return shopName;
 	}
 
-	public void setShop_name(String shop_name) {
-		this.shop_name = shop_name;
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
 	}
 
-	public String getGoods_id() {
-		return goods_id;
+	public String getGoodsId() {
+		return goodsId;
 	}
 
-	public void setGoods_id(String goods_id) {
-		this.goods_id = goods_id;
+	public void setGoodsId(String goodsId) {
+		this.goodsId = goodsId;
 	}
 
-	public String getGoods_name() {
-		return goods_name;
+	public String getGoodsName() {
+		return goodsName;
 	}
 
-	public void setGoods_name(String goods_name) {
-		this.goods_name = goods_name;
+	public void setGoodsName(String goodsName) {
+		this.goodsName = goodsName;
 	}
 
-	public double getGoods_price() {
-		return goods_price;
+	public double getGoodsPrice() {
+		return goodsPrice;
 	}
 
-	public void setGoods_price(double goods_price) {
-		this.goods_price = goods_price;
+	public void setGoodsPrice(double goodsPrice) {
+		this.goodsPrice = goodsPrice;
 	}
 
-	public int getGoods_num() {
-		return goods_num;
+	public int getGoodsNum() {
+		return goodsNum;
 	}
 
-	public void setGoods_num(int goods_num) {
-		this.goods_num = goods_num;
+	public void setGoodsNum(int goodsNum) {
+		this.goodsNum = goodsNum;
 	}
 
-	public String getGoods_image() {
-		return goods_image;
+	public String getGoodsImage() {
+		return goodsImage;
 	}
 
-	public void setGoods_image(String goods_image) {
-		this.goods_image = goods_image;
+	public void setGoodsImage(String goodsImage) {
+		this.goodsImage = goodsImage;
 	}
 
-	public String getGoods_sku() {
-		return goods_sku;
+	public String getGoodsSku() {
+		return goodsSku;
 	}
 
-	public void setGoods_sku(String goods_sku) {
-		this.goods_sku = goods_sku;
+	public void setGoodsSku(String goodsSku) {
+		this.goodsSku = goodsSku;
 	}
 
 	public String getNote() {
@@ -125,19 +125,19 @@ public class Cart implements Serializable {
 		this.note = note;
 	}
 
-	public String getCreate_time() {
-		return create_time;
+	public String getCreateTime() {
+		return createTime;
 	}
 
-	public void setCreate_time(String create_time) {
-		this.create_time = create_time;
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
 	}
 
-	public String getUpdate_time() {
-		return update_time;
+	public String getUpdateTime() {
+		return updateTime;
 	}
 
-	public void setUpdate_time(String update_time) {
-		this.update_time = update_time;
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
 	}
 }

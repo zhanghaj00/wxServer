@@ -26,135 +26,113 @@ public class Address implements Serializable{
 	private String country;//县城
 	private String town;//城镇
 	private String detail;//详细地址
-	private int is_default;//是否默认地址
-	private String customer_id;
+	private int isDefault;//是否默认地址
+	private String customerId;
 	private String name;
 	private String phone;
-	private String create_time;
-	private String update_time;
-	
+	private String createTime;
+	private String updateTime;
+
+	public Address() {
+	}
+
 	/**
 	 * 返回完整地址列表
 	 * @return
 	 */
-	public String getFullAddress(){
-		return province + city + country + town + detail;
-	}
-	
 	public String getId() {
 		return id;
 	}
-	
+
 	public void setId(String id) {
 		this.id = id;
 	}
-	
+
 	public String getProvince() {
 		return province;
 	}
-	
+
 	public void setProvince(String province) {
 		this.province = province;
 	}
-	
+
 	public String getCity() {
 		return city;
 	}
-	
+
 	public void setCity(String city) {
 		this.city = city;
 	}
-	
+
 	public String getCountry() {
 		return country;
 	}
-	
+
 	public void setCountry(String country) {
 		this.country = country;
 	}
-	
+
 	public String getTown() {
-		
-		if(town == null || town.toLowerCase().equals("null")) return "";
-		
 		return town;
 	}
-	
+
 	public void setTown(String town) {
 		this.town = town;
 	}
-	
+
 	public String getDetail() {
 		return detail;
 	}
-	
+
 	public void setDetail(String detail) {
 		this.detail = detail;
 	}
-	
-	public int getIs_default() {
-		return is_default;
+
+	public int getIsDefault() {
+		return isDefault;
 	}
-	
-	public void setIs_default(int is_default) {
-		this.is_default = is_default;
+
+	public void setIsDefault(int isDefault) {
+		this.isDefault = isDefault;
 	}
-	
-	public String getCustomer_id() {
-		return customer_id;
+
+	public String getCustomerId() {
+		return customerId;
 	}
-	
-	public void setCustomer_id(String customer_id) {
-		this.customer_id = customer_id;
+
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public String getPhone() {
 		return phone;
 	}
-	
+
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	
-	public String getCreate_time() {
-		return create_time;
+
+	public String getCreateTime() {
+		return createTime;
 	}
-	
-	public void setCreate_time(String create_time) {
-		this.create_time = create_time;
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
 	}
-	
-	public String getUpdate_time() {
-		return update_time;
+
+	public String getUpdateTime() {
+		return updateTime;
 	}
-	
-	public void setUpdate_time(String update_time) {
-		this.update_time = update_time;
-	}
-	
-	@Override
-	public String toString() {
-		return "Address{" +
-				"id=" + id +
-				", province='" + province + '\'' +
-				", city='" + city + '\'' +
-				", country='" + country + '\'' +
-				", town='" + town + '\'' +
-				", detail='" + detail + '\'' +
-				", is_default=" + is_default +
-				", customer_id=" + customer_id +
-				", name='" + name + '\'' +
-				", phone='" + phone + '\'' +
-				", create_time='" + create_time + '\'' +
-				", update_time='" + update_time + '\'' +
-				'}';
+
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
 	}
 }

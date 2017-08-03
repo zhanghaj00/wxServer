@@ -35,7 +35,7 @@ public class CartRowMapper implements RowMapper<Cart>{
 	public Cart mapRow(ResultSet rs, int rowNum) throws SQLException {
 		
 		Cart cart = new Cart();
-		cart.setCart_id(rs.getInt("id"));
+		/*cart.setCart_id(rs.getInt("id"));
 		cart.setCustomer_id(rs.getInt("customer_id"));
 		cart.setShop_id(rs.getInt("shop_id"));
 		cart.setShop_name(rs.getString("shop_name"));
@@ -47,7 +47,7 @@ public class CartRowMapper implements RowMapper<Cart>{
 		cart.setGoods_sku(rs.getString("goods_sku"));
 		cart.setNote(rs.getString("note"));
 		cart.setCreate_time(rs.getString("create_time"));
-		cart.setUpdate_time(rs.getString("update_time"));
+		cart.setUpdate_time(rs.getString("update_time"));*/
 		
 		return cart;
 	}

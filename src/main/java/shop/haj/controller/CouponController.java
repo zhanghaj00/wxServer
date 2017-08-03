@@ -36,10 +36,10 @@ public class CouponController {
 	 */
 	@ApiOperation(value = "新增优惠券", notes = "卖家新增优惠券")
 	@PostMapping({"/seller/coupons"})
-	public Coupon addCoupon(@RequestHeader("shop_id") int shop_id,
+	public Coupon addCoupon(@RequestHeader("shop_id") String shop_id,
 	                        @RequestBody Coupon coupon){
 		
-		coupon.setShop_id(shop_id);
+		coupon.setShopId(shop_id);
 		
 		return couponService.addCoupon(coupon);
 	}
@@ -51,7 +51,7 @@ public class CouponController {
 	 */
 	@ApiOperation(value = "卖家查找店铺优惠券", notes = "卖家查找优惠券列表")
 	@GetMapping(value = {"/seller/coupons"})
-	public List<Coupon> findCouponByShopID(@RequestHeader("shop_id") int shop_id,
+	public List<Coupon> findCouponByShopID(@RequestHeader("shop_id") String shop_id,
 	                                       @RequestParam(value = "from", defaultValue = "0") int from,
 	                                       @RequestParam(value = "limit", defaultValue = "20") int to,
 	                                       @RequestParam(value = "by", defaultValue = "id") String by,
@@ -72,8 +72,8 @@ public class CouponController {
 	 */
 	@ApiOperation(value = "删除优惠券", notes = "卖家删除指定优惠券")
 	@DeleteMapping(value = {"/seller/coupons/{coupon_id}"})
-	public String deleteCouponByID(@RequestHeader("shop_id") int shop_id,
-	                               @PathVariable("coupon_id") int coupon_id){
+	public String deleteCouponByID(@RequestHeader("shop_id") String shop_id,
+	                               @PathVariable("coupon_id") String coupon_id){
 		
 		return couponService.deleteCouponByID(shop_id, coupon_id);
 	}
@@ -85,7 +85,7 @@ public class CouponController {
 	 */
 	@ApiOperation(value = "买家查找优惠券", notes = "买家查找拥有的优惠券信息")
 	@GetMapping(value = {"/customer/coupons"})
-	public List<CouponCustomerInfo> findCustomerCouponInfo(@RequestAttribute(value = "customer_id", required = false) int customer_id,
+	public List<CouponCustomerInfo> findCustomerCouponInfo(@RequestAttribute(value = "customer_id", required = false) String customer_id,
 	                                                       @RequestParam(value = "from", defaultValue = "0") int from,
 	                                                       @RequestParam(value = "limit", defaultValue = "20") int to,
 	                                                       @RequestParam(value = "by", defaultValue = "id") String by,

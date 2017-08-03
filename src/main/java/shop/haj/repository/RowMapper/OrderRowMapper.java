@@ -23,7 +23,7 @@ public class OrderRowMapper implements RowMapper<Order> {
 	public Order mapRow(ResultSet rs, int rowNum) throws SQLException {
 		
 		Order order = new Order();
-		order.setOrder_id(rs.getInt("id"));
+		/*order.setOrder_id(rs.getInt("id"));
 		order.setUuid(rs.getString("uuid"));
 		order.setCustomer_id(rs.getInt("customer_id"));
 		order.setStatus(rs.getInt("status"));
@@ -39,7 +39,7 @@ public class OrderRowMapper implements RowMapper<Order> {
 		order.setPayment_time(rs.getString("payment_time"));
 		order.setSended_time(rs.getString("sended_time"));
 		order.setClose_time(rs.getString("close_time"));
-		order.setUpdate_time(rs.getString("update_time"));
+		order.setUpdate_time(rs.getString("update_time"));*/
 		
 		//addShop by lingq 2017/04/02 新增买家留言字段
 		order.setMessage(rs.getString("message"));

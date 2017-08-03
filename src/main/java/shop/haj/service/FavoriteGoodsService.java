@@ -23,7 +23,7 @@ public interface FavoriteGoodsService {
 	 * @param customer_id
 	 * @return
 	 */
-	List<FavoriteGoods> findFavoriteGoodsByCustomer(int customer_id, Pagination page);
+	List<FavoriteGoods> findFavoriteGoodsByCustomer(String customer_id, Pagination page);
 	
 	/**
 	 * 查找卖家在该店铺收藏的商品
@@ -31,14 +31,14 @@ public interface FavoriteGoodsService {
 	 * @param shop_id
 	 * @return
 	 */
-	List<FavoriteGoods> findFavoriteGoodsByCustomerShop(int customer_id, int shop_id, Pagination page);
+	List<FavoriteGoods> findFavoriteGoodsByCustomerShop(String customer_id, String shop_id, Pagination page);
 	
 	/**
 	 * 商品加入收藏
 	 * @param favoriteGoods
 	 * @return
 	 */
-	int addFavoriteGoods(FavoriteGoods favoriteGoods);
+	FavoriteGoods addFavoriteGoods(FavoriteGoods favoriteGoods);
 	
 	/**
 	 * 移除收藏
@@ -46,5 +46,5 @@ public interface FavoriteGoodsService {
 	 * @param goods_id
 	 * @return
 	 */
-	int removeFavoriteGoods(int customer_id, int goods_id);
+	int removeFavoriteGoods(String customer_id, String goods_id);
 }

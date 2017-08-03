@@ -22,26 +22,26 @@ public class Notice implements Serializable {
 	@Id
 	private String id;
 	
-	private String shop_id;
+	private String shopId;
 	
 	private String content;
 	
-	private int is_show;
+	private int isShow;
 	
-	private String create_time;
+	private String createTime;
 	
-	private String update_time;
+	private String updateTime;
 	
 	public Notice() {
 	}
 
-	public Notice(String id, String shop_id, String content, int is_show, String create_time, String update_time) {
+	public Notice(String id, String shopId, String content, int isShow, String createTime, String updateTime) {
 		this.id = id;
-		this.shop_id = shop_id;
+		this.shopId = shopId;
 		this.content = content;
-		this.is_show = is_show;
-		this.create_time = create_time;
-		this.update_time = update_time;
+		this.isShow = isShow;
+		this.createTime = createTime;
+		this.updateTime = updateTime;
 	}
 
 	public String getId() {
@@ -52,12 +52,12 @@ public class Notice implements Serializable {
 		this.id = id;
 	}
 
-	public String getShop_id() {
-		return shop_id;
+	public String getShopId() {
+		return shopId;
 	}
 
-	public void setShop_id(String shop_id) {
-		this.shop_id = shop_id;
+	public void setShopId(String shopId) {
+		this.shopId = shopId;
 	}
 
 	public String getContent() {
@@ -68,27 +68,27 @@ public class Notice implements Serializable {
 		this.content = content;
 	}
 
-	public int getIs_show() {
-		return is_show;
+	public int getIsShow() {
+		return isShow;
 	}
 
-	public void setIs_show(int is_show) {
-		this.is_show = is_show;
+	public void setIsShow(int isShow) {
+		this.isShow = isShow;
 	}
 
-	public String getCreate_time() {
-		return create_time;
+	public String getCreateTime() {
+		return createTime;
 	}
 
-	public void setCreate_time(String create_time) {
-		this.create_time = create_time;
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
 	}
 
-	public String getUpdate_time() {
-		return update_time;
+	public String getUpdateTime() {
+		return updateTime;
 	}
 
-	public void setUpdate_time(String update_time) {
-		this.update_time = update_time;
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
 	}
 }

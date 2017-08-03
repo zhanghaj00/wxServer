@@ -48,7 +48,7 @@ public class CouponServiceImpl implements CouponService{
 	 * @return
 	 */
 	@Override
-	public List<Coupon> findCouponByShopID(int shop_id, Pagination page) {
+	public List<Coupon> findCouponByShopID(String shop_id, Pagination page) {
 		
 		//查询该店铺全部的优惠券信息
 		
@@ -65,7 +65,7 @@ public class CouponServiceImpl implements CouponService{
 	 * @return
 	 */
 	@Override
-	public String deleteCouponByID(int shop_id, int coupon_id) {
+	public String deleteCouponByID(String shop_id, String coupon_id) {
 		
 		//先判断是否部分商品适用，如果有则先删除coupon_goods_rel表记录
 		
@@ -81,7 +81,7 @@ public class CouponServiceImpl implements CouponService{
 	 * @return
 	 */
 	@Override
-	public List<CouponCustomerInfo> findCustomerCouponInfo(int customer_id, Pagination page) {
+	public List<CouponCustomerInfo> findCustomerCouponInfo(String customer_id, Pagination page) {
 		
 		//查询coupon_customer_info表信息
 		

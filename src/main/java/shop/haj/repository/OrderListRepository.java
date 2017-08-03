@@ -1,3 +1,4 @@
+/*
 package shop.haj.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
+*/
 /**
  * <p>Title: shop.ha.repository</p>
  * <p/>
@@ -25,20 +27,23 @@ import java.util.List;
  *
  * @author hao
  *         CreateTime：3/14/17
- */
+ *//*
+
 @Repository
 public class OrderListRepository {
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
-	/**
+	*/
+/**
 	 * 根据买家ID来进行查询买家的全部订单信息
 	 * @param customer_id 买家ID
 	 * @param status 订单状态
 	 * @param page 订单分页信息
 	 * @return
-	 */
+	 *//*
+
 	public List<OrderListSingleInfo> findOrderListSingleByCustomerID(int customer_id, int status, Pagination page){
 		
 		String sql = "SELECT \n" +
@@ -69,13 +74,15 @@ public class OrderListRepository {
 		return jdbcTemplate.query(sql, args, new OrderListSingleInfoRowMapper());
 	}
 	
-	/**
+	*/
+/**
 	 * 根据买家ID和店铺ID返回订单列表
 	 * 查询买家在某店铺的全部订单
 	 * @param shop_id
 	 * @param customer_id
 	 * @return
-	 */
+	 *//*
+
 	public List<OrderListSingleInfo> findOrderListSingleByShopAndCustomerID(int shop_id, int customer_id, int status, Pagination page){
 		
 		String sql = "SELECT \n" +
@@ -110,11 +117,13 @@ public class OrderListRepository {
 	
 	
 	
-	/**
+	*/
+/**
 	 * 查找订单对应的商品信息
 	 * @param order_id
 	 * @return
-	 */
+	 *//*
+
 	public List<OrderListSingleInfo> findOrderGoodsInfoListByOrderID(int order_id, Pagination page){
 		
 		String sql = "select \n" +
@@ -138,10 +147,12 @@ public class OrderListRepository {
 				new OrderListSingleInfoRowMapper());
 	}
 	
-	/**
+	*/
+/**
 	 * 新增订单商品关联表信息
 	 * @param order
-	 */
+	 *//*
+
 	public void addOrderListGoodsInfo(Order order){
 		
 		String sql = "insert into order_goods_info(order_id, goods_id, shop_id, customer_id,\n" +
@@ -179,4 +190,4 @@ public class OrderListRepository {
 		
 	}
 	
-}
+}*/

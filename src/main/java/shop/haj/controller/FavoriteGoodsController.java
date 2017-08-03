@@ -39,7 +39,7 @@ public class FavoriteGoodsController {
 	 */
 	@ApiOperation(value = "查找用户全部收藏的商品", notes = "查找用户全部收藏的商品")
 	@GetMapping(value = "/customer/favorite_goods")
-	public List<FavoriteGoods> findFavoriteGoodsByCustomer(@RequestAttribute(value = "customer_id", required = false) int customer_id,
+	public List<FavoriteGoods> findFavoriteGoodsByCustomer(@RequestAttribute(value = "customer_id", required = false) String customer_id,
 	                                                       @RequestParam(value = "from", defaultValue = "0") int from,
 	                                                       @RequestParam(value = "limit", defaultValue = "20") int to,
 	                                                       @RequestParam(value = "by", defaultValue = "create_time") String by,
@@ -62,8 +62,8 @@ public class FavoriteGoodsController {
 	@ApiOperation(value = "查找用户在某家店收藏的商品", notes = "查找用户在某家店收藏的商品")
 	@GetMapping(value = "/customer/shops/favorite_goods")
 	public List<FavoriteGoods> findFavoriteGoodsByCustomerShop(
-			@RequestAttribute(value = "customer_id", required = false) int customer_id,
-			@RequestHeader("shop_id") int shop_id,
+			@RequestAttribute(value = "customer_id", required = false) String customer_id,
+			@RequestHeader("shop_id") String shop_id,
 			@RequestParam(value = "from", defaultValue = "0") int from,
 			@RequestParam(value = "limit", defaultValue = "20") int to,
 			@RequestParam(value = "by", defaultValue = "create_time") String by,
@@ -85,15 +85,15 @@ public class FavoriteGoodsController {
 	 */
 	@ApiOperation(value = "新增收藏", notes = "新增收藏商品, POST参数需要传${goods_id}")
 	@PostMapping(value = "/customer/favorite_goods")
-	public String addFavoriteGoods(@RequestAttribute(value = "customer_id", required = false) int customer_id,
-	                            @RequestHeader("shop_id") int shop_id,
+	public String addFavoriteGoods(@RequestAttribute(value = "customer_id", required = false) String customer_id,
+	                            @RequestHeader("shop_id") String shop_id,
 	                            @RequestBody FavoriteGoods favoriteGoods){
-		favoriteGoods.setCustomer_id(customer_id);
-		favoriteGoods.setShop_id(shop_id);
+		favoriteGoods.setCustomerId(customer_id);
+		favoriteGoods.setShopId(shop_id);
+
+		favoriteGoods = favoriteGoodsService.addFavoriteGoods(favoriteGoods);
 		
-		int result = favoriteGoodsService.addFavoriteGoods(favoriteGoods);
-		
-		return ResultUtil.getJson(result);
+		return favoriteGoods.toString();
 	}
 	
 	/**
@@ -103,9 +103,9 @@ public class FavoriteGoodsController {
 	 */
 	@ApiOperation(value = "移除收藏", notes = "移除收藏, POST参数需要传${goods_id}")
 	@DeleteMapping(value = "/customer/favorite_goods")
-	public String removeFavoriteGoods(@RequestAttribute(value = "customer_id", required = false) int customer_id,
+	public String removeFavoriteGoods(@RequestAttribute(value = "customer_id", required = false) String customer_id,
 	                                  @RequestBody FavoriteGoods favoriteGoods){
-		int result = favoriteGoodsService.removeFavoriteGoods(customer_id, favoriteGoods.getGoods_id());
+		int result = 0;//favoriteGoodsService.removeFavoriteGoods(customer_id, favoriteGoods.getGoods_id());
 		
 		return ResultUtil.getJson(result);
 	}

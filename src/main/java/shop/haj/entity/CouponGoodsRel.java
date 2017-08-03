@@ -1,5 +1,7 @@
 package shop.haj.entity;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.io.Serializable;
 
 /**
@@ -13,51 +15,53 @@ import java.io.Serializable;
  * @author hao
  *         CreateTime：3/24/17
  */
+@Document(collection = "wx_coupon_goods_rel")
 public class CouponGoodsRel implements Serializable {
-	
-	private int coupon_id;
-	private int goods_id;
+
+	private String id;
+	private String couponId;
+	private String goodsId;
 	private String create_time;
 	
 	public CouponGoodsRel() {
 	}
-	
-	public CouponGoodsRel(int coupon_id, int goods_id, String create_time) {
-		this.coupon_id = coupon_id;
-		this.goods_id = goods_id;
+
+	public CouponGoodsRel(String id, String couponId, String goodsId, String create_time) {
+		this.id = id;
+		this.couponId = couponId;
+		this.goodsId = goodsId;
 		this.create_time = create_time;
 	}
-	
-	public int getCoupon_id() {
-		return coupon_id;
+
+	public String getId() {
+		return id;
 	}
-	
-	public void setCoupon_id(int coupon_id) {
-		this.coupon_id = coupon_id;
+
+	public void setId(String id) {
+		this.id = id;
 	}
-	
-	public int getGoods_id() {
-		return goods_id;
+
+	public String getCouponId() {
+		return couponId;
 	}
-	
-	public void setGoods_id(int goods_id) {
-		this.goods_id = goods_id;
+
+	public void setCouponId(String couponId) {
+		this.couponId = couponId;
 	}
-	
+
+	public String getGoodsId() {
+		return goodsId;
+	}
+
+	public void setGoodsId(String goodsId) {
+		this.goodsId = goodsId;
+	}
+
 	public String getCreate_time() {
 		return create_time;
 	}
-	
+
 	public void setCreate_time(String create_time) {
 		this.create_time = create_time;
-	}
-	
-	@Override
-	public String toString() {
-		return "CouponGoodsRel{" +
-				"coupon_id=" + coupon_id +
-				", goods_id=" + goods_id +
-				", create_time='" + create_time + '\'' +
-				'}';
 	}
 }

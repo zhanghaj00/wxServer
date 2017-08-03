@@ -37,7 +37,7 @@ public class AddressServiceImplTest {
 	@Test
 	public void findAddressListByCustomerID() throws Exception {
 		
-		List<Address> addressList = addressService.findAddressListByCustomerID(1, DefaultPagination.getAddress());
+		List<Address> addressList = addressService.findAddressListByCustomerID("1", DefaultPagination.getAddress());
 		
 		System.out.println(addressList);
 	}
@@ -45,7 +45,7 @@ public class AddressServiceImplTest {
 	@Test
 	public void findAddressByID() throws Exception {
 		
-		Address address = addressService.findAddressByID(2);
+		Address address = addressService.findAddressByID("2");
 		
 		System.out.println(address);
 	}
@@ -58,7 +58,7 @@ public class AddressServiceImplTest {
 	@Test
 	public void deleteAddress() throws Exception {
 		
-		addressService.deleteAddress(2);
+		addressService.deleteAddress("2");
 		
 	}
 	

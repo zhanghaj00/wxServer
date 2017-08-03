@@ -1,3 +1,4 @@
+/*
 package shop.haj.repository;
 
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +20,7 @@ import shop.haj.repository.RowMapper.GoodsRowMapper;
 import java.sql.*;
 import java.util.List;
 
+*/
 /**
  * <p>Title: shop.ha.repository</p>
  * <p/>
@@ -29,7 +31,8 @@ import java.util.List;
  *
  * @author hao
  *         CreateTime：3/4/17
- */
+ *//*
+
 @Repository
 public class GoodsRepository {
 	
@@ -38,10 +41,12 @@ public class GoodsRepository {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
-	/**
+	*/
+/**
 	 * 查找所有的商品
 	 * @return
-	 */
+	 *//*
+
 	public List<Goods> findAll(int shop_id, Pagination page){
 		String sql = "SELECT \n" +
 				"    id,\n" +
@@ -64,11 +69,13 @@ public class GoodsRepository {
 		return jdbcTemplate.query(sql, new Object[]{shop_id}, new GoodsRowMapper());
 	}
 	
-	/**
+	*/
+/**
 	 * 根据商品id来查找商品
 	 * @param goods_id
 	 * @return
-	 */
+	 *//*
+
 	public Goods findGoodsByID(int shop_id, int goods_id){
 		String sql = "SELECT \n" +
 				"    id,\n" +
@@ -100,11 +107,13 @@ public class GoodsRepository {
 		return goods;
 	}
 	
-	/**
+	*/
+/**
 	 * 根据uuid来查找商品
 	 * @param uuid
 	 * @return
-	 */
+	 *//*
+
 	public Goods findGoodsByUUID(int shop_id, String uuid){
 		String sql = "SELECT \n" +
 				"    id,\n" +
@@ -127,11 +136,13 @@ public class GoodsRepository {
 		return jdbcTemplate.queryForObject(sql, new Object[]{shop_id, uuid}, new GoodsRowMapper());
 	}
 	
-	/**
+	*/
+/**
 	 * 根据名称查找商品
 	 * @param name
 	 * @return
-	 */
+	 *//*
+
 	public Goods findGoodsByName(int shop_id, String name){
 		String sql = "SELECT \n" +
 				"    id,\n" +
@@ -154,21 +165,25 @@ public class GoodsRepository {
 		return jdbcTemplate.queryForObject(sql, new Object[]{shop_id, name}, new GoodsRowMapper());
 	}
 	
-	/**
+	*/
+/**
 	 * 根据商品ID查找图片
 	 * @param goods_id
 	 * @return
-	 */
+	 *//*
+
 	public List<Image> findImagesByGoodsID(int goods_id){
 		String sql = "select image_id id, url, date_format(create_time, '%Y-%m-%d %H:%i:%s') create_time from image_goods where goods_id=?";
 		return null;//jdbcTemplate.query(sql, new Object[]{goods_id}, new ImageRowMapper());
 	}
 	
-	/**
+	*/
+/**
 	 * 新增商品
 	 * @param goods
 	 * @return
-	 */
+	 *//*
+
 	public Goods addGoods(Goods goods){
 		
 		String sql = "insert into goods(uuid, `name`, shop_id, status, original_price, sell_price, \n" +
@@ -179,7 +194,8 @@ public class GoodsRepository {
 			@Override
 			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
 				PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-				/*ps.setString(1, goods.getUuid());
+				*/
+/*ps.setString(1, goods.getUuid());
 				ps.setString(2, goods.getName());
 				ps.setInt(3, goods.getShop_id());
 				ps.setInt(4, goods.getStatus());
@@ -191,7 +207,8 @@ public class GoodsRepository {
 				ps.setInt(10, goods.getGlobal_cid());
 				ps.setInt(11, goods.getIs_recommend());
 				ps.setString(12, goods.getCreate_time());
-				ps.setString(13, goods.getUpdate_time());*/
+				ps.setString(13, goods.getUpdate_time());*//*
+
 				return ps;
 			}
 		}, holder);
@@ -202,12 +219,14 @@ public class GoodsRepository {
 		return goods;
 	}
 	
-	/**
+	*/
+/**
 	 * 批量新增图片
 	 * @param images
 	 * @param goods_id
 	 * @return
-	 */
+	 *//*
+
 	public void addImage(List<Image> images, int goods_id){
 		
 		if(images == null || images.size() == 0) return;
@@ -217,9 +236,11 @@ public class GoodsRepository {
 		jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 			@Override
 			public void setValues(PreparedStatement ps, int i) throws SQLException {
-				/*ps.setInt(1, images.get(i).getId());
+				*/
+/*ps.setInt(1, images.get(i).getId());
 				ps.setInt(2, goods_id);
-				ps.setString(3, images.get(i).getUrl());*/
+				ps.setString(3, images.get(i).getUrl());*//*
+
 			}
 			
 			@Override
@@ -229,11 +250,13 @@ public class GoodsRepository {
 		});
 	}
 	
-	/**
+	*/
+/**
 	 * 根据商品ID删除该商品所有图片信息
 	 * @param goods_id
 	 * @return
-	 */
+	 *//*
+
 	public int deleteImageByGoodsID(int goods_id){
 		String sql = "delete from image_goods where goods_id=?";
 		int result = jdbcTemplate.update(sql, new int[]{Types.INTEGER});
@@ -241,12 +264,14 @@ public class GoodsRepository {
 		return 1;
 	}
 	
-	/**
+	*/
+/**
 	 * 删除单个商品照片
 	 * @param image_id
 	 * @param goods_id
 	 * @return
-	 */
+	 *//*
+
 	public int deleteSingleGoodsImage(int image_id, int goods_id){
 		String sql = "delete from image_goods where image_id=? and goods_id=?";
 		int result = jdbcTemplate.update(sql, new Object[]{image_id, goods_id});
@@ -254,12 +279,15 @@ public class GoodsRepository {
 		return 1;
 	}
 	
-	/**
+	*/
+/**
 	 * 新增商品快照
 	 * @param goods
 	 * @return
-	 */
-	/*public Goods addGoodsSnapshot(Goods goods){
+	 *//*
+
+	*/
+/*public Goods addGoodsSnapshot(Goods goods){
 		String sql = "insert into goods_snapshot(uuid, `name`, shop_id, status, original_price, sell_price, \n" +
 				"stock, sales_volume, inner_cid, global_cid, is_recommend, create_time, update_time)\n" +
 				"values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, date_format(?, '%Y-%m-%d %H:%i:%s'), date_format(?, '%Y-%m-%d %H:%i:%s'))";
@@ -286,13 +314,16 @@ public class GoodsRepository {
 		}, holder);
 		goods.setId(holder.getKey().intValue());
 		return goods;
-	}*/
+	}*//*
+
 	
-	/**
+	*/
+/**
 	 * 更新商品信息
 	 * @param goods
 	 * @return
-	 */
+	 *//*
+
 	public int updateGoods(Goods goods){
 		String sql = "update goods set `name`=?, status=?, original_price=?, sell_price=?,\n" +
 				"stock=?, sales_volume=?, inner_cid=?, global_cid=?, is_recommend=?, update_time=now()\n" +
@@ -319,11 +350,13 @@ public class GoodsRepository {
 		return 1;
 	}
 	
-	/**
+	*/
+/**
 	 * 根据商品ID删除指定商品
 	 * @param goods_id
 	 * @return
-	 */
+	 *//*
+
 	public int deleteGoods(int shop_id, int goods_id){
 		
 //		String sql = "deleteShop from goods where id=? and shop_id=?";
@@ -336,4 +369,4 @@ public class GoodsRepository {
 		return 1;
 		
 	}
-}
+}*/

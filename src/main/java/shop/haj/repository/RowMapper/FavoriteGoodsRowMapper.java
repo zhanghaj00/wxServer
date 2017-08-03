@@ -34,10 +34,10 @@ public class FavoriteGoodsRowMapper implements RowMapper<FavoriteGoods>{
 	public FavoriteGoods mapRow(ResultSet rs, int rowNum) throws SQLException {
 		
 		FavoriteGoods favoriteGoods = new FavoriteGoods();
-		favoriteGoods.setCustomer_id(rs.getInt("customer_id"));
+	/*	favoriteGoods.setCustomer_id(rs.getInt("customer_id"));
 		favoriteGoods.setShop_id(rs.getInt("shop_id"));
 		favoriteGoods.setGoods_id(rs.getInt("goods_id"));
-		favoriteGoods.setCreate_time(rs.getString("create_time"));
+		favoriteGoods.setCreate_time(rs.getString("create_time"));*/
 		
 		return favoriteGoods;
 	}

@@ -60,13 +60,13 @@ public class GoodsServiceImplTest {
 			
 			goods.setName("测试商品" + i);
 			goods.setStatus(1);
-			goods.setOriginal_price(99.99);
-			goods.setSell_price(69.99);
+			goods.setOriginalPrice(99.99);
+			goods.setSellPrice(69.99);
 			goods.setStock(99);
-			goods.setSales_volume(1);
-			goods.setInner_cid(2);
-			goods.setGlobal_cid(2);
-			goods.setIs_recommend(0);
+			goods.setSalesVolume(1);
+			goods.setInnerCid(2);
+			goods.setGlobalCid(2);
+			goods.setIsRecommend(0);
 			
 			List<Image> images = Lists.newArrayList();
 			
@@ -125,13 +125,13 @@ public class GoodsServiceImplTest {
 		
 		goods.setName("测试商品" + i);
 		goods.setStatus(1);
-		goods.setOriginal_price(99.99);
-		goods.setSell_price(69.99);
+		goods.setOriginalPrice(99.99);
+		goods.setSellPrice(69.99);
 		goods.setStock(99);
-		goods.setSales_volume(1);
-		goods.setInner_cid(2);
-		goods.setGlobal_cid(2);
-		goods.setIs_recommend(0);
+		goods.setSalesVolume(1);
+		goods.setInnerCid(2);
+		goods.setGlobalCid(2);
+		goods.setIsRecommend(0);
 		
 		List<Image> images = Lists.newArrayList();
 		

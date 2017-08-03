@@ -40,10 +40,10 @@ public class ShopServiceImpl implements ShopService{
 	@Override
 	@Transactional
 	public List<Shop> findAll(Pagination page) {
-		Page<Shop> shops = mongoShopRepository.findAll(page);
+		Page<Shop> shops = mongoShopRepository.findAll(page.getRequest());
 		
 		
-		for (Shop shop : shops) {
+		for (Shop shop : shops.getContent()) {
 			
 			//新增图片信息
 			shop.setImages(mongoImageRepository.findByShopId(shop.getId()));

@@ -24,7 +24,7 @@ public interface NoticeService {
 	 * @param page
 	 * @return
 	 */
-	List<Notice> findAllNotice(int shop_id, Pagination page);
+	List<Notice> findAllNotice(String shop_id, Pagination page);
 	
 	/**
 	 * 查找店铺所有需要显示的公告
@@ -32,7 +32,7 @@ public interface NoticeService {
 	 * @param page
 	 * @return
 	 */
-	List<Notice> findAllShowedNotice(int shop_id, Pagination page);
+	List<Notice> findAllShowedNotice(String shop_id, Pagination page);
 	
 	/**
 	 * 新增公告信息
@@ -47,6 +47,6 @@ public interface NoticeService {
 	 * @param notice_id
 	 * @return
 	 */
-	int deleteNotice(int shop_id, int notice_id);
+	int deleteNotice(String shop_id, String notice_id);
 	
 }

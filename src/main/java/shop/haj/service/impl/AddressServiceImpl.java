@@ -1,5 +1,6 @@
 package shop.haj.service.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.haj.entity.Address;
 import shop.haj.entity.Pagination;
+import shop.haj.mongo_repository.MongoAddressRepository;
 import shop.haj.repository.AddressRepository;
 import shop.haj.service.AddressService;
 
@@ -30,7 +32,7 @@ public class AddressServiceImpl implements AddressService {
 	private Logger logger = LogManager.getLogger(AddressServiceImpl.class);
 	
 	@Autowired
-	private AddressRepository addressRepository;
+	private MongoAddressRepository mongoAddressRepository;
 	
 	/**
 	 * 新增地址
@@ -40,11 +42,11 @@ public class AddressServiceImpl implements AddressService {
 	 */
 	@Override
 	public Address addAddress(Address address) {
+
+		address = mongoAddressRepository.insert(address);
 		
-		addressRepository.addAddress(address);
-		
-		if(address.getIs_default() == 1){
-			addressRepository.setUndefaultAddress(address.getCustomer_id(), address.getId());
+		if(address.getIsDefault() == 1){
+			this.setUndefaultAddress(address.getCustomerId(), address.getId());
 		}
 		
 		return address;
@@ -57,9 +59,9 @@ public class AddressServiceImpl implements AddressService {
 	 * @return
 	 */
 	@Override
-	public List<Address> findAddressListByCustomerID(int customer_id, Pagination page) {
+	public List<Address> findAddressListByCustomerID(String customer_id, Pagination page) {
 		
-		return addressRepository.findAddressListByCustomerID(customer_id, page);
+		return mongoAddressRepository.findByCustomerId(customer_id, page);
 	}
 	
 	/**
@@ -69,9 +71,9 @@ public class AddressServiceImpl implements AddressService {
 	 * @return
 	 */
 	@Override
-	public Address findAddressByID(int address_id) {
+	public Address findAddressByID(String address_id) {
 		
-		return addressRepository.findAddressByID(address_id);
+		return mongoAddressRepository.findOne(address_id);
 	}
 	
 	/**
@@ -81,9 +83,9 @@ public class AddressServiceImpl implements AddressService {
 	 * @return
 	 */
 	@Override
-	public Address findDefaultAddress(int customer_id) {
+	public Address findDefaultAddress(String customer_id) {
 		
-		Address address = addressRepository.findDefaultAddress(customer_id);
+		Address address = mongoAddressRepository.findByCustomerIdAndIsDefault(customer_id,1);
 		
 		logger.info("findDefaultAddress service >>> custoemr_id={} result=({})", customer_id, address);
 		
@@ -97,9 +99,9 @@ public class AddressServiceImpl implements AddressService {
 	 * @return
 	 */
 	@Override
-	public int updateAddress(Address address) {
+	public Address updateAddress(Address address) {
 		
-		return addressRepository.updateAddress(address);
+		return mongoAddressRepository.save(address);
 	}
 	
 	/**
@@ -111,13 +113,13 @@ public class AddressServiceImpl implements AddressService {
 	 * @return
 	 */
 	@Override
-	public int setDefaultAddress(int customer_id, int address_id) {
+	public int setDefaultAddress(String customer_id, String address_id) {
 		
 		logger.info("setDefaultAddress service >>> customer_id={}, address_id={}", customer_id, address_id);
+
+		this.setDefaultAddress(address_id);
 		
-		addressRepository.setDefaultAddress(address_id);
-		
-		return addressRepository.setUndefaultAddress(customer_id, address_id);
+		return this.setUndefaultAddress(customer_id, address_id);
 	}
 	
 	/**
@@ -127,10 +129,27 @@ public class AddressServiceImpl implements AddressService {
 	 * @return
 	 */
 	@Override
-	public int deleteAddress(int address_id) {
-		
-		return addressRepository.deleteAddress(address_id);
+	public int deleteAddress(String address_id) {
+		mongoAddressRepository.delete(address_id);
+		return 1;
+
 	}
-	
+
+
+	private void setDefaultAddress(String address_id){
+		if (StringUtils.isEmpty(address_id)) return;
+		Address address = new Address();
+		address.setId(address_id);
+		address.setIsDefault(1);
+		mongoAddressRepository.save(address);
+
+	}
+
+	private int setUndefaultAddress(String customer_id,String address_id){
+		if(StringUtils.isEmpty(customer_id)) return 0;
+		Address address = new Address();
+		//TODO
+		return 1;
+	}
 	
 }

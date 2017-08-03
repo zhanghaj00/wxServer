@@ -1,5 +1,6 @@
 package shop.haj.entity;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
@@ -17,7 +18,7 @@ import java.util.concurrent.locks.Condition;
  * @author hao
  *         CreateTime：3/19/17
  */
-public class Pagination implements Serializable ,Pageable {
+public class Pagination implements Serializable {
 
 	/**
 	 * mongodb分页
@@ -34,44 +35,9 @@ public class Pagination implements Serializable ,Pageable {
 
 	private String by = "id";
 
-	@Override
-	public int getPageNumber() {
-		return this.from;
-	}
+	private PageRequest request ;
 
-	@Override
-	public int getPageSize() {
-		return this.limit;
-	}
-
-	@Override
-	public int getOffset() {
-		return (this.from - 1) * this.limit;
-	}
-
-	@Override
-	public Pageable next() {
-		return null;
-	}
-
-	@Override
-	public Pageable previousOrFirst() {
-		return null;
-	}
-
-	@Override
-	public Pageable first() {
-		return null;
-	}
-
-	@Override
-	public boolean hasPrevious() {
-		return false;
-	}
-
-
-	@Override
-	public Sort getSort() {
+	private Sort getSort() {
 		Sort sort = null;
 		if(this.sort.equals("asc")){
 			sort =  new Sort(Sort.Direction.ASC,this.by);
@@ -81,6 +47,9 @@ public class Pagination implements Serializable ,Pageable {
 		return sort;
 	}
 
+	public PageRequest getRequest(){
+		return new PageRequest(this.from,this.limit,this.getSort());
+	}
 
 	public void setFrom(int from){
 		this.from = from;

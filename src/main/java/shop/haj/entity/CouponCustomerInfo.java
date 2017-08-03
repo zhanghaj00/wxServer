@@ -21,21 +21,21 @@ public class CouponCustomerInfo implements Serializable {
 
 	@Id
 	private String id;
-	private String coupon_id;
-	private String customer_id;
-	private String accept_time;
-	private String used_time;
+	private String couponId;
+	private String customerId;
+	private String acceptTime;
+	private String usedTime;
 	private int status;//优惠券状态，未使用、已使用、已过期
 	
 	public CouponCustomerInfo() {
 	}
 
-	public CouponCustomerInfo(String id, String coupon_id, String customer_id, String accept_time, String used_time, int status) {
+	public CouponCustomerInfo(String id, String couponId, String customerId, String acceptTime, String usedTime, int status) {
 		this.id = id;
-		this.coupon_id = coupon_id;
-		this.customer_id = customer_id;
-		this.accept_time = accept_time;
-		this.used_time = used_time;
+		this.couponId = couponId;
+		this.customerId = customerId;
+		this.acceptTime = acceptTime;
+		this.usedTime = usedTime;
 		this.status = status;
 	}
 
@@ -47,36 +47,36 @@ public class CouponCustomerInfo implements Serializable {
 		this.id = id;
 	}
 
-	public String getCoupon_id() {
-		return coupon_id;
+	public String getCouponId() {
+		return couponId;
 	}
 
-	public void setCoupon_id(String coupon_id) {
-		this.coupon_id = coupon_id;
+	public void setCouponId(String couponId) {
+		this.couponId = couponId;
 	}
 
-	public String getCustomer_id() {
-		return customer_id;
+	public String getCustomerId() {
+		return customerId;
 	}
 
-	public void setCustomer_id(String customer_id) {
-		this.customer_id = customer_id;
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
 	}
 
-	public String getAccept_time() {
-		return accept_time;
+	public String getAcceptTime() {
+		return acceptTime;
 	}
 
-	public void setAccept_time(String accept_time) {
-		this.accept_time = accept_time;
+	public void setAcceptTime(String acceptTime) {
+		this.acceptTime = acceptTime;
 	}
 
-	public String getUsed_time() {
-		return used_time;
+	public String getUsedTime() {
+		return usedTime;
 	}
 
-	public void setUsed_time(String used_time) {
-		this.used_time = used_time;
+	public void setUsedTime(String usedTime) {
+		this.usedTime = usedTime;
 	}
 
 	public int getStatus() {

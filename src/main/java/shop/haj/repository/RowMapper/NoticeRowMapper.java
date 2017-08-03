@@ -23,10 +23,10 @@ public class NoticeRowMapper implements RowMapper<Notice>{
 	public Notice mapRow(ResultSet rs, int rowNum) throws SQLException {
 		
 		Notice notice = new Notice();
-		notice.setId(rs.getInt("id"));
+		/*notice.setId(rs.getInt("id"));
 		notice.setShop_id(rs.getInt("shop_id"));
 		notice.setContent(rs.getString("content"));
-		notice.setIs_show(rs.getInt("is_show"));
+		notice.setIs_show(rs.getInt("is_show"));*/
 		
 		return notice;
 	}

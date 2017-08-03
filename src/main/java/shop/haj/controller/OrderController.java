@@ -127,16 +127,16 @@ public class OrderController extends BaseController {
 	 */
 	@ApiOperation(value = "创建订单", notes = "创建订单")
 	@PostMapping("/customer/orders")
-	public Order addOrder(@RequestHeader("shop_id") int shop_id,
-						  @RequestAttribute(value = "customer_id", required = false) int customer_id,
+	public Order addOrder(@RequestHeader("shop_id") String shop_id,
+						  @RequestAttribute(value = "customer_id", required = false) String customer_id,
 						  @RequestBody Order order) {
 
-		order.setShop_id(shop_id);
-		order.setCustomer_id(customer_id);
+		order.setShopId(shop_id);
+		order.setCustomerId(customer_id);
 
 		//查询shop name
 		Shop shop = shopService.findById("");
-		order.setShop_name(shop.getName());
+		order.setShopName(shop.getName());
 
 		return orderService.addOrder(order);
 	}
@@ -207,14 +207,14 @@ public class OrderController extends BaseController {
 
 		//设置退款/退货的价格
 		if (OrderRefundType.REFUND_MONEY.ordinal() == orderRefund.getType()) {//退款
-			orderRefund.setRefund_price(order.getFinal_price());
+			orderRefund.setRefund_price(order.getFinalPrice());
 		} else if (OrderRefundType.REFUND_GOODS.ordinal() == orderRefund.getType()) {//退货
 			//退款指定商品的价格
 			List<OrderGoodsInfo> orderGoodsInfos = order.getOrderGoodsInfos();
 			for (OrderGoodsInfo orderGoodsInfo : orderGoodsInfos) {
-				if (orderGoodsInfo.getGoods_id() == orderRefund.getGoods_id()) {
-					orderRefund.setRefund_price(orderGoodsInfo.getGoods_price());
-				}
+				/*if (orderGoodsInfo.getGoodsId() == orderRefund.getGoods_id()) {
+					orderRefund.setRefund_price(orderGoodsInfo.getGoodsPrice());
+				}*/
 			}
 		}
 
@@ -306,7 +306,7 @@ public class OrderController extends BaseController {
 
 
 		//申请退款，并确认退款
-		WxPayConfig config = wxPayService.getWxConfig(order.getShop_id());
+		WxPayConfig config = null;// wxPayService.getWxConfig(order.getShopId());
 
 		//需要证书
 		if (config.getSslContext() == null) {
@@ -322,8 +322,8 @@ public class OrderController extends BaseController {
 			WxPayRefundRequest request = WxPayRefundRequest.newBuilder()
 					.outRefundNo(orderRefund.getRefund_uuid())
 					.outTradeNo(order.getUuid())
-					.totalFee((int) (order.getFinal_price() * 100))
-					.refundFee((int) (order.getFinal_price() * 100))
+					.totalFee((int) (order.getFinalPrice() * 100))
+					.refundFee((int) (order.getFinalPrice() * 100))
 					.build();
 
 			request.checkAndSign(config);
@@ -337,7 +337,7 @@ public class OrderController extends BaseController {
 		}
 
 		//退款接口调用成功后，更新状态
-		int status = orderService.updateOrderStatusToFinish(order.getCustomer_id(), order_id);
+		int status =  1;//orderService.updateOrderStatusToFinish(order.getCustomerId(), order_id);
 
 		return ResultUtil.getJson(status);
 	}
@@ -349,7 +349,7 @@ public class OrderController extends BaseController {
 
 		Order order = orderService.findShopOrderByID(order_id, DefaultPagination.getOrder());
 
-		WxPayConfig config = wxPayService.getWxConfig(order.getShop_id());
+		WxPayConfig config = null; //wxPayService.getWxConfig(order.getShopId());
 
 		//已经提交未支付的订单,则需要关闭微信端订单
 		if (wxPayService.isPrepay(order_id)) {

@@ -44,9 +44,9 @@ public class Customer implements Serializable {
 	
 	private String country;
 	
-	private String create_time;
+	private String createTime;
 	
-	private String update_time;
+	private String updateTime;
 	
 	public Customer() {
 	}
@@ -146,40 +146,20 @@ public class Customer implements Serializable {
 	public void setCountry(String country) {
 		this.country = country;
 	}
-	
-	public String getCreate_time() {
-		return create_time;
+
+	public String getCreateTime() {
+		return createTime;
 	}
-	
-	public void setCreate_time(String create_time) {
-		this.create_time = create_time;
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
 	}
-	
-	public String getUpdate_time() {
-		return update_time;
+
+	public String getUpdateTime() {
+		return updateTime;
 	}
-	
-	public void setUpdate_time(String update_time) {
-		this.update_time = update_time;
-	}
-	
-	@Override
-	public String toString() {
-		return "Customer{" +
-				"id=" + id +
-				", nickName='" + nickName + '\'' +
-				", openId='" + openId + '\'' +
-				", unionId='" + unionId + '\'' +
-				", avatarUrl='" + avatarUrl + '\'' +
-				", phone='" + phone + '\'' +
-				", note='" + note + '\'' +
-				", gender='" + gender + '\'' +
-				", language='" + language + '\'' +
-				", city='" + city + '\'' +
-				", province='" + province + '\'' +
-				", country='" + country + '\'' +
-				", create_time='" + create_time + '\'' +
-				", update_time='" + update_time + '\'' +
-				'}';
+
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
 	}
 }

@@ -90,7 +90,7 @@ public class FavoriteGoodsRepository {
 				"values(?, ?, ?, now())";
 		
 		try {
-			int result = jdbcTemplate.update(sql, favoriteGoods.getCustomer_id(), favoriteGoods.getShop_id(), favoriteGoods.getGoods_id());
+			int result = jdbcTemplate.update(sql, favoriteGoods.getCustomerId(), favoriteGoods.getShopId(), favoriteGoods.getGoodsId());
 			
 			logger.info("addFavoriteGoods >>> sql={}, args=({}), result={}",
 					sql, favoriteGoods.toString(), result);

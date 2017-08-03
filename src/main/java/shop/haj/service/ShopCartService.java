@@ -30,7 +30,7 @@ public interface ShopCartService {
 	 * 查找用户在某店铺的购物车信息(独立店家)
 	 * @return
 	 */
-	List<Cart> findShopCarts(int customer_id, int shop_id, Pagination page);
+	List<Cart> findShopCarts(String customer_id, String shop_id, Pagination page);
 	
 	/**
 	 * 根据商品ID及规格查找购物车信息
@@ -38,8 +38,8 @@ public interface ShopCartService {
 	 * @param sku
 	 * @return
 	 */
-	Cart findShopCart(int customer_id, int shop_id,
-	                  int goods_id, String sku);
+	Cart findShopCart(String customer_id, String shop_id,
+					  String goods_id, String sku);
 	
 	/**
 	 * 添加商品到购物车
@@ -54,14 +54,14 @@ public interface ShopCartService {
 	 * @param num
 	 * @return
 	 */
-	int updateCartNum(int customer_id, int shop_id, int cart_id, int num);
+	int updateCartNum(String customer_id, String shop_id, String cart_id, int num);
 	
 	/**
 	 * 在购物车中删除某件商品
 	 * @param cart_id
 	 * @return
 	 */
-	int removeGoodsFromCart(int customer_id, int shop_id, int cart_id);
+	int removeGoodsFromCart(String customer_id, String shop_id, String cart_id);
 	
 	/**
 	 * 清空用户在某家店的购物车信息
@@ -69,5 +69,5 @@ public interface ShopCartService {
 	 * @param shop_id
 	 * @return
 	 */
-	int clearShopCart(int customer_id, int shop_id);
+	int clearShopCart(String customer_id, String shop_id);
 }

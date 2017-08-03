@@ -240,7 +240,7 @@ public class OrderServiceImpl implements OrderService {
 			//减少库存
 			
 			//清除缓存
-			clearShopPageCache(goods.getShop_id());
+			clearShopPageCache(goods.getShopId());
 			clearGoodsCache(goods.getId());
 			
 			orderGoodsInfo.setGoods_price(goods.getSell_price());
@@ -489,7 +489,7 @@ public class OrderServiceImpl implements OrderService {
 	 * 清除商品集合缓存
 	 * @param shop_id
 	 */
-	private void clearShopPageCache(int shop_id){
+	private void clearShopPageCache(String shop_id){
 		
 		List<String> keys = cacheManage.getShopPageCacheKeys(shop_id);
 		
@@ -509,7 +509,7 @@ public class OrderServiceImpl implements OrderService {
 	 * 清除商品缓存
 	 * @param goods_id
 	 */
-	private void clearGoodsCache(int goods_id){
+	private void clearGoodsCache(String goods_id){
 		
 		cacheManage.clearGoodsCache(goods_id);
 	}

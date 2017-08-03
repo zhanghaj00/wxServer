@@ -9,7 +9,6 @@ import shop.haj.entity.Pagination;
 import shop.haj.entity.Shop;
 import shop.haj.mongo_repository.MongoImageRepository;
 import shop.haj.mongo_repository.MongoShopRepository;
-import shop.haj.repository.ShopCategoryRepository;
 import shop.haj.service.ShopService;
 
 import java.util.List;
@@ -35,8 +34,8 @@ public class ShopServiceImpl implements ShopService{
 	@Autowired
 	private MongoShopRepository mongoShopRepository;
 	
-	@Autowired
-	private ShopCategoryRepository shopCategoryRepository;
+	//@Autowired
+	//private ShopCategoryRepository shopCategoryRepository;
 	
 	@Override
 	@Transactional

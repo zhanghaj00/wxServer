@@ -24,6 +24,8 @@ public class Image implements Serializable{
 
 	private String shopId;
 
+	private String goodsId;
+
 	private String url;
 	
 	private String create_time;
@@ -35,6 +37,14 @@ public class Image implements Serializable{
 		this.id = id;
 		this.url = url;
 		this.create_time = create_time;
+	}
+
+	public String getGoodsId() {
+		return goodsId;
+	}
+
+	public void setGoodsId(String goodsId) {
+		this.goodsId = goodsId;
 	}
 
 	public String getShopId() {

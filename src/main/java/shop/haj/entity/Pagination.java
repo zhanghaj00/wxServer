@@ -4,6 +4,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.io.Serializable;
+import java.util.concurrent.locks.Condition;
 
 /**
  * <p>Title: shop.ha.entity</p>
@@ -23,23 +24,29 @@ public class Pagination implements Serializable ,Pageable {
 	 */
 	private static final long serialVersionUID = 1L;
 	// 当前页
-	private Integer pagenumber = 1;
+	private Integer from = 1;
 	// 当前页面条数
-	private Integer pagesize = 10;
+	private Integer limit = 10;
+
+	private Sort sort =  new Sort(Sort.Direction.ASC,"id");
+
+	private String sortStr = "asc";
+
+	private String by = "id";
 
 	@Override
 	public int getPageNumber() {
-		return 1;
+		return this.from;
 	}
 
 	@Override
 	public int getPageSize() {
-		return 10;
+		return this.limit;
 	}
 
 	@Override
 	public int getOffset() {
-		return 10;
+		return (this.from - 1) * this.limit;
 	}
 
 	@Override
@@ -62,24 +69,31 @@ public class Pagination implements Serializable ,Pageable {
 		return false;
 	}
 
-	public Integer getPagenumber() {
-		return pagenumber;
-	}
-
-	public void setPagenumber(Integer pagenumber) {
-		this.pagenumber = pagenumber;
-	}
-
-	public Integer getPagesize() {
-		return pagesize;
-	}
-
-	public void setPagesize(Integer pagesize) {
-		this.pagesize = pagesize;
-	}
 
 	@Override
 	public Sort getSort() {
-		return new Sort(Sort.Direction.ASC,"id");
+		Sort sort = null;
+		if(this.sort.equals("asc")){
+			sort =  new Sort(Sort.Direction.ASC,this.by);
+		}else{
+			sort =  new Sort(Sort.Direction.ASC,this.by);
+		}
+		return sort;
+	}
+
+
+	public void setFrom(int from){
+		this.from = from;
+	}
+
+	public void setLimit(int limit){
+		this.limit = limit;
+	}
+
+	public void setBy(String by){
+		this.by =by;
+	}
+	public void setSort(String sortStr){
+		this.sortStr = sortStr;
 	}
 }

@@ -9,6 +9,7 @@ import shop.haj.entity.Shop;
 import shop.haj.entity.ShopCategory;
 import shop.haj.service.ShopCategoryService;
 import shop.haj.service.ShopService;
+import shop.haj.service.WxAuthService;
 import shop.haj.utils.ResultUtil;
 
 import java.util.List;
@@ -34,6 +35,9 @@ public class ShopController extends BaseController{
 	
 	@Autowired
 	private ShopCategoryService shopCategoryService;
+
+	@Autowired
+	private WxAuthService wxAuthService;
 	
 	/**
 	 * 查找所有店铺信息
@@ -88,8 +92,10 @@ public class ShopController extends BaseController{
 	@GetMapping(value = {"/seller/shops_list"})
 	public Map<String,Object> findShopBySellerId(@RequestHeader("login_code") String login_code){
 
+		String openId = wxAuthService.getOpenId(login_code);
+
 		//根据login-code来查找相关点不
-		List<Shop> shop = shopService.findBySellerId(login_code);
+		List<Shop> shop = shopService.findBySellerId(openId);
 
 		//ShopCategory shopCategory = shopCategoryService.findShopCategoryByID(shop.getCategory_id());
 		//shop.setCategory_name(shopCategory.getName());

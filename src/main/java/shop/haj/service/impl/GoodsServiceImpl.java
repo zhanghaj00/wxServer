@@ -54,11 +54,9 @@ public class GoodsServiceImpl implements GoodsService{
 	@Override
 	@Transactional
 //	@Cacheable(value = "goodsPages", key = "{#shop_id, #page.getOrderByLimitString()}")
-	public List<Goods> findAll(String shop_id, Pagination page) {
+	public List<Goods> findAll(Goods goods, Pagination page) {
 
-		Goods condition = new Goods();
-		condition.setShopId(shop_id);
-		Example<Goods> example = Example.of(condition);
+		Example<Goods> example = Example.of(goods);
 		Page<Goods> goodsList = mongoGoodsRepository.findAll(example,page.getRequest());
 		if(goodsList.getContent() == null && goodsList.getContent().size() <= 0) return goodsList.getContent();
 		//cacheManage.addGoodsPageKeysMapData(shop_id, page.getOrderByLimitString());

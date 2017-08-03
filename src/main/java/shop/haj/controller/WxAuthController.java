@@ -253,6 +253,13 @@ public class WxAuthController extends BaseController{
 	@GetMapping(value = "/seller/auth/check")
 	public Map<String,Object> sellerAuthCheck(@RequestParam(value = "sessionId")String sessionId){
 
+		String sessionCode = wxAuthService.getSessionKey(sessionId);
+
+		if(sessionCode == null) {
+			logger.error("customer not exists, by wxLoginCode:{}", sessionCode);
+			return rtnParam(40010, "session is expired.");
+		}
+
 		return rtnParam(0, true);
 	}
 }

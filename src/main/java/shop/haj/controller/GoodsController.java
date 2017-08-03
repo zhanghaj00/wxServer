@@ -1,14 +1,19 @@
 package shop.haj.controller;
 
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import shop.haj.entity.Goods;
+import shop.haj.entity.GoodsCategory;
 import shop.haj.entity.Image;
 import shop.haj.entity.Pagination;
+import shop.haj.service.GoodsCategoryService;
 import shop.haj.service.GoodsService;
 import shop.haj.utils.ResultUtil;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,6 +33,10 @@ public class GoodsController extends  BaseController{
 	
 	@Autowired
 	private GoodsService goodsService;
+
+
+	@Autowired
+	private GoodsCategoryService goodsCategoryService;
 	
 	/**
 	 * 查找某个店铺的全部商品信息
@@ -40,15 +49,16 @@ public class GoodsController extends  BaseController{
 	                           @RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
 	                           @RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
 	                           @RequestParam(value = "by", defaultValue = "id") String by,
-	                           @RequestParam(value = "sort", defaultValue = "asc") String sort){
+	                           @RequestParam(value = "sort", defaultValue = "asc") String sort,
+									  @RequestBody Goods goods){
 		
 		Pagination page = new Pagination();
 		page.setFrom(pageNum);
 		page.setLimit(pageSize);
 		page.setBy(by);
 		page.setSort(sort);
-		
-		return rtnParam(0, goodsService.findAll(shop_id, page));
+		goods.setShopId(shop_id);
+		return rtnParam(0, goodsService.findAll(goods, page));
 	}
 	
 	/**
@@ -139,10 +149,37 @@ public class GoodsController extends  BaseController{
 	@ApiOperation(value = "卖家删除商品图片", notes = "卖家删除商品图片")
 	@DeleteMapping(value = "/seller/goods/{goods_id}/images/{image_id}")
 	public Map<String,Object>  deleteGoodsImage(@RequestHeader("shop_id") String shop_id,
-	                               @PathVariable("goods_id") String goods_id,
-	                               @PathVariable("image_id") String image_id){
+												@PathVariable("goods_id") String goods_id,
+												@PathVariable("image_id") String image_id){
 		int state = goodsService.deleteGoodsImage(shop_id, image_id, goods_id);
 		return rtnParam(0,ResultUtil.getJson(state));
+	}
+
+
+	/**
+	 * 卖家商品分类
+	 * @param shop_id
+	 * @return
+	 */
+	@ApiOperation(value = "卖家商品分类", notes = "卖家商品分类")
+	@GetMapping(value = "/seller/goods/innerCategory")
+	public Map<String,Object>  innerCategory(@RequestHeader("shop_id") String shop_id){
+		List<GoodsCategory> state = goodsCategoryService.findByShopId(shop_id);
+		return rtnParam(0,state);
+	}
+
+	/**
+	 * 卖家添加商品分类
+	 * @param shop_id
+	 * @return
+	 */
+	@ApiOperation(value = "卖家商品分类", notes = "卖家商品分类")
+	@RequestMapping(value = "/seller/goods/addGoodsCategory")
+	public Map<String,Object>  addGoodsCategory(@RequestHeader("shop_id") String shop_id,@RequestBody GoodsCategory category){
+		if(null == category || StringUtils.isEmpty(category.getName())) return  rtnParam(50010,new Error("没有数据"));
+		category.setShopId(shop_id);
+		category = goodsCategoryService.addGoodsCategory(category);
+		return rtnParam(0,category);
 	}
 	
 }

@@ -25,7 +25,7 @@ public interface GoodsService {
 	 * @param page 分页信息
 	 * @return
 	 */
-	List<Goods> findAll(String shop_id, Pagination page);
+	List<Goods> findAll(Goods goods, Pagination page);
 	
 	/**
 	 * 根据店铺ID和商品ID查找商品信息

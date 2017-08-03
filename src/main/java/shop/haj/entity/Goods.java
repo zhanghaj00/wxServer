@@ -39,9 +39,9 @@ public class Goods implements Serializable{
 	
 	private Integer salesVolume;
 	
-	private Integer innerCid;
+	private String innerCid;
 	
-	private Integer globalCid;
+	private String globalCid;
 	
 	private Integer isRecommend;
 	
@@ -132,19 +132,19 @@ public class Goods implements Serializable{
 		this.salesVolume = salesVolume;
 	}
 
-	public Integer getInnerCid() {
+	public String getInnerCid() {
 		return innerCid;
 	}
 
-	public void setInnerCid(Integer innerCid) {
+	public void setInnerCid(String innerCid) {
 		this.innerCid = innerCid;
 	}
 
-	public Integer getGlobalCid() {
+	public String getGlobalCid() {
 		return globalCid;
 	}
 
-	public void setGlobalCid(Integer globalCid) {
+	public void setGlobalCid(String globalCid) {
 		this.globalCid = globalCid;
 	}
 

@@ -1,15 +1,9 @@
 package shop.haj.service.impl;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.haj.entity.GoodsDetail;
 import shop.haj.entity.Pagination;
-import shop.haj.manage.CacheManage;
-import shop.haj.mongo_repository.MongoGoodsDetailRepository;
-import shop.haj.repository.GoodsDetailRepository;
 import shop.haj.service.GoodsDetailService;
 
 import java.util.List;

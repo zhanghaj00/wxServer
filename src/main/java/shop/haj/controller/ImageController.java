@@ -52,19 +52,22 @@ public class ImageController {
 		}
 		
 		String jsonString = "";
-		
-		try {
-			
-			Image image = imageService.addImage(imageFile);
-			
+
+		/*try {
+
+			Image image = new Image();//imageService.addImage(imageFile);
+			image.setUrl("2222");
 			Gson gson = new Gson();
 			jsonString = gson.toJson(image);
-			
+
 		} catch (IOException e) {
 			logger.error(e.toString(), e);
 			return new ResponseEntity("addShop image file fail. " + e.toString(), HttpStatus.BAD_REQUEST);
-		}
-		
+		}*/
+		Image image = new Image();//imageService.addImage(imageFile);
+		image.setUrl("2222");
+		Gson gson = new Gson();
+		jsonString = gson.toJson(image);
 		return new ResponseEntity(jsonString, new HttpHeaders(), HttpStatus.OK);
 	}
 	

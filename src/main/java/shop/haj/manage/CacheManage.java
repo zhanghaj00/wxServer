@@ -100,7 +100,7 @@ public class CacheManage {
 	 * 获取店铺的缓存
 	 * @param shop_id
 	 */
-	public List<String> getShopPageCacheKeys(int shop_id){
+	public List<String> getShopPageCacheKeys(String shop_id){
 		
 		String key = GOODS_LIST_KEY_REFIX + shop_id;
 		
@@ -122,13 +122,13 @@ public class CacheManage {
 	}
 	
 	@CacheEvict(value = {"goodsPages"}, key = "{#shop_id, #pageInfo}")
-	public void clearGoodsPageCache(int shop_id,String pageInfo){
+	public void clearGoodsPageCache(String shop_id,String pageInfo){
 		
 		logger.info("clearGoodsPageCache >>> Cache Evict : value=goodsPages, key={{}, {}}, pageMap={}", shop_id, pageInfo, goodsPageCacheKeyMap);
 	}
 	
 	@CacheEvict(value = "goods", key = "#goods_id")
-	public void clearGoodsCache(int goods_id){
+	public void clearGoodsCache(String goods_id){
 		logger.info("clearGoodsCache >>> Cache Evict : value=goods, key={{}}", goods_id);
 	}
 	

@@ -30,7 +30,7 @@ public interface ShopCartService {
 	 * 查找用户在某店铺的购物车信息(独立店家)
 	 * @return
 	 */
-	List<Cart> findShopCarts(String customer_id, String shop_id, Pagination page);
+	List<Cart> findShopCarts(Cart cart, Pagination page);
 	
 	/**
 	 * 根据商品ID及规格查找购物车信息

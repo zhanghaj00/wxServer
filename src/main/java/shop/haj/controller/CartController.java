@@ -31,7 +31,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping(value = "/v1")
-public class CartController {
+public class CartController extends BaseController {
 	
 	private Logger logger = LogManager.getLogger(CartController.class);
 	
@@ -48,26 +48,28 @@ public class CartController {
 	
 	
 	@ApiOperation(value = "查找店铺购物车列表", notes = "该用户在该店铺的购物车列表")
-	@GetMapping("/customer/carts")
-	public List<Cart> findShopCarts(@RequestAttribute(value = "customer_id", required = false) String customer_id,
+	@GetMapping("/customer/carts/carts")
+	public Map<String,Object> findShopCarts(@RequestAttribute(value = "customer_id", required = false) String customer_id,
 	                                @RequestHeader("shop_id") String shop_id,
-	                                @RequestParam(value = "from", defaultValue = "0") int from,
-	                                @RequestParam(value = "limit", defaultValue = "20") int to,
-	                                @RequestParam(value = "by", defaultValue = "create_time") String by,
-	                                @RequestParam(value = "sort", defaultValue = "desc") String sort){
+	                                @RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
+	                                @RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
+	                                @RequestParam(value = "by", defaultValue = "createTime") String by,
+	                                @RequestParam(value = "sort", defaultValue = "desc") String sort,
+									Cart cart){
 		
 		Pagination page = new Pagination();
-		/*page.setFrom(from);
-		page.setLimit(to);
+		page.setFrom(pageNum);
+		page.setLimit(pageSize);
 		page.setBy(by);
-		page.setSort(sort);*/
-		
-		return shopCartService.findShopCarts(customer_id, shop_id, page);
+		page.setSort(sort);
+		cart.setCustomerId(customer_id);
+		cart.setShopId(shop_id);
+		return rtnParam(0, shopCartService.findShopCarts(cart, page));
 	}
 	
 	@ApiOperation(value = "添加商品到购物车", notes = "添加商品到购物车")
-	@PostMapping("/customer/carts")
-	public String addCart(@RequestAttribute(value = "customer_id", required = false) String customer_id,
+	@PostMapping("/customer/carts/addCarts")
+	public Map<String,Object> addCart(@RequestAttribute(value = "customer_id", required = false) String customer_id,
 	                    @RequestHeader("shop_id") String shop_id,
 	                    @RequestBody Cart cart){
 		
@@ -76,14 +78,14 @@ public class CartController {
 		//防止购物车过于频繁的请求导致购物车数量新增出错
 		synchronized (key) {
 			if(shopCartUsedMap.get(key) != null){
-				return ResultUtil.getJson(0);
+				return rtnParam(50021, "请求过于频繁");
 			}
 			shopCartUsedMap.put(key, cart.toString());
 		}
 		
 		int result;
 		try {
-			Cart checkCart = shopCartService.findShopCart(customer_id, "1",
+			Cart checkCart = shopCartService.findShopCart(customer_id, shop_id,
 					cart.getGoodsId(), cart.getGoodsSku());
 			
 			//如果该商品规格在购物车中不存在，则新增，否则数量+1
@@ -92,10 +94,10 @@ public class CartController {
 				Shop shop = shopService.findById(shop_id);
 				
 				cart.setCustomerId(customer_id);
-				cart.setShopId("1");
+				cart.setShopId(shop_id);
 				cart.setShopName(shop.getName());
 				
-				Goods goods = goodsService.findGoodsByID("1", String.valueOf(cart.getGoodsId()));
+				Goods goods = goodsService.findGoodsByID(shop_id, cart.getGoodsId());
 				cart.setGoodsName(goods.getName());
 				cart.setGoodsPrice(goods.getSellPrice());
 				cart.setGoodsImage(goods.getImages().get(0).getUrl());
@@ -104,7 +106,7 @@ public class CartController {
 				
 			} else {
 				int increaseNum = cart.getGoodsNum() == 0 ? 1 : cart.getGoodsNum();
-				result = shopCartService.updateCartNum(customer_id, "1", checkCart.getId(), (checkCart.getGoodsNum() + increaseNum));
+				result = shopCartService.updateCartNum(customer_id, shop_id, checkCart.getId(), (checkCart.getGoodsNum() + increaseNum));
 			}
 		} finally {
 			
@@ -112,7 +114,7 @@ public class CartController {
 		}
 		
 		
-		return ResultUtil.getJson(result);
+		return rtnParam(0, result);
 	}
 	
 	@ApiOperation(value = "更新购物车数量", notes = "更新购物车数量")
@@ -159,5 +161,14 @@ public class CartController {
 		
 		int result = shopCartService.clearShopCart(customer_id, shop_id);
 		return ResultUtil.getJson(result);
+	}
+
+	@ApiOperation(value = "购物车数量", notes = "查找购物车数量")
+	@GetMapping("/customer/carts/count")
+	public Map<String,Object> countShopCarts(@RequestAttribute(value = "customer_id", required = false) String customer_id,
+								@RequestHeader("shop_id") String shop_id){
+
+		//int result = shopCartService.clearShopCart(customer_id, shop_id);
+		return rtnParam(0,2);
 	}
 }

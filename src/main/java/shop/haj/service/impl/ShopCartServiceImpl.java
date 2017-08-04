@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.haj.entity.Cart;
@@ -44,11 +45,15 @@ public class ShopCartServiceImpl implements ShopCartService {
 	 * @return
 	 */
 	@Override
-	public List<Cart> findShopCarts(String customer_id, String shop_id, Pagination page) {
+	public List<Cart> findShopCarts(Cart cart, Pagination page) {
 		
-		logger.debug("findShopCarts >>> customer_id={}, shop_id={}",
-						customer_id, shop_id);
-		
+		logger.debug("findShopCarts >>> customer_id={}, shop_id={}",cart.getCustomerId()
+						, cart.getShopId());
+
+		Example<Cart> example = Example.of(cart);
+
+		return mongoCartRepository.findAll(example,page.getRequest()).getContent();
+
 		//List<Cart> carts = mongoCartRepository.findShopCarts(customer_id, shop_id, page);
 		
 		//logger.info("findCarts >>> result size = {}", carts == null ? 0 : carts.size());
@@ -56,7 +61,6 @@ public class ShopCartServiceImpl implements ShopCartService {
 		//添加分页缓存信息
 		//cacheManage.addShopCartPageKeysMapData(customer_id, shop_id, page.getOrderByLimitString());
 		
-		return null;
 	}
 	
 	/**

@@ -98,13 +98,15 @@ public class WxAuthController extends BaseController{
 		}*/
 
 		String sessionCode = wxAuthService.getSessionKey(sessionId);
+		String appId = wxAuthService.getOpenId(sessionId);
 
 		if(sessionCode == null) {
 			logger.error("customer not exists, by wxLoginCode:{}", sessionCode);
 			return rtnParam(40010, "session is expired.");
 		}
 
-		return rtnParam(0, "ok");
+		ImmutableMap<String,Object> result = new ImmutableMap.Builder<String,Object>().put("appId",appId).build();
+		return rtnParam(0, result);
 	}
 	
 	/**

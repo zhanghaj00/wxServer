@@ -32,7 +32,7 @@ public class ShopCartServiceImplTest {
 	
 	@Test
 	public void findShopCarts() throws Exception {
-		List<Cart> carts = shopCartService.findShopCarts("10","10", DefaultPagination.getCart());
+		List<Cart> carts = shopCartService.findShopCarts(new Cart(), DefaultPagination.getCart());
 		for (Cart cart : carts) {
 			System.out.println(cart);
 		}

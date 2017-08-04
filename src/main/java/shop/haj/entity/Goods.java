@@ -40,6 +40,8 @@ public class Goods implements Serializable{
 	private Integer salesVolume;
 	
 	private String innerCid;
+
+	private String innerCidName;
 	
 	private String globalCid;
 	
@@ -58,6 +60,14 @@ public class Goods implements Serializable{
 	private GoodsSkuInfo goodsSkuInfo;
 	
 	public Goods() {
+	}
+
+	public String getInnerCidName() {
+		return innerCidName;
+	}
+
+	public void setInnerCidName(String innerCidName) {
+		this.innerCidName = innerCidName;
 	}
 
 	public String getId() {

@@ -26,8 +26,8 @@ public class Cart implements Serializable {
 	private String shopName;//店铺名称
 	private String goodsId;//商品ID
 	private String goodsName;//商品名称
-	private double goodsPrice;//商品价格
-	private int goodsNum;//商品数量
+	private Double goodsPrice;//商品价格
+	private Integer goodsNum;//商品数量
 	private String goodsImage;//商品图片
 	private String goodsSku;//规格说明
 	private String note;//商品备注

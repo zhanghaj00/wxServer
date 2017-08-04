@@ -1,5 +1,6 @@
 package shop.haj.controller;
 
+import com.google.common.collect.ImmutableMap;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +50,7 @@ public class GoodsController extends  BaseController{
 	                           @RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
 	                           @RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
 	                           @RequestParam(value = "by", defaultValue = "id") String by,
-	                           @RequestParam(value = "sort", defaultValue = "asc") String sort,
-									  @RequestBody Goods goods){
+	                           @RequestParam(value = "sort", defaultValue = "asc") String sort,Goods goods){
 		
 		Pagination page = new Pagination();
 		page.setFrom(pageNum);
@@ -58,6 +58,7 @@ public class GoodsController extends  BaseController{
 		page.setBy(by);
 		page.setSort(sort);
 		goods.setShopId(shop_id);
+		if(goods!=null&& (StringUtils.isEmpty(goods.getInnerCid())||"0".equals(goods.getInnerCid()))){goods.setInnerCid(null);}
 		return rtnParam(0, goodsService.findAll(goods, page));
 	}
 	
@@ -75,7 +76,23 @@ public class GoodsController extends  BaseController{
 	                           @PathVariable("goods_id") String goods_id){
 		return rtnParam(0, goodsService.findGoodsByID(shop_id, goods_id));
 	}
-	
+	/**
+	 * 根据商品ID查找商品
+	 * @param shop_id
+	 * @param goods_id
+	 * @return
+	 */
+
+	@ApiOperation(value = "获取商品库存", notes = "获取商品库存")
+	@GetMapping(value = {"/customer/goods/{goods_id}/stock",
+			"/seller/goods/{goods_id}/stock"})
+	public Map<String,Object>  findGoodsStock(@RequestHeader("shop_id") String shop_id,
+											 @PathVariable("goods_id") String goods_id){
+
+		ImmutableMap<String,Object> result = new ImmutableMap.Builder<String,Object>().put("stock",goodsService.findGoodsByID(shop_id, goods_id).getStock()).build();
+
+		return rtnParam(0,result );
+	}
 	/**
 	 * 在店铺内新增商品
 	 * @param shop_id
@@ -162,7 +179,7 @@ public class GoodsController extends  BaseController{
 	 * @return
 	 */
 	@ApiOperation(value = "卖家商品分类", notes = "卖家商品分类")
-	@GetMapping(value = "/seller/goods/innerCategory")
+	@GetMapping(value = {"/seller/goods/innerCategory","/customer/goods/innerCategory"})
 	public Map<String,Object>  innerCategory(@RequestHeader("shop_id") String shop_id){
 		List<GoodsCategory> state = goodsCategoryService.findByShopId(shop_id);
 		return rtnParam(0,state);

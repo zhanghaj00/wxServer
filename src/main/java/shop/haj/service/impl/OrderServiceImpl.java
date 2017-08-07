@@ -1,9 +1,13 @@
 package shop.haj.service.impl;
 
+import com.google.common.collect.Lists;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.haj.entity.*;
@@ -13,7 +17,11 @@ import shop.haj.mongo_repository.MongoOrderListRepository;
 import shop.haj.mongo_repository.MongoOrderRepository;
 import shop.haj.repository.OrderRefundRepository;
 import shop.haj.service.OrderService;
+import shop.haj.utils.OrderPayType;
+import shop.haj.utils.OrderStatus;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -36,8 +44,8 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private MongoOrderRepository mongoOrderRepository;
 	
-	@Autowired
-	private MongoOrderListRepository mongoOrderListRepository;
+	//@Autowired
+	//private MongoOrderListRepository mongoOrderListRepository;
 	
 	@Autowired
 	private MongoGoodsRepository mongoGoodsRepository;
@@ -55,15 +63,16 @@ public class OrderServiceImpl implements OrderService {
 	 * @return
 	 */
 	@Override
-	public List<OrderListInfo> findOrderListByShopAndCustomerID(int shop_id, int customer_id, int status, Pagination page) {
+	public List<OrderListInfo> findOrderListByShopAndCustomerID(Order order ,Pagination page) {
 
-		/*List<OrderListSingleInfo> orderListSingleInfoList = mongoOrderListRepository.findByShopIdAndCustomerIdAndStatus(shop_id, customer_id, status, page).getContent();
+		Example<Order> example = Example.of(order);
+
+		List<Order> orderList = mongoOrderRepository.findAll(example, page.getRequest()).getContent();
 
 		//处理订单数据
-		if(orderListSingleInfoList == null || orderListSingleInfoList.size() == 0) return Lists.newArrayList();
+		if(orderList == null || orderList.size() == 0) return Lists.newArrayList();
 
-		return this.groupByOrderListInfo(orderListSingleInfoList);*/
-		return null;
+		return this.groupByOrderListInfo(orderList);
 	}
 	
 	/**
@@ -91,18 +100,18 @@ public class OrderServiceImpl implements OrderService {
 	 * @param orderListSingleInfoList
 	 * @return
 	 */
-	private List<OrderListInfo> groupByOrderListInfo(List<OrderListSingleInfo> orderListSingleInfoList){
+	private List<OrderListInfo> groupByOrderListInfo(List<Order> orderListSingleInfoList){
 		
-		/*//订单号集合
-		List<Integer> orderIDList = Lists.newArrayList();
-		int temp_order_id = 0;
+		//订单号集合
+		List<String> orderIDList = Lists.newArrayList();
+		String temp_order_id = "0";
 		
 		//计算订单个数
 		for (OrderListSingleInfo singleInfo : orderListSingleInfoList) {
 			//当前订单号与临时订单号不一致，则算作新订单
-			if(singleInfo.getOrder_id() != temp_order_id){
-				orderIDList.add(singleInfo.getOrder_id());
-				temp_order_id = singleInfo.getOrder_id();
+			if(singleInfo.getOrderId().equals(temp_order_id)){
+				orderIDList.add(singleInfo.getOrderId());
+				temp_order_id = singleInfo.getOrderId();
 			}
 		}
 		
@@ -139,8 +148,7 @@ public class OrderServiceImpl implements OrderService {
 			orderListInfos.add(orderListInfo);
 		}
 		
-		return orderListInfos;*/
-		return null;
+		return orderListInfos;
 	}
 	
 	
@@ -205,8 +213,8 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public Order addOrder(Order order) {
 		
-		/*//当支付方式为线下支付时，初始支付状态为待发货， 否则初始状态为待支付
-		if(order.getPayment_type() == OrderPayType.OFFLINEPAY.ordinal()){
+		//当支付方式为线下支付时，初始支付状态为待发货， 否则初始状态为待支付
+		if(order.getPaymentType() == OrderPayType.OFFLINEPAY.ordinal()){
 			order.setStatus(OrderStatus.WAITING_SEND.ordinal());
 		}else {
 			order.setStatus(OrderStatus.WAITING_PAYMENT.ordinal());
@@ -222,17 +230,17 @@ public class OrderServiceImpl implements OrderService {
 		
 		//生成订单时间
 		DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		order.setOrder_time(format2.format(System.currentTimeMillis()));
-		order.setUpdate_time(format2.format(System.currentTimeMillis()));
+		order.setOrderTime(format2.format(System.currentTimeMillis()));
+		order.setUpdateTime(format2.format(System.currentTimeMillis()));
 		
 		//计算订单价格
 		double final_price = 0;
 		for (OrderGoodsInfo orderGoodsInfo : order.getOrderGoodsInfos()) {
-			Goods goods = goodsRepository.findGoodsByID(order.getShop_id(), orderGoodsInfo.getGoods_id());
+			Goods goods = mongoGoodsRepository.findOne( orderGoodsInfo.getGoodsId());
 			
 			//增加商品销量
-			goods.setSales_volume(goods.getSales_volume()+1);
-			goodsRepository.updateGoods(goods);
+			goods.setSalesVolume(goods.getSalesVolume() ==null?1:goods.getSalesVolume()+1);
+			mongoGoodsRepository.save(goods);
 			
 			//减少库存
 			
@@ -240,42 +248,41 @@ public class OrderServiceImpl implements OrderService {
 			clearShopPageCache(goods.getShopId());
 			clearGoodsCache(goods.getId());
 			
-			orderGoodsInfo.setGoods_price(goods.getSell_price());
-			orderGoodsInfo.setGoods_name(goods.getName());
+			orderGoodsInfo.setGoodsPrice(goods.getSellPrice());
+			orderGoodsInfo.setGoodsName(goods.getName());
 			
-			List<Image> images = goodsRepository.findImagesByGoodsID(orderGoodsInfo.getGoods_id());
+			List<Image> images = mongoGoodsRepository.findOne(orderGoodsInfo.getGoodsId()).getImages();
 			
 			if(images != null && images.size() > 0) {
-				orderGoodsInfo.setImage_url(images.get(0).getUrl());//选择首张图片作为默认
+				orderGoodsInfo.setImageUrl(images.get(0).getUrl());//选择首张图片作为默认
 			}
 			
-			final_price += goods.getSell_price() * orderGoodsInfo.getCount();
+			final_price += goods.getSellPrice() * orderGoodsInfo.getCount();
 			logger.info("订单统计当前价格：店铺:{}, 买家:{}, 商品:{}，单价:{}, 个数:{}，当前总价:{}",
-					order.getShop_id(), order.getCustomer_id(), goods.getId(), goods.getSell_price(),
+					order.getShopId(), order.getCustomerId(), goods.getId(), goods.getSellPrice(),
 					orderGoodsInfo.getCount(), final_price);
 		}
 		logger.info("订单统计总价：店铺:{}, 买家:{}, 最终价格:{}",
-				order.getShop_id(), order.getCustomer_id(), final_price);
+				order.getShopId(), order.getCustomerId(), final_price);
 		
-		order.setFinal_price(final_price);
+		order.setFinalPrice(final_price);
 		
 		
-		if(order.getCoupon_used_id() > 0){
+		if(order.getCoupoUsedId() != null){
 			//计算优惠券优惠后价格
 			
 		}
 		
-		orderRepository.addOrder(order);
+		mongoOrderRepository.insert(order);
 		
-		orderListRepository.addOrderListGoodsInfo(order);
+		//mongoOrderListRepository.insert(order.getOrderGoodsInfos());
 		
 		logger.info("addOrder >>> {}", order);
 		
 		//清空该买家订单缓存
-		clearOrderPagesCache(order.getCustomer_id());
+		clearOrderPagesCache(order.getCustomerId());
 		
-		return order;*/
-		return null;
+		return order;
 	}
 	
 	/**
@@ -471,9 +478,9 @@ public class OrderServiceImpl implements OrderService {
 	 * 清除订单集合缓存
 	 * @param customer_id
 	 */
-	private void clearOrderPagesCache(int customer_id){
+	private void clearOrderPagesCache(String customer_id){
 		
-		/*List<String> keys = cacheManage.getOrderPageCacheKeys(customer_id);
+		List<String> keys = cacheManage.getOrderPageCacheKeys(customer_id);
 		
 		if(keys == null || keys.size() == 0) {
 			cacheManage.clearAllOrderPagesCache();
@@ -484,7 +491,7 @@ public class OrderServiceImpl implements OrderService {
 				cacheManage.clearOrderPageCache(customer_id, pageKey);
 			}
 			keys.clear();
-		}*/
+		}
 		
 	}
 	

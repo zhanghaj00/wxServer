@@ -11,6 +11,7 @@ import shop.haj.service.AddressService;
 import shop.haj.utils.ResultUtil;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>Title: shop.ha.controller</p>
@@ -25,7 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/v1")
-public class AddressController {
+public class AddressController extends BaseController{
 	
 	private Logger logger = LogManager.getLogger(AddressController.class);
 	
@@ -39,13 +40,13 @@ public class AddressController {
 	 */
 	@ApiOperation(value = "新增地址", notes = "新增买家地址信息")
 	@PostMapping(value = "/customer/addresses")
-	public Address addAddress(@RequestAttribute(value = "customer_id", required = false) String customer_id,
+	public Map<String,Object> addAddress(@RequestAttribute(value = "customer_id", required = false) String customer_id,
 	                          @RequestBody Address address){
 		logger.info("PostMapping request addAddress , address is {}, customer_id is {}", address, customer_id);
 		
 		address.setCustomerId(customer_id);
 		
-		return addressService.addAddress(address);
+		return rtnParam(0,addressService.addAddress(address));
 	}
 	
 	/**
@@ -55,21 +56,21 @@ public class AddressController {
 	 */
 	@ApiOperation(value = "查找买家地址列表", notes = "根据买家ID查找买家地址列表")
 	@GetMapping(value = "/customer/addresses")
-	public List<Address> findAddressListByCustomerID(@RequestAttribute(value = "customer_id", required = false) String customer_id,
-	                                                 @RequestParam(value = "from", defaultValue = "0") int from,
-	                                                 @RequestParam(value = "limit", defaultValue = "20") int to,
-	                                                 @RequestParam(value = "by", defaultValue = "is_default desc, id") String by,
-	                                                 @RequestParam(value = "sort", defaultValue = "desc") String sort){
+	public Map<String,Object> findAddressListByCustomerID(@RequestAttribute(value = "customer_id", required = false) String customer_id,
+														  @RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
+														  @RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
+														  @RequestParam(value = "by", defaultValue = "is_default desc, id") String by,
+														  @RequestParam(value = "sort", defaultValue = "desc") String sort){
 		
 		Pagination page = new Pagination();
-		/*page.setFrom(from);
-		page.setLimit(to);
+		page.setFrom(pageNum);
+		page.setLimit(pageSize);
 		page.setBy(by);
-		page.setSort(sort);*/
+		page.setSort(sort);
 		
 		logger.info("GetMapping request findAddressListByCustomerID , customer_id is {}", customer_id);
 		
-		return addressService.findAddressListByCustomerID(customer_id, page);
+		return rtnParam(0,addressService.findAddressListByCustomerID(customer_id, page));
 	}
 	
 	/**

@@ -56,8 +56,9 @@ public class ShopServiceImpl implements ShopService{
 	@Transactional
 	public Shop findById(String id) {
 		Shop shop = mongoShopRepository.findShopById(id);
-		shop.setImages(mongoImageRepository.findByShopId(shop.getId()));
-		
+		if(null != shop){
+			shop.setImages(mongoImageRepository.findByShopId(shop.getId()));
+		}
 		return shop;
 	}
 	

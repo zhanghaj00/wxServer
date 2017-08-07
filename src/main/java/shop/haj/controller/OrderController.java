@@ -90,16 +90,16 @@ public class OrderController extends BaseController {
 	public List<OrderListInfo> findOrderListByShopAndCustomerID(@RequestAttribute(value = "customer_id", required = false) int customer_id,
 																@RequestHeader("shop_id") int shop_id,
 																@RequestParam(value = "status", defaultValue = "0") int status,
-																@RequestParam(value = "from", defaultValue = "0") int from,
-																@RequestParam(value = "limit", defaultValue = "20") int to,
+																@RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
+																@RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
 																@RequestParam(value = "by", defaultValue = "order_id") String by,
 																@RequestParam(value = "sort", defaultValue = "desc") String sort) {
 
 		Pagination page = new Pagination();
-		/*page.setFrom(from);
-		page.setLimit(to);
+		page.setFrom(pageNum);
+		page.setLimit(pageSize);
 		page.setBy(by);
-		page.setSort(sort);*/
+		page.setSort(sort);
 
 		return orderService.findOrderListByShopAndCustomerID(shop_id, customer_id, status, page);
 	}
@@ -127,7 +127,7 @@ public class OrderController extends BaseController {
 	 */
 	@ApiOperation(value = "创建订单", notes = "创建订单")
 	@PostMapping("/customer/orders")
-	public Order addOrder(@RequestHeader("shop_id") String shop_id,
+	public Map<String,Object> addOrder(@RequestHeader("shop_id") String shop_id,
 						  @RequestAttribute(value = "customer_id", required = false) String customer_id,
 						  @RequestBody Order order) {
 
@@ -135,10 +135,12 @@ public class OrderController extends BaseController {
 		order.setCustomerId(customer_id);
 
 		//查询shop name
-		Shop shop = shopService.findById("");
-		order.setShopName(shop.getName());
+		Shop shop = shopService.findById(shop_id);
+		if(null != shop){
+			order.setShopName(shop.getName());
+		}
 
-		return orderService.addOrder(order);
+		return rtnParam(0,orderService.addOrder(order));
 	}
 
 	@ApiOperation(value = "更新订单状态为待收货", notes = "当卖家进行发货处理时，订单状态变更为待收货.")

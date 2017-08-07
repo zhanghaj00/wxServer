@@ -21,6 +21,10 @@ public class OrderGoodsInfo implements Serializable {
 	private String id;
 
 	private String goodsId;
+
+	private String shopId;
+
+	private String customerId;
 	
 	private String imageUrl;//商品图片地址
 	
@@ -33,6 +37,22 @@ public class OrderGoodsInfo implements Serializable {
 	private int count;//购买商品数量
 	
 	public OrderGoodsInfo() {
+	}
+
+	public String getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
+	}
+
+	public String getShopId() {
+		return shopId;
+	}
+
+	public void setShopId(String shopId) {
+		this.shopId = shopId;
 	}
 
 	public int getCount() {

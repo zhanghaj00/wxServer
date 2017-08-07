@@ -141,7 +141,7 @@ public class CacheManage {
 	}
 	
 	@CacheEvict(value = {"orderPages"}, key = "{#customer_id, #pageInfo}")
-	public void clearOrderPageCache(int customer_id, String pageInfo){
+	public void clearOrderPageCache(String customer_id, String pageInfo){
 		
 		logger.info("clearOrderPageCache >>> Cache Evict : value=goodsPages, key={{}, {}}, pageMap={}", customer_id, pageInfo, orderPageCacheKeyMap);
 	}

@@ -13,6 +13,6 @@ import shop.haj.entity.OrderListSingleInfo;
  *
  * @since 1.9.0
  */
-public interface MongoOrderListRepository extends MongoRepository<OrderGoodsInfo,String> {
+public interface MongoOrderListRepository extends MongoRepository<OrderListSingleInfo,String> {
     //Page<OrderGoodsInfo> findByShopIdAndCustomerIdAndStatus(String shopId,String customerId,int status ,Pageable pagination);
 }

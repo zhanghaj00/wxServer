@@ -1,9 +1,6 @@
 package shop.haj.service;
 
-import shop.haj.entity.Order;
-import shop.haj.entity.OrderListInfo;
-import shop.haj.entity.OrderRefund;
-import shop.haj.entity.Pagination;
+import shop.haj.entity.*;
 
 import java.util.List;
 
@@ -22,18 +19,16 @@ public interface OrderService {
 	
 	/**
 	 * 查找某买家在某店铺的全部订单列表
-	 * @param shop_id
-	 * @param customer_id
 	 * @return
 	 */
-	List<OrderListInfo> findOrderListByShopAndCustomerID(int shop_id, int customer_id, int status, Pagination page);
+	List<OrderListInfo> findOrderListInfo(OrderListSingleInfo order , Pagination page);
 	
 	/**
 	 * 查找某买家全部订单列表
 	 * @param customer_id
 	 * @return
 	 */
-	List<OrderListInfo> findOrderListByCustomerID(int customer_id, int status, Pagination page);
+	List<OrderListInfo> findOrderListByCustomerID(String customer_id, int status, Pagination page);
 	
 	/**
 	 * 根据订单ID查找某个订单详细信息
@@ -41,7 +36,7 @@ public interface OrderService {
 	 * @param page
 	 * @return
 	 */
-	Order findShopOrderByID(int order_id, Pagination page);
+	Order findShopOrderByID(String order_id, Pagination page);
 	
 	/**
 	 * 根据订单号查询订单信息
@@ -71,7 +66,7 @@ public interface OrderService {
 	 * @param order_id
 	 * @return
 	 */
-	int updateOrderStatusToWaitingReceive(int customer_id, int order_id);
+	int updateOrderStatusToWaitingReceive(String customer_id, String order_id);
 	
 	/**
 	 * 将订单状态修改为待评价
@@ -79,35 +74,35 @@ public interface OrderService {
 	 * @param order_id
 	 * @return
 	 */
-	int updateOrderStatusToWaitingComments(int customer_id, int order_id);
+	int updateOrderStatusToWaitingComments(String customer_id, String order_id);
 	
 	/**
 	 * 将订单状态修改为退款/售后
 	 * @param orderRefund
 	 * @return
 	 */
-	int updateOrderStatusToRefund(OrderRefund orderRefund, int customer_id);
+	int updateOrderStatusToRefund(OrderRefund orderRefund, String customer_id);
 	
 	/**
 	 * 将订单状态修改为已完成
 	 * @param order_id
 	 * @return
 	 */
-	int updateOrderStatusToFinish(int customer_id, int order_id);
+	int updateOrderStatusToFinish(String customer_id, String order_id);
 	
 	/**
 	 * 将订单状态修改为已关闭
 	 * @param order_id
 	 * @return
 	 */
-	int updateOrderStatusToClose(int customer_id, int order_id);
+	int updateOrderStatusToClose(String customer_id, String order_id);
 	
 	/**
 	 * 买家查看退款记录,有且仅有一条记录
 	 * @param order_id
 	 * @return
 	 */
-	OrderRefund findOrderRefund(int order_id);
+	OrderRefund findOrderRefund(String order_id);
 	
 	/**
 	 * 买家查看订单中某件商品的退货记录
@@ -115,7 +110,7 @@ public interface OrderService {
 	 * @param goods_id
 	 * @return
 	 */
-	OrderRefund findOrderRefund(int order_id, int goods_id);
+	OrderRefund findOrderRefund(String order_id, String goods_id);
 	
 	/**
 	 * 当买家提交退款/售后申请时，当卖家未确认前，买家可以主动关闭退单

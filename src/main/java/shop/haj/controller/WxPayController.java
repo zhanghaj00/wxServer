@@ -62,7 +62,7 @@ public class WxPayController extends BaseController{
 	 */
 	@GetMapping(value = "/customer/orders/{order_id}/wxpay")
 	public Map<String,Object> unifiedOrderPay(@RequestHeader("shop_id") int shop_id,
-	                              @PathVariable("order_id") int order_id,
+	                              @PathVariable("order_id") String order_id,
 	                              @RequestHeader("session_id") String session_id){
 		
 		//1. 根据shop_id拿到店铺对应的支付信息，从表wxpay_info获取
@@ -112,7 +112,7 @@ public class WxPayController extends BaseController{
 		//5. 向微信服务器发送统一下单请求，并生成新的sign
 		Map<String, String> payInfo = null;
 		try {
-			payInfo = wxPayService.getPayInfo(wxPayUnifiedOrderRequest, wxPayConfig.getMchKey(), order_id);
+			payInfo = wxPayService.getPayInfo(wxPayUnifiedOrderRequest, wxPayConfig.getMchKey(), 0);//TODO
 			
 		} catch (WxErrorException e) {
 			logger.error(e.toString(), e);

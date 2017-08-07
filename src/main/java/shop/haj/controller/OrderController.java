@@ -62,19 +62,19 @@ public class OrderController extends BaseController {
 	 */
 	@ApiOperation(value = "查找买家订单列表", notes = "根据买家ID来进行查询买家的全部订单")
 	@GetMapping(value = "/manager/orders")
-	public List<OrderListInfo> findOrderListByCustomerID(@RequestAttribute(value = "customer_id", required = false) int customer_id,
+	public Map<String,Object> findOrderListByCustomerID(@RequestAttribute(value = "customer_id", required = false) String customer_id,
 														 @RequestParam(value = "status", defaultValue = "0") int status,
-														 @RequestParam(value = "from", defaultValue = "0") int from,
-														 @RequestParam(value = "limit", defaultValue = "20") int to,
+														 @RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
+														 @RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
 														 @RequestParam(value = "by", defaultValue = "order_id") String by,
 														 @RequestParam(value = "sort", defaultValue = "desc") String sort) {
 		Pagination page = new Pagination();
-		/*page.setFrom(from);
-		page.setLimit(to);
+		page.setFrom(pageNum);
+		page.setLimit(pageSize);
 		page.setBy(by);
-		page.setSort(sort);*/
+		page.setSort(sort);
 
-		return orderService.findOrderListByCustomerID(customer_id, status, page);
+		return rtnParam(0, orderService.findOrderListByCustomerID(customer_id, status, page));
 	}
 
 	/**
@@ -87,21 +87,25 @@ public class OrderController extends BaseController {
 	 */
 	@ApiOperation(value = "查找买家在某店的订单列表", notes = "根据买家ID和店铺ID返回订单列表")
 	@GetMapping(value = "/customer/orders")
-	public List<OrderListInfo> findOrderListByShopAndCustomerID(@RequestAttribute(value = "customer_id", required = false) int customer_id,
-																@RequestHeader("shop_id") int shop_id,
-																@RequestParam(value = "status", defaultValue = "0") int status,
+	public Map<String,Object> findOrderListByShopAndCustomerID(@RequestAttribute(value = "customer_id", required = false) String customer_id,
+																@RequestHeader("shop_id") String shop_id,
 																@RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
 																@RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
 																@RequestParam(value = "by", defaultValue = "order_id") String by,
-																@RequestParam(value = "sort", defaultValue = "desc") String sort) {
+																@RequestParam(value = "sort", defaultValue = "desc") String sort,
+																OrderListSingleInfo orderListSingleInfo) {
 
 		Pagination page = new Pagination();
 		page.setFrom(pageNum);
 		page.setLimit(pageSize);
 		page.setBy(by);
 		page.setSort(sort);
-
-		return orderService.findOrderListByShopAndCustomerID(shop_id, customer_id, status, page);
+		orderListSingleInfo.setShopId(shop_id);
+		orderListSingleInfo.setCustomerId(customer_id);
+		if(orderListSingleInfo.getStatus()!=null && 0 == orderListSingleInfo.getStatus()){
+			orderListSingleInfo.setStatus(null);
+		}
+		return rtnParam(0, orderService.findOrderListInfo(orderListSingleInfo, page));
 	}
 
 	/**
@@ -112,7 +116,7 @@ public class OrderController extends BaseController {
 	 */
 	@ApiOperation(value = "查找订单详细信息", notes = "查找订单详细信息")
 	@GetMapping(value = "/customer/orders/{order_id}")
-	public Order findShopOrderByID(@PathVariable("order_id") int order_id) {
+	public Order findShopOrderByID(@PathVariable("order_id") String order_id) {
 
 		return orderService.findShopOrderByID(order_id, DefaultPagination.getOrder());
 	}
@@ -145,29 +149,29 @@ public class OrderController extends BaseController {
 
 	@ApiOperation(value = "更新订单状态为待收货", notes = "当卖家进行发货处理时，订单状态变更为待收货.")
 	@PatchMapping("/seller/orders/{order_id}/status/receive")
-	public String updateOrderStatusToWaitingReceive(@PathVariable("order_id") int order_id,
-													@RequestAttribute(value = "customer_id", required = false) int customer_id) {
+	public String updateOrderStatusToWaitingReceive(@PathVariable("order_id") String order_id,
+													@RequestAttribute(value = "customer_id", required = false) String customer_id) {
 		int result = orderService.updateOrderStatusToWaitingReceive(customer_id, order_id);
 		return ResultUtil.getJson(result);
 	}
 
 	@ApiOperation(value = "更新订单状态为待评价", notes = "更新订单状态为待评价")
 	@PatchMapping("/customer/orders/{order_id}/status/comments")
-	public String updateOrderStatusToWaitingComments(@PathVariable("order_id") int order_id,
-													 @RequestAttribute(value = "customer_id", required = false) int customer_id) {
+	public String updateOrderStatusToWaitingComments(@PathVariable("order_id") String order_id,
+													 @RequestAttribute(value = "customer_id", required = false) String customer_id) {
 		int result = orderService.updateOrderStatusToWaitingComments(customer_id, order_id);
 		return ResultUtil.getJson(result);
 	}
 
 	@ApiOperation(value = "买家提交退款申请", notes = "买家提交退款申请，修改状态为退款中")
 	@PutMapping("/customer/orders/{order_id}/status/refund")
-	public String updateOrderStatusToRefund(@PathVariable("order_id") int order_id,
-											@RequestAttribute(value = "customer_id", required = false) int customer_id,
+	public String updateOrderStatusToRefund(@PathVariable("order_id") String order_id,
+											@RequestAttribute(value = "customer_id", required = false) String customer_id,
 											@RequestBody OrderRefund orderRefund) {
 
 		logger.info("updateOrderStatusToRefund controller >>> ");
 
-		orderRefund.setOrder_id(order_id);
+		//orderRefund.setOrder_id(order_id);
 
 		Order order = orderService.findShopOrderByID(order_id, DefaultPagination.getOrder());
 
@@ -191,7 +195,7 @@ public class OrderController extends BaseController {
 			}
 		} else if (orderRefund.getType() == OrderRefundType.REFUND_GOODS.ordinal()) {
 			//2. 如果是退货，则唯一是：order_id+goods_id
-			OrderRefund exist_orderRefund = orderService.findOrderRefund(order_id, orderRefund.getGoods_id());
+			OrderRefund exist_orderRefund = null ; //orderService.findOrderRefund(order_id, orderRefund.getGoods_id());
 			if (exist_orderRefund != null && exist_orderRefund.getOrder_id() > 0) {
 				return ResultUtil.getJson(0);
 			}
@@ -240,8 +244,8 @@ public class OrderController extends BaseController {
 	 */
 	@ApiOperation(value = "取消退款申请", notes = "当用户进行退款处理后，在卖家未处理之前，可手工撤销退款申请")
 	@PutMapping("/customer/orders/{order_id}/status/cancelRefundMoney")
-	public String cancelRefundMoneyApply(@PathVariable("order_id") int order_id,
-										 @RequestAttribute(value = "customer_id", required = false) int customer_id,
+	public String cancelRefundMoneyApply(@PathVariable("order_id") String order_id,
+										 @RequestAttribute(value = "customer_id", required = false) String customer_id,
 										 @RequestBody OrderRefund orderRefund) {
 
 		logger.info("cancelRefundMoneyApply controller >>> order_id={}, customer_id={}", order_id, customer_id);
@@ -272,14 +276,14 @@ public class OrderController extends BaseController {
 
 	@ApiOperation(value = "取消退货申请", notes = "当用户进行退货处理后，在卖家未处理之前，可手工撤销退货申请")
 	@PutMapping("/customer/orders/{order_id}/status/cancelRefundGoods")
-	public String cancelRefundGoodsApply(@PathVariable("order_id") int order_id,
-										 @RequestAttribute(value = "customer_id", required = false) int customer_id,
+	public String cancelRefundGoodsApply(@PathVariable("order_id") String order_id,
+										 @RequestAttribute(value = "customer_id", required = false) String customer_id,
 										 @RequestBody OrderRefund orderRefund) {
 
 		logger.info("cancelRefundGoodsApply controller >>> order_id={}, customer_id={}", order_id, customer_id);
 
 		//退单表否存在退货记录
-		OrderRefund exist_orderRefund = orderService.findOrderRefund(order_id, orderRefund.getGoods_id());
+		OrderRefund exist_orderRefund = null;//orderService.findOrderRefund(order_id, orderRefund.getGoods_id());
 		if (exist_orderRefund == null) {
 			logger.error("cancelRefundGoodsApply controller >>> customer_id={}, order_id={} 退单表未发现记录，用户无法进行取消退款/售后申请操作.", customer_id, order_id);
 			return ResultUtil.getJson(0);
@@ -298,7 +302,7 @@ public class OrderController extends BaseController {
 
 	@ApiOperation(value = "卖家确认退款", notes = "当卖家同意退款请求时，系统将正式开始进行退款流程处理")
 	@PatchMapping("/seller/orders/{order_id}/status/refund_money")
-	public String replyForRefundMoney(@PathVariable("order_id") int order_id) {
+	public String replyForRefundMoney(@PathVariable("order_id") String order_id) {
 
 //		//校验支付渠道，根据不同的订单支付渠道采取不同的退款方式
 		Order order = orderService.findShopOrderByID(order_id, DefaultPagination.getOrder());
@@ -346,15 +350,15 @@ public class OrderController extends BaseController {
 
 	@ApiOperation(value = "买家主动关闭未支付订单", notes = "买家提交订单但不想购买后，可主动取消订单")
 	@PatchMapping("/customer/orders/{order_id}/status/close")
-	public String updateOrderStatusToCloseByCustomer(@PathVariable("order_id") int order_id,
-													 @RequestAttribute(value = "customer_id", required = false) int customer_id) {
+	public String updateOrderStatusToCloseByCustomer(@PathVariable("order_id") String order_id,
+													 @RequestAttribute(value = "customer_id", required = false) String customer_id) {
 
 		Order order = orderService.findShopOrderByID(order_id, DefaultPagination.getOrder());
 
 		WxPayConfig config = null; //wxPayService.getWxConfig(order.getShopId());
 
 		//已经提交未支付的订单,则需要关闭微信端订单
-		if (wxPayService.isPrepay(order_id)) {
+		/*if (wxPayService.isPrepay(order_id)) {
 			try {
 				WxPayOrderCloseResult result = wxPayService.closeOrder(order.getUuid(), config.getMchKey());
 
@@ -371,7 +375,7 @@ public class OrderController extends BaseController {
 		} else {
 			int status = orderService.updateOrderStatusToClose(customer_id, order_id);
 			return ResultUtil.getJson(status);
-		}
+		}*/
 
 		return ResultUtil.getJson(0);
 	}

@@ -1,5 +1,6 @@
 package shop.haj.entity;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -17,19 +18,18 @@ import java.util.List;
  * @author hao
  *         CreateTime：3/13/17
  */
-@Document(collection = "wx_order_listinfo")
 public class OrderListInfo implements Serializable {
 
-	@Id
 	private String id;
 	private String orderId;
 	private String shopId;
-	private String order_time;//下单时间
-	private int status;
-	private double final_price;//最终成交价
+	private String orderTime;//下单时间
+	private Integer status;
+	private Double finalPrice;//最终成交价
 	private String shopName;
 	private List<OrderGoodsInfo> orderGoodsInfos;
-	
+
+
 	public OrderListInfo() {
 	}
 
@@ -57,12 +57,20 @@ public class OrderListInfo implements Serializable {
 		this.shopId = shopId;
 	}
 
-	public String getOrder_time() {
-		return order_time;
+	public String getOrderTime() {
+		return orderTime;
 	}
 
-	public void setOrder_time(String order_time) {
-		this.order_time = order_time;
+	public void setOrderTime(String orderTime) {
+		this.orderTime = orderTime;
+	}
+
+	public double getFinalPrice() {
+		return finalPrice;
+	}
+
+	public void setFinalPrice(double finalPrice) {
+		this.finalPrice = finalPrice;
 	}
 
 	public int getStatus() {
@@ -73,13 +81,6 @@ public class OrderListInfo implements Serializable {
 		this.status = status;
 	}
 
-	public double getFinal_price() {
-		return final_price;
-	}
-
-	public void setFinal_price(double final_price) {
-		this.final_price = final_price;
-	}
 
 	public String getShopName() {
 		return shopName;

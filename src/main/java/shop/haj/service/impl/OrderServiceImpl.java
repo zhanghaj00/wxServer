@@ -10,6 +10,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import shop.haj.entity.*;
 import shop.haj.manage.CacheManage;
 import shop.haj.mongo_repository.MongoGoodsRepository;
@@ -22,6 +23,7 @@ import shop.haj.utils.OrderStatus;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -44,8 +46,8 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private MongoOrderRepository mongoOrderRepository;
 	
-	//@Autowired
-	//private MongoOrderListRepository mongoOrderListRepository;
+	@Autowired
+	private MongoOrderListRepository mongoOrderListRepository;
 	
 	@Autowired
 	private MongoGoodsRepository mongoGoodsRepository;
@@ -58,16 +60,14 @@ public class OrderServiceImpl implements OrderService {
 	
 	/**
 	 * 查找某买家在某店铺的全部订单列表
-	 * @param shop_id
-	 * @param customer_id
-	 * @return
+	 * @return List<OrderListInfo>
 	 */
 	@Override
-	public List<OrderListInfo> findOrderListByShopAndCustomerID(Order order ,Pagination page) {
+	public List<OrderListInfo> findOrderListInfo(OrderListSingleInfo order ,Pagination page) {
 
-		Example<Order> example = Example.of(order);
+		Example<OrderListSingleInfo> example = Example.of(order);
 
-		List<Order> orderList = mongoOrderRepository.findAll(example, page.getRequest()).getContent();
+		List<OrderListSingleInfo> orderList = mongoOrderListRepository.findAll(example, page.getRequest()).getContent();
 
 		//处理订单数据
 		if(orderList == null || orderList.size() == 0) return Lists.newArrayList();
@@ -83,7 +83,7 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	@Override
 //	@Cacheable(value = "orderPages", key = "{#customer_id, #status + '_' + #page.orderByLimitString}")
-	public List<OrderListInfo> findOrderListByCustomerID(int customer_id, int status, Pagination page) {
+	public List<OrderListInfo> findOrderListByCustomerID(String customer_id, int status, Pagination page) {
 		/*List<OrderListSingleInfo> orderListSingleInfoList = orderListRepository.findOrderListSingleByCustomerID(customer_id, status, page);
 
 		//处理订单数据
@@ -97,19 +97,19 @@ public class OrderServiceImpl implements OrderService {
 	
 	/**
 	 * 关联订单和商品信息
-	 * @param orderListSingleInfoList
+	 * @param orderListInfoList
 	 * @return
 	 */
-	private List<OrderListInfo> groupByOrderListInfo(List<Order> orderListSingleInfoList){
+	private List<OrderListInfo> groupByOrderListInfo(List<OrderListSingleInfo> orderListInfoList){
 		
 		//订单号集合
 		List<String> orderIDList = Lists.newArrayList();
 		String temp_order_id = "0";
 		
 		//计算订单个数
-		for (OrderListSingleInfo singleInfo : orderListSingleInfoList) {
+		for (OrderListSingleInfo singleInfo : orderListInfoList) {
 			//当前订单号与临时订单号不一致，则算作新订单
-			if(singleInfo.getOrderId().equals(temp_order_id)){
+			if(!singleInfo.getOrderId().equals(temp_order_id)){
 				orderIDList.add(singleInfo.getOrderId());
 				temp_order_id = singleInfo.getOrderId();
 			}
@@ -119,29 +119,29 @@ public class OrderServiceImpl implements OrderService {
 		List<OrderListInfo> orderListInfos = Lists.newArrayList();
 		
 		//按订单ID个数进行遍历
-		for (Integer order_id : orderIDList) {
+		for (String order_id : orderIDList) {
 			
 			OrderListInfo orderListInfo = new OrderListInfo();
 			List<OrderGoodsInfo> orderGoodsInfos = Lists.newArrayList();
 			
-			for (OrderListSingleInfo singleInfo : orderListSingleInfoList) {
-				if(order_id != singleInfo.getOrder_id()) continue;
+			for (OrderListSingleInfo singleInfo : orderListInfoList) {
+				if(!order_id.equals(singleInfo.getOrderId())) continue;
 				//订单信息判断
-				orderListInfo.setOrder_id(order_id);
-				orderListInfo.setOrder_time(singleInfo.getOrder_time());
+				orderListInfo.setOrderId(order_id);
+				orderListInfo.setOrderTime(singleInfo.getOrderTime());
 				orderListInfo.setStatus(singleInfo.getStatus());
-				orderListInfo.setFinal_price(singleInfo.getFinal_price());
-				orderListInfo.setShop_id(singleInfo.getShop_id());
-				orderListInfo.setShop_name(singleInfo.getShop_name());
-				
+				orderListInfo.setFinalPrice(singleInfo.getFinalPrice());
+				orderListInfo.setShopId(singleInfo.getShopId());
+				orderListInfo.setShopName(singleInfo.getShopName());
+
 				OrderGoodsInfo orderGoodsInfo = new OrderGoodsInfo();
-				orderGoodsInfo.setGoods_id(singleInfo.getGoods_id());
-				orderGoodsInfo.setGoods_name(singleInfo.getGoods_name());
-				orderGoodsInfo.setImage_url(singleInfo.getImage_url());
-				orderGoodsInfo.setGoods_price(singleInfo.getGoods_price());
+				orderGoodsInfo.setGoodsId(singleInfo.getGoodsId());
+				orderGoodsInfo.setGoodsName(singleInfo.getGoodsName());
+				orderGoodsInfo.setImageUrl(singleInfo.getImageUrl());
+				orderGoodsInfo.setGoodsPrice(singleInfo.getGoodsPrice());
 				orderGoodsInfo.setCount(singleInfo.getCount());
-				orderGoodsInfo.setGoods_sku(singleInfo.getGoods_sku());
-				
+				orderGoodsInfo.setGoodsSku(singleInfo.getGoodsSku());
+
 				orderGoodsInfos.add(orderGoodsInfo);
 			}
 			orderListInfo.setOrderGoodsInfos(orderGoodsInfos);
@@ -154,13 +154,10 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Override
 //	@Cacheable(value = "order", key = "#order_id")
-	public Order findShopOrderByID(int order_id, Pagination page) {
-		/*Order order = orderRepository.findShopOrderByID(order_id);
-		
-		fillOrderGoodsInfo(order);
-		
-		return order;*/
-		return null;
+	public Order findShopOrderByID(String order_id, Pagination page) {
+		Order order = mongoOrderRepository.findOne(order_id);
+		//fillOrderGoodsInfo(order);
+		return order;
 	}
 	
 	/**
@@ -173,12 +170,11 @@ public class OrderServiceImpl implements OrderService {
 //	@Cacheable(value = "order", key = "#uuid")
 	public Order findShopOrderByUUID(String uuid) {
 		
-		/*Order order = orderRepository.findShopOrderByUUID(uuid);
+		Order order = mongoOrderRepository.findByUuid(uuid);
 		
-		fillOrderGoodsInfo(order);
+		//fillOrderGoodsInfo(order);
 		
-		return order;*/
-		return null;
+		return order;
 	}
 	
 	/**
@@ -275,7 +271,7 @@ public class OrderServiceImpl implements OrderService {
 		
 		mongoOrderRepository.insert(order);
 		
-		//mongoOrderListRepository.insert(order.getOrderGoodsInfos());
+		mongoOrderListRepository.insert(convertOrderToOrderListSingleInfo(order));
 		
 		logger.info("addOrder >>> {}", order);
 		
@@ -284,7 +280,30 @@ public class OrderServiceImpl implements OrderService {
 		
 		return order;
 	}
-	
+
+	private List<OrderListSingleInfo> convertOrderToOrderListSingleInfo(Order order){
+		List<OrderListSingleInfo> result = Lists.newArrayList();
+		if(null == order && CollectionUtils.isEmpty(order.getOrderGoodsInfos())) return  result;
+		for(OrderGoodsInfo goodsInfo:order.getOrderGoodsInfos()){
+			OrderListSingleInfo tmp = new OrderListSingleInfo();
+			tmp.setOrderId(order.getId());
+			tmp.setGoodsId(goodsInfo.getGoodsId());
+			tmp.setShopId(order.getShopId());
+			tmp.setCustomerId(order.getCustomerId());
+			tmp.setOrderTime(order.getOrderTime());
+			tmp.setStatus(order.getStatus());
+			tmp.setFinalPrice(order.getFinalPrice());
+			tmp.setImageUrl(goodsInfo.getImageUrl());
+			tmp.setShopName(order.getShopName());
+			tmp.setGoodsName(goodsInfo.getGoodsName());
+			tmp.setGoodsPrice(goodsInfo.getGoodsPrice());
+			tmp.setGoodsSku(goodsInfo.getGoodsSku());
+			tmp.setCount(goodsInfo.getCount());
+			result.add(tmp);
+		}
+		return result;
+	}
+
 	/**
 	 * 当买家付款，将订单状态修改为待发货
 	 *
@@ -317,7 +336,7 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	@Override
 	@CacheEvict(value = "order", key = "#order_id")
-	public int updateOrderStatusToWaitingReceive(int customer_id, int order_id) {
+	public int updateOrderStatusToWaitingReceive(String customer_id, String order_id) {
 		
 		/*logger.info("updateOrderStatusToWaitingReceive >>> customer_id={}, order_id={}", customer_id, order_id);
 		
@@ -340,7 +359,7 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	@Override
 	@CacheEvict(value = "order", key = "#order_id")
-	public int updateOrderStatusToWaitingComments(int customer_id, int order_id) {
+	public int updateOrderStatusToWaitingComments(String customer_id, String order_id) {
 		
 		/*logger.info("updateOrderStatusToComments >>> customer_id={}, order_id={}", customer_id, order_id);
 		
@@ -362,7 +381,7 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	@Override
 	@CacheEvict(value = "order", key = "#orderRefund.getOrder_id()")
-	public int updateOrderStatusToRefund(OrderRefund orderRefund, int customer_id) {
+	public int updateOrderStatusToRefund(OrderRefund orderRefund, String customer_id) {
 		
 		/*logger.info("updateOrderStatusToRefund >>> OrderRefund={}", orderRefund);
 		
@@ -387,7 +406,7 @@ public class OrderServiceImpl implements OrderService {
 	 * @return
 	 */
 	@Override
-	public int updateOrderStatusToFinish(int customer_id, int order_id) {
+	public int updateOrderStatusToFinish(String customer_id, String order_id) {
 		
 		/*logger.info("updateOrderStatusToFinish >>> customer_id={}, order_id={}", customer_id, order_id);
 		
@@ -410,7 +429,7 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	@Override
 	@CacheEvict(value = "order", key = "#order_id")
-	public int updateOrderStatusToClose(int customer_id, int order_id) {
+	public int updateOrderStatusToClose(String customer_id, String order_id) {
 		
 		/*logger.info("updateOrderStatusToClose >>> customer_id={}, order_id={}", customer_id, order_id);
 		
@@ -430,9 +449,9 @@ public class OrderServiceImpl implements OrderService {
 	 * @return
 	 */
 	@Override
-	public OrderRefund findOrderRefund(int order_id) {
+	public OrderRefund findOrderRefund(String order_id) {
 		
-		OrderRefund orderRefunds = orderRefundRepository.findOrderRefund(order_id);
+		OrderRefund orderRefunds = null ;// orderRefundRepository.findOrderRefund(order_id);
 		
 		logger.info("findOrderRefund service >>> order_id={}, result=(orderRefunds={})", orderRefunds);
 		
@@ -448,9 +467,9 @@ public class OrderServiceImpl implements OrderService {
 	 * @return
 	 */
 	@Override
-	public OrderRefund findOrderRefund(int order_id, int goods_id) {
+	public OrderRefund findOrderRefund(String order_id, String goods_id) {
 		
-		OrderRefund orderRefund = orderRefundRepository.findOrderRefund(order_id, goods_id);
+		OrderRefund orderRefund = null ;//orderRefundRepository.findOrderRefund(order_id, goods_id);
 		
 		logger.info("findOrderRefund service >>> order_id={}, result=(orderRefunds={})", orderRefund);
 		

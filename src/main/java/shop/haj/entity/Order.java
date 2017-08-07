@@ -27,11 +27,11 @@ public class Order implements Serializable {
 	
 	private String customerId;
 	
-	private int status;
+	private Integer status;
 	
-	private double dealPrice;
+	private Double dealPrice;
 	
-	private double finalPrice;
+	private Double finalPrice;
 	
 	private String coupoUsedId;
 	
@@ -47,7 +47,7 @@ public class Order implements Serializable {
 	
 	private String shopName;
 	
-	private int paymentType;
+	private Integer paymentType;
 	
 	private String orderTime;
 	
@@ -85,27 +85,27 @@ public class Order implements Serializable {
 		this.customerId = customerId;
 	}
 
-	public int getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 
-	public double getDealPrice() {
+	public Double getDealPrice() {
 		return dealPrice;
 	}
 
-	public void setDealPrice(double dealPrice) {
+	public void setDealPrice(Double dealPrice) {
 		this.dealPrice = dealPrice;
 	}
 
-	public double getFinalPrice() {
+	public Double getFinalPrice() {
 		return finalPrice;
 	}
 
-	public void setFinalPrice(double finalPrice) {
+	public void setFinalPrice(Double finalPrice) {
 		this.finalPrice = finalPrice;
 	}
 
@@ -165,11 +165,11 @@ public class Order implements Serializable {
 		this.shopName = shopName;
 	}
 
-	public int getPaymentType() {
+	public Integer getPaymentType() {
 		return paymentType;
 	}
 
-	public void setPaymentType(int paymentType) {
+	public void setPaymentType(Integer paymentType) {
 		this.paymentType = paymentType;
 	}
 

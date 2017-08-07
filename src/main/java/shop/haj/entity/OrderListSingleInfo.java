@@ -27,9 +27,9 @@ public class OrderListSingleInfo implements Serializable {
 
 	private String orderTime;
 	
-	private int status;
+	private Integer status;
 	
-	private double finalPrice;//本次订单总价格
+	private Double finalPrice;//本次订单总价格
 	
 	private String goodsId;
 	
@@ -39,9 +39,9 @@ public class OrderListSingleInfo implements Serializable {
 	
 	private String goodsSku;//商品规格
 	
-	private double goodsPrice;//商品成交单价
+	private Double goodsPrice;//商品成交单价
 	
-	private int count;//商品个数
+	private Integer count;//商品个数
 	
 	private String shopId;
 	
@@ -76,19 +76,19 @@ public class OrderListSingleInfo implements Serializable {
 		this.orderTime = orderTime;
 	}
 
-	public int getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 
-	public double getFinalPrice() {
+	public Double getFinalPrice() {
 		return finalPrice;
 	}
 
-	public void setFinalPrice(double finalPrice) {
+	public void setFinalPrice(Double finalPrice) {
 		this.finalPrice = finalPrice;
 	}
 
@@ -124,19 +124,19 @@ public class OrderListSingleInfo implements Serializable {
 		this.goodsSku = goodsSku;
 	}
 
-	public double getGoodsPrice() {
+	public Double getGoodsPrice() {
 		return goodsPrice;
 	}
 
-	public void setGoodsPrice(double goodsPrice) {
+	public void setGoodsPrice(Double goodsPrice) {
 		this.goodsPrice = goodsPrice;
 	}
 
-	public int getCount() {
+	public Integer getCount() {
 		return count;
 	}
 
-	public void setCount(int count) {
+	public void setCount(Integer count) {
 		this.count = count;
 	}
 

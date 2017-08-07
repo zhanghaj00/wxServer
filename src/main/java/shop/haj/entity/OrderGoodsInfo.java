@@ -32,9 +32,9 @@ public class OrderGoodsInfo implements Serializable {
 	
 	private String goodsSku;//商品规格信息
 	
-	private double goodsPrice;//商品成交价格
+	private Double goodsPrice;//商品成交价格
 	
-	private int count;//购买商品数量
+	private Integer count;//购买商品数量
 	
 	public OrderGoodsInfo() {
 	}
@@ -55,11 +55,11 @@ public class OrderGoodsInfo implements Serializable {
 		this.shopId = shopId;
 	}
 
-	public int getCount() {
+	public Integer getCount() {
 		return count;
 	}
 
-	public void setCount(int count) {
+	public void setCount(Integer count) {
 		this.count = count;
 	}
 

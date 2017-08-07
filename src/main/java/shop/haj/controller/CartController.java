@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import shop.haj.entity.Cart;
 import shop.haj.entity.Goods;
@@ -15,6 +16,7 @@ import shop.haj.service.ShopCartService;
 import shop.haj.service.ShopService;
 import shop.haj.utils.ResultUtil;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -162,6 +164,16 @@ public class CartController extends BaseController {
 		int result = shopCartService.clearShopCart(customer_id, shop_id);
 		return ResultUtil.getJson(result);
 	}
+	@ApiOperation(value = "清除购物车指定商品", notes = "清空该用户在该店铺的购物车信息")
+	@DeleteMapping("/customer/carts/batch")
+	public Map<String,Object> batchShopCart(@RequestAttribute(value = "customer_id", required = false) String customer_id,
+								@RequestHeader("shop_id") String shop_id,@RequestParam Form form){
+		if(CollectionUtils.isEmpty(form.getCartId())) return rtnParam(50021,"没有购物车信息");
+		for(String id:form.getCartId()){
+			shopCartService.removeGoodsFromCart(customer_id,shop_id,id);
+		}
+		return rtnParam(0,"success");
+	}
 
 	@ApiOperation(value = "购物车数量", notes = "查找购物车数量")
 	@GetMapping("/customer/carts/count")
@@ -170,5 +182,17 @@ public class CartController extends BaseController {
 
 		//int result = shopCartService.clearShopCart(customer_id, shop_id);
 		return rtnParam(0,2);
+	}
+
+	class Form implements Serializable{
+		private List<String> cartId;
+
+		public List<String> getCartId() {
+			return cartId;
+		}
+
+		public void setCartId(List<String> cartId) {
+			this.cartId = cartId;
+		}
 	}
 }

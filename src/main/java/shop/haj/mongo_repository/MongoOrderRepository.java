@@ -10,5 +10,5 @@ import shop.haj.entity.Order;
  * @since 1.9.0
  */
 public interface MongoOrderRepository extends MongoRepository<Order,String> {
-
+    Order findByUuid(String uuid);
 }

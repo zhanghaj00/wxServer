@@ -6,18 +6,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.haj.entity.Goods;
-import shop.haj.entity.GoodsSkuInfo;
 import shop.haj.entity.Image;
 import shop.haj.entity.Pagination;
 import shop.haj.manage.CacheManage;
 import shop.haj.mongo_repository.MongoGoodsRepository;
 import shop.haj.mongo_repository.MongoImageRepository;
-import shop.haj.repository.GoodsDetailRepository;
-import shop.haj.repository.GoodsSkuRepository;
 import shop.haj.service.GoodsService;
 
 import java.text.DateFormat;

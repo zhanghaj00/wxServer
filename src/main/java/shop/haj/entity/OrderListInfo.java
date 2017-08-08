@@ -1,9 +1,5 @@
 package shop.haj.entity;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -26,6 +22,7 @@ public class OrderListInfo implements Serializable {
 	private String orderTime;//下单时间
 	private Integer status;
 	private Double finalPrice;//最终成交价
+	private Double postFee;//运费
 	private String shopName;
 	private List<OrderGoodsInfo> orderGoodsInfos;
 
@@ -65,22 +62,29 @@ public class OrderListInfo implements Serializable {
 		this.orderTime = orderTime;
 	}
 
-	public double getFinalPrice() {
-		return finalPrice;
-	}
-
-	public void setFinalPrice(double finalPrice) {
-		this.finalPrice = finalPrice;
-	}
-
-	public int getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 
+	public Double getFinalPrice() {
+		return finalPrice;
+	}
+
+	public void setFinalPrice(Double finalPrice) {
+		this.finalPrice = finalPrice;
+	}
+
+	public Double getPostFee() {
+		return postFee;
+	}
+
+	public void setPostFee(Double postFee) {
+		this.postFee = postFee;
+	}
 
 	public String getShopName() {
 		return shopName;

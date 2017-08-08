@@ -15,15 +15,14 @@ import shop.haj.entity.*;
 import shop.haj.manage.CacheManage;
 import shop.haj.mongo_repository.MongoGoodsRepository;
 import shop.haj.mongo_repository.MongoOrderListRepository;
+import shop.haj.mongo_repository.MongoOrderRefundRepository;
 import shop.haj.mongo_repository.MongoOrderRepository;
-import shop.haj.repository.OrderRefundRepository;
 import shop.haj.service.OrderService;
 import shop.haj.utils.OrderPayType;
 import shop.haj.utils.OrderStatus;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -56,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
 	private CacheManage cacheManage;
 	
 	@Autowired
-	private OrderRefundRepository orderRefundRepository;
+	private MongoOrderRefundRepository mongoOrderRefundRepository;
 	
 	/**
 	 * 查找某买家在某店铺的全部订单列表
@@ -94,7 +93,12 @@ public class OrderServiceImpl implements OrderService {
 		return this.groupByOrderListInfo(orderListSingleInfoList);*/
 		return null;
 	}
-	
+
+	@Override
+	public List<Order> findOrderListShopId(String shopId) {
+		return mongoOrderRepository.findByShopId(shopId);
+	}
+
 	/**
 	 * 关联订单和商品信息
 	 * @param orderListInfoList
@@ -133,7 +137,7 @@ public class OrderServiceImpl implements OrderService {
 				orderListInfo.setFinalPrice(singleInfo.getFinalPrice());
 				orderListInfo.setShopId(singleInfo.getShopId());
 				orderListInfo.setShopName(singleInfo.getShopName());
-
+				orderListInfo.setPostFee(singleInfo.getPostFee());
 				OrderGoodsInfo orderGoodsInfo = new OrderGoodsInfo();
 				orderGoodsInfo.setGoodsId(singleInfo.getGoodsId());
 				orderGoodsInfo.setGoodsName(singleInfo.getGoodsName());
@@ -299,6 +303,7 @@ public class OrderServiceImpl implements OrderService {
 			tmp.setGoodsPrice(goodsInfo.getGoodsPrice());
 			tmp.setGoodsSku(goodsInfo.getGoodsSku());
 			tmp.setCount(goodsInfo.getCount());
+			tmp.setPostFee(order.getPostFee());
 			result.add(tmp);
 		}
 		return result;
@@ -485,7 +490,7 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public int updateOrderRefundStatusToClose(String refund_uuid) {
 		
-		int result = orderRefundRepository.updateStatusToClose(refund_uuid);
+		int result = 1;//mongoOrderRefundRepository.updateStatusToClose(refund_uuid);
 		
 		logger.info("updateOrderRefundStatusToClose service >>> refund_uuid={}, result={}", refund_uuid, result);
 		

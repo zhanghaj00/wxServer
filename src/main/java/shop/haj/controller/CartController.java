@@ -121,7 +121,7 @@ public class CartController extends BaseController {
 	
 	@ApiOperation(value = "更新购物车数量", notes = "更新购物车数量")
 	@PutMapping("/customer/carts/{cart_id}")
-	public String updateCartNum(@RequestAttribute(value = "customer_id", required = false) String customer_id,
+	public Map<String,Object> updateCartNum(@RequestAttribute(value = "customer_id", required = false) String customer_id,
 	                            @RequestHeader("shop_id") String shop_id,
 	                            @PathVariable("cart_id") String cart_id,
 	                            @RequestBody Cart cart){
@@ -131,7 +131,7 @@ public class CartController extends BaseController {
 		//防止购物车过于频繁的请求导致购物车数量新增出错
 		synchronized (key) {
 			if(shopCartUsedMap.get(key) != null){
-				return ResultUtil.getJson(0);
+				return rtnParam(53001,"请求过于频繁");
 			}
 			shopCartUsedMap.put(key, cart.toString());
 		}
@@ -143,7 +143,7 @@ public class CartController extends BaseController {
 			shopCartUsedMap.remove(key);
 		}
 		
-		return ResultUtil.getJson(result);
+		return rtnParam(0, result);
 	}
 	
 	@ApiOperation(value = "从购物车中删除商品", notes = "从购物车中删除商品")
@@ -167,9 +167,9 @@ public class CartController extends BaseController {
 	@ApiOperation(value = "清除购物车指定商品", notes = "清空该用户在该店铺的购物车信息")
 	@DeleteMapping("/customer/carts/batch")
 	public Map<String,Object> batchShopCart(@RequestAttribute(value = "customer_id", required = false) String customer_id,
-								@RequestHeader("shop_id") String shop_id,@RequestParam Form form){
-		if(CollectionUtils.isEmpty(form.getCartId())) return rtnParam(50021,"没有购物车信息");
-		for(String id:form.getCartId()){
+								@RequestHeader("shop_id") String shop_id,@RequestBody Map map){
+		if(CollectionUtils.isEmpty((List<String>)map.get("cartId"))) return rtnParam(50021,"没有购物车信息");
+		for(String id:(List<String>)map.get("cartId")){
 			shopCartService.removeGoodsFromCart(customer_id,shop_id,id);
 		}
 		return rtnParam(0,"success");
@@ -185,7 +185,10 @@ public class CartController extends BaseController {
 	}
 
 	class Form implements Serializable{
-		private List<String> cartId;
+		List<String> cartId;
+
+		public Form() {
+		}
 
 		public List<String> getCartId() {
 			return cartId;
@@ -195,4 +198,5 @@ public class CartController extends BaseController {
 			this.cartId = cartId;
 		}
 	}
+
 }

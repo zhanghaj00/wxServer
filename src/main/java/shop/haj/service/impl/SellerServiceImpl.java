@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.haj.entity.Pagination;
 import shop.haj.entity.Seller;
-import shop.haj.repository.SellerRepository;
+import shop.haj.mongo_repository.MongoSellerRpository;
 import shop.haj.service.SellerService;
 
 import java.util.List;
@@ -26,30 +26,32 @@ import java.util.List;
 public class SellerServiceImpl implements SellerService {
 	
 	@Autowired
-	private SellerRepository sellerRepository;
+	private MongoSellerRpository sellerRepository;
 	
 	@Override
 	public List<Seller> findAll(Pagination page) {
-		return sellerRepository.findAll(page);
+		return sellerRepository.findAll(page.getRequest()).getContent();
 	}
 	
 	@Override
 	public Seller findById(int id) {
-		return sellerRepository.findByID(id);
+		return sellerRepository.findOne(id + "");
 	}
 	
 	@Override
 	public Seller add(Seller seller) {
-		return sellerRepository.add(seller);
+		return sellerRepository.insert(seller);
 	}
 	
 	@Override
 	public int update(Seller seller) {
-		return sellerRepository.update(seller);
+		sellerRepository.save(seller);
+		return 0;
 	}
 	
 	@Override
 	public int delete(int id) {
-		return sellerRepository.delete(id);
+		sellerRepository.delete(id + "");
+		return 1;
 	}
 }

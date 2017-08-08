@@ -1,10 +1,6 @@
 package shop.haj.mongo_repository;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import shop.haj.entity.OrderGoodsInfo;
-import shop.haj.entity.OrderListInfo;
 import shop.haj.entity.OrderListSingleInfo;
 
 /**

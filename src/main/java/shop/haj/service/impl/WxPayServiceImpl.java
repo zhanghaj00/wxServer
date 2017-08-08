@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.haj.entity.wxPay.WxPayConfig;
 import shop.haj.entity.wxPay.request.*;
 import shop.haj.entity.wxPay.result.*;
-import shop.haj.repository.WxPayRepository;
+import shop.haj.mongo_repository.WxPayRepository;
 import shop.haj.service.WxPayService;
 import shop.haj.utils.SignUtils;
 import shop.haj.utils.utils.qrcode.QrcodeUtils;
@@ -52,7 +52,7 @@ public class WxPayServiceImpl implements WxPayService {
 	
 	@Override
 	public WxPayConfig getWxConfig(int shop_id) {
-		return wxPayRepository.getWxPayConfig(shop_id);
+		return null ; //wxPayRepository.getWxPayConfig(shop_id);
 	}
 	
 	private String getPayBaseUrl() {
@@ -221,7 +221,7 @@ public class WxPayServiceImpl implements WxPayService {
 	public Map<String, String> getPayInfo(WxPayUnifiedOrderRequest request, String mchKey, int order_id) throws WxErrorException {
 		
 		//该订单之前是否已经申请过prepay_id
-		Map<String, Object> prepayInfoMap = wxPayRepository.findPrepayInfo(order_id);
+		Map<String, Object> prepayInfoMap = null ;//wxPayRepository.findPrepayInfo(order_id);
 		String prepayId = "";
 		String codeUrl = "";
 		
@@ -235,7 +235,7 @@ public class WxPayServiceImpl implements WxPayService {
 			}
 			
 			//将prepayId更新至微信订单支付表
-			boolean isSave = wxPayRepository.saveOrderPrepay(order_id, prepayId, codeUrl);
+			boolean isSave = true ;//wxPayRepository.saveOrderPrepay(order_id, prepayId, codeUrl);
 			if(!isSave){
 				logger.error("saveOrderPrepay failure >>> order_id={}, prepayId={}, codeUrl={}", order_id, prepayId, codeUrl);
 			}else {
@@ -424,7 +424,7 @@ public class WxPayServiceImpl implements WxPayService {
 	@Override
 	public boolean isPrepay(int order_id) {
 		
-		return wxPayRepository.isPrepay(order_id);
+		return true ;//wxPayRepository.isPrepay(order_id);
 	}
 	
 	private String post(String url, String xmlParam) {

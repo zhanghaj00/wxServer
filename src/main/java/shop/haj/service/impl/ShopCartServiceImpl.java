@@ -11,7 +11,6 @@ import shop.haj.entity.Cart;
 import shop.haj.entity.Pagination;
 import shop.haj.manage.CacheManage;
 import shop.haj.mongo_repository.MongoCartRepository;
-import shop.haj.repository.CartRepository;
 import shop.haj.service.ShopCartService;
 
 import java.util.List;
@@ -118,18 +117,21 @@ public class ShopCartServiceImpl implements ShopCartService {
 							 String cart_id, int num) {
 		
 		logger.debug("updateCartNum >>> cart_id={}, num={}", cart_id, num);
+
+
+		Cart cart = mongoCartRepository.findOne(cart_id);
+		cart.setGoodsNum(num);
+		Cart cart1 =  mongoCartRepository.save(cart);
 		
-		/*int result = cartRepository.updateNum(cart_id, num);
-		
-		if(result > 0){
+		if(cart1 != null){
 			logger.info("updateCartNum >>> update success: cart_id={}, num={}",
 					cart_id, num);
-		}*/
+		}
 		
 		this.clearShopCartCache(cart_id);
 		this.clearShopCartPageCache(customer_id, shop_id);
 		
-		return 0;
+		return 1;
 	}
 	
 	/**

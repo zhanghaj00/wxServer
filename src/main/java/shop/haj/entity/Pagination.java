@@ -1,11 +1,9 @@
 package shop.haj.entity;
 
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.io.Serializable;
-import java.util.concurrent.locks.Condition;
 
 /**
  * <p>Title: shop.ha.entity</p>

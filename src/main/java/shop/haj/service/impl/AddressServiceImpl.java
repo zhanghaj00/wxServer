@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.haj.entity.Address;
 import shop.haj.entity.Pagination;
 import shop.haj.mongo_repository.MongoAddressRepository;
-import shop.haj.repository.AddressRepository;
 import shop.haj.service.AddressService;
 
 import java.util.List;

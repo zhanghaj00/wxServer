@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.haj.entity.Customer;
 import shop.haj.entity.Pagination;
 import shop.haj.mongo_repository.Mongo_CustomerRepository;
-import shop.haj.repository.CustomerRepository;
 import shop.haj.service.CustomerService;
 
 import java.util.List;
@@ -26,20 +25,18 @@ import java.util.List;
 @Transactional
 public class CustomerServiceImpl implements CustomerService {
 	
-	@Autowired
-	private CustomerRepository customerRepository;
 
 	@Autowired
-	private Mongo_CustomerRepository mongp_customerRepository;
+	private Mongo_CustomerRepository mongo_customerRepository;
 
 	@Override
 	public List<Customer> findAll(Pagination page) {
-		return customerRepository.findAll(page);
+		return mongo_customerRepository.findAll(page.getRequest()).getContent();
 	}
 	
 	@Override
 	public Customer findById(String id) {
-		return mongp_customerRepository.findOne(id);
+		return mongo_customerRepository.findOne(id);
 	}
 	
 	/**
@@ -50,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
 	 */
 	@Override
 	public Customer findByOpenID(String open_id) {
-		return mongp_customerRepository.findByOpenId(open_id);
+		return mongo_customerRepository.findByOpenId(open_id);
 	}
 	
 	/**
@@ -62,22 +59,22 @@ public class CustomerServiceImpl implements CustomerService {
 	 */
 	@Override
 	public Customer findByIdAndOpenId(String id, String open_id) {
-		return mongp_customerRepository.findByIdAndOpenId(id, open_id);
+		return mongo_customerRepository.findByIdAndOpenId(id, open_id);
 	}
 	
 	@Override
 	public Customer add(Customer customer) {
-		return mongp_customerRepository.save(customer);
+		return mongo_customerRepository.save(customer);
 	}
 	
 	@Override
 	public Customer update(Customer customer) {
-		return mongp_customerRepository.insert(customer);
+		return mongo_customerRepository.insert(customer);
 	}
 	
 	@Override
 	public int delete(String id) {
-		mongp_customerRepository.delete(id);
+		mongo_customerRepository.delete(id);
 		return 1;
 	}
 }

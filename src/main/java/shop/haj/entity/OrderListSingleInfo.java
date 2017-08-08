@@ -30,6 +30,8 @@ public class OrderListSingleInfo implements Serializable {
 	private Integer status;
 	
 	private Double finalPrice;//本次订单总价格
+
+	private Double postFee;
 	
 	private String goodsId;
 	
@@ -48,7 +50,15 @@ public class OrderListSingleInfo implements Serializable {
 	private String shopName;
 	
 	private String customerId;
-	
+
+	public Double getPostFee() {
+		return postFee;
+	}
+
+	public void setPostFee(Double postFee) {
+		this.postFee = postFee;
+	}
+
 	public OrderListSingleInfo() {
 	}
 

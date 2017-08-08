@@ -13,7 +13,6 @@ import shop.haj.service.GoodsCategoryService;
 import shop.haj.service.GoodsService;
 import shop.haj.utils.ResultUtil;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 

@@ -31,7 +31,7 @@ public class SwaggerConfig {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.apiInfo(apiInfo())
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("shop.ha"))
+				.apis(RequestHandlerSelectors.basePackage("shop.haj"))
 				.paths(PathSelectors.any())
 				.build();
 		

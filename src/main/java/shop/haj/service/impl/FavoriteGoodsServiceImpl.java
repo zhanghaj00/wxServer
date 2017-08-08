@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import shop.haj.entity.FavoriteGoods;
 import shop.haj.entity.Pagination;
 import shop.haj.mongo_repository.MongoFavoriteGoodsRepository;
-import shop.haj.repository.FavoriteGoodsRepository;
 import shop.haj.service.FavoriteGoodsService;
 
 import java.util.List;

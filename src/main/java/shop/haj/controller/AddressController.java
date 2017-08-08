@@ -10,7 +10,6 @@ import shop.haj.entity.Pagination;
 import shop.haj.service.AddressService;
 import shop.haj.utils.ResultUtil;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -89,11 +88,10 @@ public class AddressController extends BaseController{
 	
 	@ApiOperation(value = "查找买家默认地址", notes = "查找买家默认地址")
 	@GetMapping(value = "/customer/addresses/default")
-	public Address findDefaultAddress(@RequestAttribute(value = "customer_id", required = false) String customer_id){
+	public Map<String,Object> findDefaultAddress(@RequestAttribute(value = "customer_id", required = false) String customer_id){
 		
 		logger.info("findDefaultAddress controller >>> customer_id={}", customer_id);
-		
-		return addressService.findDefaultAddress(customer_id);
+		return rtnParam(0,addressService.findDefaultAddress(customer_id));
 	}
 	
 	/**
@@ -117,7 +115,7 @@ public class AddressController extends BaseController{
 		
 		return ResultUtil.getJson(9);
 	}
-	
+
 	@ApiOperation(value = "设置默认地址", notes = "将某个地址设置为默认地址")
 	@PatchMapping(value = "/customer/addresses/{address_id}/default")
 	public String setDefaultAddress(@RequestAttribute(value = "customer_id", required = false) String customer_id,

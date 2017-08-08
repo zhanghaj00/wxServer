@@ -32,6 +32,9 @@ public class Order implements Serializable {
 	private Double dealPrice;
 	
 	private Double finalPrice;
+
+
+	private Double postFee;
 	
 	private String coupoUsedId;
 	
@@ -60,6 +63,15 @@ public class Order implements Serializable {
 	private String updateTime;
 	
 	private List<OrderGoodsInfo> orderGoodsInfos;
+
+
+	public Double getPostFee() {
+		return postFee;
+	}
+
+	public void setPostFee(Double postFee) {
+		this.postFee = postFee;
+	}
 
 	public String getId() {
 		return id;

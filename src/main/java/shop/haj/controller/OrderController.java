@@ -1,8 +1,7 @@
 package shop.haj.controller;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiOperation;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -15,13 +14,13 @@ import org.springframework.web.bind.annotation.*;
 import shop.haj.entity.*;
 import shop.haj.entity.wxPay.WxPayConfig;
 import shop.haj.entity.wxPay.request.WxPayRefundRequest;
-import shop.haj.entity.wxPay.result.WxPayOrderCloseResult;
 import shop.haj.entity.wxPay.result.WxPayRefundResult;
 import shop.haj.service.OrderService;
 import shop.haj.service.ShopService;
 import shop.haj.service.WxPayService;
 import shop.haj.utils.*;
 
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -111,6 +110,26 @@ public class OrderController extends BaseController {
 	/**
 	 * 查找订单详细信息
 	 *
+	 * @return
+	 */
+	@ApiOperation(value = "查找订单详细信息", notes = "查找订单详细信息")
+	@PostMapping(value = "/customer/orders/delivery")
+	public Map<String,Object> findShopOrderByID() {
+
+		List<Deliver> delivers = Lists.newArrayList();
+		delivers.add(new Deliver("1","顺丰","顺丰",true,12.5));
+		delivers.add(new Deliver("2","天天","天天",false,12.66));
+		delivers.add(new Deliver("3","神通","神通",false,125.6));
+		delivers.add(new Deliver("4","光通","光通",false,123.6));
+		delivers.add(new Deliver("5","快递沙发","快递沙发",false,121.6));
+
+		ImmutableMap<String,Object> result = new ImmutableMap.Builder<String,Object>().put("dilivery",true).put("delilveryList", delivers).build();
+		return rtnParam(0,result);
+	}
+
+	/**
+	 * 查找查找邮运方式
+	 *
 	 * @param order_id
 	 * @return
 	 */
@@ -120,7 +139,6 @@ public class OrderController extends BaseController {
 
 		return orderService.findShopOrderByID(order_id, DefaultPagination.getOrder());
 	}
-
 	/**
 	 * 创建订单
 	 *
@@ -387,9 +405,7 @@ public class OrderController extends BaseController {
 
 		if (StringUtils.isEmpty(shop_id)) return rtnParam(0, null);
 		//orderService.findOrderListByCustomerID();
-
-
-		return rtnParam(0, new ArrayList<>());
+		return rtnParam(0, orderService.findOrderListShopId(shop_id));
 
 	}
 
@@ -401,16 +417,37 @@ public class OrderController extends BaseController {
 		if (StringUtils.isEmpty(shop_id)) return rtnParam(0, null);
 		switch (count_type) {
 			case "TODAY":
-				ImmutableMap result = new ImmutableMap.Builder<>().put("income",10).build();
-				return rtnParam(0,result);
+				return rtnParam(0,countIncome(orderService.findOrderListShopId(shop_id),count_type));
 			case "MONTH":
-				ImmutableMap result1 = new ImmutableMap.Builder<>().put("income",20).build();
-				return rtnParam(0,result1);
+				return rtnParam(0,countIncome(orderService.findOrderListShopId(shop_id),count_type));
 			default:
-				ImmutableMap result3 = new ImmutableMap.Builder<>().put("income",4).build();
-				return rtnParam(0,result3);
+				return rtnParam(0,countIncome(orderService.findOrderListShopId(shop_id),count_type));
 
 		}
 
+	}
+
+	private Map<String, Object> countIncome(List<Order> orders,String count_type){
+		Double dayIncome = 0d;
+		Double montyIncome = 0d;
+		for(Order o:orders){
+			if(TimeUtil.compareToday(o.getOrderTime())){
+				dayIncome +=o.getFinalPrice();
+			}else{
+				montyIncome+=o.getFinalPrice();
+			}
+		}
+		switch (count_type) {
+			case "TODAY":
+				ImmutableMap result = new ImmutableMap.Builder<>().put("income",dayIncome).build();
+				return rtnParam(0,result);
+			case "MONTH":
+				ImmutableMap result1 = new ImmutableMap.Builder<>().put("income",montyIncome).build();
+				return rtnParam(0,result1);
+			default:
+				ImmutableMap result3 = new ImmutableMap.Builder<>().put("income",dayIncome).build();
+				return rtnParam(0,result3);
+
+		}
 	}
 }

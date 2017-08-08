@@ -16,8 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import shop.haj.entity.Image;
 import shop.haj.service.ImageService;
 
-import java.io.IOException;
-
 /**
  * <p>Title: shop.ha.controller</p>
  * <p/>

@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.haj.entity.Notice;
 import shop.haj.entity.Pagination;
 import shop.haj.mongo_repository.MongoNoticeRepository;
-import shop.haj.repository.NoticeRepository;
 import shop.haj.service.NoticeService;
 
 import java.text.DateFormat;

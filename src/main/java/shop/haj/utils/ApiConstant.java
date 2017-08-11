@@ -38,4 +38,6 @@ public class ApiConstant {
 	
 	/* club社区专栏文章搜索 */
 	public static final String WX_CLUB_SEARCH = "WX_CLUB_SEARCH";
+
+	public final static String QINIU_IMG_URL_PREFIX = "http://ouevjm915.bkt.clouddn.com/";
 }

@@ -148,21 +148,19 @@ public class CartController extends BaseController {
 	
 	@ApiOperation(value = "从购物车中删除商品", notes = "从购物车中删除商品")
 	@DeleteMapping("/customer/carts/{cart_id}")
-	public String removeGoodsFromCart(@RequestAttribute(value = "customer_id", required = false) String customer_id,
+	public Map<String,Object> removeGoodsFromCart(@RequestAttribute(value = "customer_id", required = false) String customer_id,
 	                                  @RequestHeader("shop_id") String shop_id,
 	                                  @PathVariable("cart_id") String cart_id){
 		
-		int result = shopCartService.removeGoodsFromCart(customer_id, shop_id, cart_id);
-		return ResultUtil.getJson(result);
+		return rtnParam(0, shopCartService.removeGoodsFromCart(customer_id, shop_id, cart_id));
 	}
 	
 	@ApiOperation(value = "清空购物车", notes = "清空该用户在该店铺的购物车信息")
 	@DeleteMapping("/customer/carts")
-	public String clearShopCart(@RequestAttribute(value = "customer_id", required = false) String customer_id,
+	public Map<String,Object> clearShopCart(@RequestAttribute(value = "customer_id", required = false) String customer_id,
 	                            @RequestHeader("shop_id") String shop_id){
 		
-		int result = shopCartService.clearShopCart(customer_id, shop_id);
-		return ResultUtil.getJson(result);
+		return rtnParam(0,shopCartService.clearShopCart(customer_id, shop_id));
 	}
 	@ApiOperation(value = "清除购物车指定商品", notes = "清空该用户在该店铺的购物车信息")
 	@DeleteMapping("/customer/carts/batch")

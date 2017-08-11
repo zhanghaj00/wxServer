@@ -87,7 +87,7 @@ public class WxAuthController extends BaseController{
 	}
 
 	@ApiOperation(value = "检查SessionId是否有效", notes = "检查SessionId是否有效")
-	@GetMapping(value = "/customer/auth/checkSession")
+	@GetMapping(value = {"/customer/auth/checkSession","/seller/auth/check"})
 	public Map<String,Object> checkSession(@RequestParam(value = "third_session")String sessionId){
 		
 		//从缓存中获取open_id
@@ -252,7 +252,7 @@ public class WxAuthController extends BaseController{
 		return rtnParam(0, result);
 	}
 
-	@ApiOperation(value = "获取sessionId", notes = "小用户允许登录后，使用code 换取 session_key api，将 code 换成 openid 和 session_key")
+	/*@ApiOperation(value = "获取sessionId", notes = "小用户允许登录后，使用code 换取 session_key api，将 code 换成 openid 和 session_key")
 	@ApiImplicitParam(name = "code", value = "用户登录回调内容会带上 ", required = true, dataType = "String")
 	@Api(name = ApiConstant.WX_CODE)
 	@GetMapping(value = "/seller/auth/check")
@@ -266,5 +266,5 @@ public class WxAuthController extends BaseController{
 		}
 
 		return rtnParam(0, true);
-	}
+	}*/
 }

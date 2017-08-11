@@ -172,17 +172,13 @@ public class ShopCartServiceImpl implements ShopCartService {
 		
 		logger.debug("clearShopCart >>> customer_id={}, shop_id={}",
 				customer_id, shop_id);
-		/*
-		int result = cartRepository.clearShopCart(customer_id, shop_id);
-		
-		if(result > 0){
-			logger.info("clearCart >>> update success: customer_id={}", customer_id);
+
+		List<Cart> carts = mongoCartRepository.findByCustomIdAndShopId(customer_id,shop_id);
+
+		for (Cart c:carts){
+			mongoCartRepository.delete(c.getId());
 		}
-		
-		this.clearShopCartPageCache(customer_id, shop_id);
-		
-		return result;*/
-		return 0;
+		return carts.size();
 	}
 	
 	/**

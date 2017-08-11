@@ -41,11 +41,14 @@ public class AddressServiceImpl implements AddressService {
 	 */
 	@Override
 	public Address addAddress(Address address) {
-
-		address = mongoAddressRepository.insert(address);
-		
-		if(address.getIsDefault() == 1){
-			this.setUndefaultAddress(address.getCustomerId(), address.getId());
+		if( address.getIsDefault() == 1){
+			if (StringUtils.isEmpty(address.getCustomerId())) return null;
+			Address address_old = mongoAddressRepository.findByCustomerIdAndIsDefault(address.getCustomerId(),1);
+			address_old.setIsDefault(0);
+			mongoAddressRepository.save(address_old);
+			address = mongoAddressRepository.insert(address);
+		}else{
+			address = mongoAddressRepository.insert(address);
 		}
 		
 		return address;
@@ -99,7 +102,9 @@ public class AddressServiceImpl implements AddressService {
 	 */
 	@Override
 	public Address updateAddress(Address address) {
-		
+		//Address address1 = mongoAddressRepository.findOne(address.getId());
+		//address1.setCity(address.getCity());
+
 		return mongoAddressRepository.save(address);
 	}
 	
@@ -116,9 +121,16 @@ public class AddressServiceImpl implements AddressService {
 		
 		logger.info("setDefaultAddress service >>> customer_id={}, address_id={}", customer_id, address_id);
 
-		this.setDefaultAddress(address_id);
+		if (StringUtils.isEmpty(customer_id)) return 0;
+		Address address = mongoAddressRepository.findByCustomerIdAndIsDefault(customer_id,1);
+		address.setIsDefault(0);
+		mongoAddressRepository.save(address);
+
+		Address address1 = mongoAddressRepository.findOne(address_id);
+		address1.setIsDefault(1);
+		mongoAddressRepository.save(address1);
 		
-		return this.setUndefaultAddress(customer_id, address_id);
+		return 1;
 	}
 	
 	/**
@@ -135,14 +147,7 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 
-	private void setDefaultAddress(String address_id){
-		if (StringUtils.isEmpty(address_id)) return;
-		Address address = new Address();
-		address.setId(address_id);
-		address.setIsDefault(1);
-		mongoAddressRepository.save(address);
 
-	}
 
 	private int setUndefaultAddress(String customer_id,String address_id){
 		if(StringUtils.isEmpty(customer_id)) return 0;

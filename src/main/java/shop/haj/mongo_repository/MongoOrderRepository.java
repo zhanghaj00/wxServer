@@ -1,5 +1,7 @@
 package shop.haj.mongo_repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import shop.haj.entity.Order;
 
@@ -14,4 +16,5 @@ import java.util.List;
 public interface MongoOrderRepository extends MongoRepository<Order,String> {
     Order findByUuid(String uuid);
     List<Order> findByShopId(String shopId);
+    Page<Order> findByShopId(String shopId,Pageable page);
 }

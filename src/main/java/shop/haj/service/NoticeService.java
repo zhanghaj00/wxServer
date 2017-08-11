@@ -24,7 +24,7 @@ public interface NoticeService {
 	 * @param page
 	 * @return
 	 */
-	List<Notice> findAllNotice(String shop_id, Pagination page);
+	List<Notice> findAllNotice(String shop_id,Integer isShowd, Pagination page);
 	
 	/**
 	 * 查找店铺所有需要显示的公告

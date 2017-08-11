@@ -29,6 +29,12 @@ public interface OrderService {
 	 * @return
 	 */
 	List<OrderListInfo> findOrderListByCustomerID(String customer_id, int status, Pagination page);
+	/**
+	 * 查找某买家全部订单列表
+	 * @param shop_id
+	 * @return
+	 */
+	List<Order> findOrderListShopIdAndPage(String shop_id, Pagination page);
 
 	/**
 	 * 查找某买家全部订单列表

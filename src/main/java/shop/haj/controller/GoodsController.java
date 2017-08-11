@@ -121,6 +121,7 @@ public class GoodsController extends  BaseController{
 		
 		goods.setShopId(shop_id);
 		goods.setId(goods_id);
+		//TODO
 		goods = goodsService.updateGoods(goods);
 		return rtnParam(0,goods);
 	}

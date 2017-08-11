@@ -31,8 +31,8 @@ public class NoticeServiceImpl implements NoticeService {
 	private MongoNoticeRepository mongoNoticeRepository;
 	
 	@Override
-	public List<Notice> findAllNotice(String shop_id, Pagination page) {
-		return mongoNoticeRepository.findByShopId(shop_id, page.getRequest()).getContent();
+	public List<Notice> findAllNotice(String shop_id,Integer isShowd, Pagination page) {
+		return mongoNoticeRepository.findByShopIdAndIsShow(shop_id,isShowd, page.getRequest()).getContent();
 	}
 	
 	@Override

@@ -14,4 +14,6 @@ public interface MongoAddressRepository extends MongoRepository<Address,String> 
     List<Address> findByCustomerId(String customer_id,Pagination page);
 
     Address findByCustomerIdAndIsDefault(String customer_id,int is_default);
+
+
 }

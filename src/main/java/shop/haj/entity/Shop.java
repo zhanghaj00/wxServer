@@ -25,6 +25,8 @@ public class Shop implements Serializable {
 	
 	private String name;//店铺名称
 
+	private String avatar;//
+
 	private String sellerId;	//卖家ID
 	
 	private String categoryId;//店铺分类
@@ -46,6 +48,13 @@ public class Shop implements Serializable {
 	public Shop() {
 	}
 
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
 
 	public String getSellerId() {
 		return sellerId;

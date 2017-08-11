@@ -77,8 +77,8 @@ public class ShopController extends BaseController{
 	public Map<String,Object> findShopByID(@RequestHeader("shop_id") String shop_id){
 		Shop shop = shopService.findById(shop_id);
 
-		ShopCategory shopCategory = shopCategoryService.findShopCategoryByID(shop.getCategoryId());
-		shop.setCategoryName(shopCategory.getName());
+		//ShopCategory shopCategory = shopCategoryService.findShopCategoryByID(shop.getCategoryId());
+		//shop.setCategoryName(shopCategory.getName());
 		
 		return rtnParam(0,shop);
 	}
@@ -109,10 +109,12 @@ public class ShopController extends BaseController{
 	 * @return
 	 */
 	@ApiOperation(value = "新增店铺信息", notes = "新增店铺信息")
-	@PostMapping(value = "/seller/sellers/{seller_id}/shops")
-	public Shop addShop(@PathVariable("seller_id") String seller_id,
+	@PostMapping(value = "/seller/shops")
+	public Map<String,Object> addShop(@RequestHeader("login_code") String login_code,
 	                    @RequestBody Shop shop){
-		return shopService.addShop(shop, seller_id);
+
+		String openId = wxAuthService.getOpenId(login_code);
+		return rtnParam(0,shopService.addShop(shop, openId));
 	}
 	
 	/**

@@ -9,6 +9,7 @@ import shop.haj.service.NoticeService;
 import shop.haj.utils.ResultUtil;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>Title: shop.ha.controller</p>
@@ -23,7 +24,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/v1")
-public class NoticeController {
+public class NoticeController  extends BaseController{
 	
 	@Autowired
 	private NoticeService noticeService;
@@ -39,19 +40,25 @@ public class NoticeController {
 	 */
 	@ApiOperation(value = "查找店内所有公告", notes = "卖家查找店内所有公告")
 	@GetMapping(value = "/seller/notices")
-	public List<Notice> findAllNotice(@RequestHeader("shop_id") String shop_id,
-	                                  @RequestParam(value = "from", defaultValue = "0") int from,
-	                                  @RequestParam(value = "limit", defaultValue = "20") int to,
+	public Map<String,Object> findAllNotice(@RequestHeader("shop_id") String shop_id,
+	                                  @RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
+									  @RequestParam(value = "status", defaultValue = "0") String status,
+	                                  @RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
 	                                  @RequestParam(value = "by", defaultValue = "id") String by,
 	                                  @RequestParam(value = "sort", defaultValue = "asc") String sort){
 		
 		Pagination page = new Pagination();
-		/*page.setFrom(from);
-		page.setLimit(to);
+		page.setFrom(pageNum);
+		page.setLimit(pageSize);
 		page.setBy(by);
-		page.setSort(sort);*/
-		
-		return noticeService.findAllNotice(shop_id, page);
+		page.setSort(sort);
+		int showd = 0;
+		if("SHOW".equals(status)){
+			showd = 1;
+		}else{
+			showd = 2;
+		}
+		return rtnParam(0, noticeService.findAllNotice(shop_id,showd, page));
 	}
 	
 	/**
@@ -65,19 +72,19 @@ public class NoticeController {
 	 */
 	@ApiOperation(value = "查找店内所有需要显示的公告", notes = "卖家查找店内所有需要显示的公告")
 	@GetMapping(value = {"/seller/notices/shows", "/customer/notices/shows"})
-	public List<Notice> findAllShowedNotice(@RequestHeader("shop_id") String shop_id,
-	                                        @RequestParam(value = "from", defaultValue = "0") int from,
-	                                        @RequestParam(value = "limit", defaultValue = "20") int to,
+	public Map<String,Object> findAllShowedNotice(@RequestHeader("shop_id") String shop_id,
+	                                        @RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
+	                                        @RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
 	                                        @RequestParam(value = "by", defaultValue = "id") String by,
 	                                        @RequestParam(value = "sort", defaultValue = "asc") String sort){
 		
 		Pagination page = new Pagination();
-		/*page.setFrom(from);
-		page.setLimit(to);
+		page.setFrom(pageNum);
+		page.setLimit(pageSize);
 		page.setBy(by);
-		page.setSort(sort);*/
+		page.setSort(sort);
 		
-		return noticeService.findAllShowedNotice(shop_id, page);
+		return rtnParam(0, noticeService.findAllShowedNotice(shop_id, page));
 	}
 	
 	/**
@@ -88,10 +95,10 @@ public class NoticeController {
 	 */
 	@ApiOperation(value = "卖家新增公告", notes = "卖家新增公告")
 	@PostMapping(value = {"/seller/notices"})
-	public Notice addNotice(@RequestHeader("shop_id") String shop_id,
+	public Map<String,Object> addNotice(@RequestHeader("shop_id") String shop_id,
 	                        @RequestBody Notice notice){
 		notice.setShopId(shop_id);
-		return noticeService.addNotice(notice);
+		return rtnParam(0, noticeService.addNotice(notice));
 	}
 	
 	/**
@@ -102,9 +109,9 @@ public class NoticeController {
 	 */
 	@ApiOperation(value = "卖家删除公告", notes = "卖家删除公告")
 	@DeleteMapping(value = {"/seller/notices/{notice_id}"})
-	public String deleteNotice(@RequestHeader("shop_id") String shop_id,
+	public Map<String,Object> deleteNotice(@RequestHeader("shop_id") String shop_id,
 	                        @PathVariable("notice_id") String notice_id){
 		int result = noticeService.deleteNotice(shop_id, notice_id);
-		return ResultUtil.getJson(result);
+		return rtnParam(0, result);
 	}
 }

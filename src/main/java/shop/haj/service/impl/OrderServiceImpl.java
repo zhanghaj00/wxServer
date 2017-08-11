@@ -95,6 +95,12 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
+	public List<Order> findOrderListShopIdAndPage(String shop_id, Pagination page) {
+		return mongoOrderRepository.findByShopId(shop_id,page.getRequest()).getContent();
+	}
+
+
+	@Override
 	public List<Order> findOrderListShopId(String shopId) {
 		return mongoOrderRepository.findByShopId(shopId);
 	}

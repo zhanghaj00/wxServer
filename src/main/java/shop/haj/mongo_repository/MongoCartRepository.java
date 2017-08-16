@@ -10,5 +10,5 @@ import java.util.List;
  */
 public interface MongoCartRepository extends MongoRepository<Cart,String> {
 
-    List<Cart> findByCustomIdAndShopId(String customeId,String shopId);
+    List<Cart> findByCustomerIdAndShopId(String customeId,String shopId);
 }

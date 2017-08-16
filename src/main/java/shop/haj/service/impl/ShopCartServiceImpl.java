@@ -173,7 +173,7 @@ public class ShopCartServiceImpl implements ShopCartService {
 		logger.debug("clearShopCart >>> customer_id={}, shop_id={}",
 				customer_id, shop_id);
 
-		List<Cart> carts = mongoCartRepository.findByCustomIdAndShopId(customer_id,shop_id);
+		List<Cart> carts = mongoCartRepository.findByCustomerIdAndShopId(customer_id,shop_id);
 
 		for (Cart c:carts){
 			mongoCartRepository.delete(c.getId());

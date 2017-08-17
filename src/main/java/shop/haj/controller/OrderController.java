@@ -15,15 +15,15 @@ import shop.haj.entity.*;
 import shop.haj.entity.wxPay.WxPayConfig;
 import shop.haj.entity.wxPay.request.WxPayRefundRequest;
 import shop.haj.entity.wxPay.result.WxPayRefundResult;
+import shop.haj.service.CustomerService;
 import shop.haj.service.OrderService;
 import shop.haj.service.ShopService;
 import shop.haj.service.WxPayService;
 import shop.haj.utils.*;
 
-import java.sql.Time;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -53,28 +53,9 @@ public class OrderController extends BaseController {
 	@Autowired
 	private WxPayService wxPayService;
 
-	/**
-	 * 根据买家ID来进行查询买家的全部订单
-	 *
-	 * @param customer_id 买家ID
-	 * @return 返回订单简要信息列表，满足【订单】页面的全部显示字段
-	 */
-	@ApiOperation(value = "查找买家订单列表", notes = "根据买家ID来进行查询买家的全部订单")
-	@GetMapping(value = "/manager/orders")
-	public Map<String,Object> findOrderListByCustomerID(@RequestAttribute(value = "customer_id", required = false) String customer_id,
-														 @RequestParam(value = "status", defaultValue = "0") int status,
-														 @RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
-														 @RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
-														 @RequestParam(value = "by", defaultValue = "order_id") String by,
-														 @RequestParam(value = "sort", defaultValue = "desc") String sort) {
-		Pagination page = new Pagination();
-		page.setFrom(pageNum);
-		page.setLimit(pageSize);
-		page.setBy(by);
-		page.setSort(sort);
+	@Autowired
+	private CustomerService customerService;
 
-		return rtnParam(0, orderService.findOrderListByCustomerID(customer_id, status, page));
-	}
 	/**
 	 * 根据卖家ID来进行查询买家的全部订单
 	 *
@@ -87,14 +68,18 @@ public class OrderController extends BaseController {
 														@RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
 														@RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
 														@RequestParam(value = "by", defaultValue = "order_id") String by,
-														@RequestParam(value = "sort", defaultValue = "desc") String sort) {
+														@RequestParam(value = "sort", defaultValue = "desc") String sort,
+														Order order) {
 		Pagination page = new Pagination();
 		page.setFrom(pageNum);
 		page.setLimit(pageSize);
 		page.setBy(by);
 		page.setSort(sort);
-
-		return rtnParam(0, orderService.findOrderListShopIdAndPage(shop_id, page));
+		order.setShopId(shop_id);
+		if(order.getStatus()!=null && 0 == order.getStatus()){
+			order.setStatus(null);
+		}
+		return rtnParam(0, orderService.findOrderListByPage(order, page));
 	}
 	/**
 	 * 根据买家ID和店铺ID返回订单列表
@@ -154,10 +139,28 @@ public class OrderController extends BaseController {
 	 * @return
 	 */
 	@ApiOperation(value = "查找订单详细信息", notes = "查找订单详细信息")
-	@GetMapping(value = "/customer/orders/{order_id}")
+	@GetMapping(value = {"/customer/orders/{order_id}","/seller/orders/{order_id}"})
 	public Map<String,Object> findShopOrderByID(@PathVariable("order_id") String order_id) {
 
 		return rtnParam(0, orderService.findShopOrderByID(order_id, DefaultPagination.getOrder()));
+	}
+
+	@ApiOperation(value = "修改订单价格",notes = "修改定单价格")
+	@PostMapping(value = "/seller/orders/{order_id}/modify_money")
+	public Map<String ,Object> modifyOrder(@PathVariable("order_id") String order_id, @RequestBody ModifyPrice modifyPrice){
+
+		Order order = orderService.findShopOrderByID(order_id, DefaultPagination.getOrder());
+
+		if(null != modifyPrice){
+			if(null != modifyPrice.getModifyPrice()){
+				order.setFinalPrice(modifyPrice.getModifyPrice());
+			}
+			if(null != modifyPrice.getModifyPost()){
+				order.setPostFee(modifyPrice.getModifyPost());
+			}
+
+		}
+		return  rtnParam(0,orderService.updateOrder(order));
 	}
 	/**
 	 * 创建订单
@@ -441,6 +444,53 @@ public class OrderController extends BaseController {
 
 	}
 
+
+	/**
+	 * 卖家端统计卖家信息
+	 * @param shop_id
+	 * @return
+	 */
+	@ApiOperation(value = "统计买家", notes = "统计买家信息")
+	@GetMapping(value = "/seller/count/customer/time")
+	public Map<String,Object> countTime(@RequestHeader("shop_id") String shop_id,
+										@RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
+										@RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
+										@RequestParam(value = "by", defaultValue = "order_id") String by,
+										@RequestParam(value = "sort", defaultValue = "desc") String sort){
+		List<CustomerCount> orders = orderService.countTimeGroupByCustomerId(shop_id);
+		return rtnParam(0, orders);
+	}
+	/**
+	 * 卖家端统计卖家信息
+	 * @param shop_id
+	 * @return
+	 */
+	@ApiOperation(value = "统计买家", notes = "统计买家信息")
+	@GetMapping(value = "/seller/count/customer/times")
+	public Map<String,Object> countTimes(@RequestHeader("shop_id") String shop_id,
+										 @RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
+										 @RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
+										 @RequestParam(value = "by", defaultValue = "order_id") String by,
+										 @RequestParam(value = "sort", defaultValue = "desc") String sort){
+		List<CustomerCount> orders = orderService.countTimesGroupByCustomerId(shop_id);
+		return rtnParam(0, orders);
+	}
+	/**
+	 * 卖家端统计卖家信息
+	 * @param shop_id
+	 * @return
+	 */
+	@ApiOperation(value = "统计买家", notes = "统计买家信息")
+	@GetMapping(value = "/seller/count/customer/price")
+	public Map<String,Object> countPrice(@RequestHeader("shop_id") String shop_id,
+										 @RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
+										 @RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
+										 @RequestParam(value = "by", defaultValue = "order_id") String by,
+										 @RequestParam(value = "sort", defaultValue = "desc") String sort){
+		List<CustomerCount> orders = orderService.countPriceGroupByCustomerId(shop_id);
+		return rtnParam(0,orders);
+	}
+
 	private Map<String, Object> countIncome(List<Order> orders,String count_type){
 		Double dayIncome = 0d;
 		Double montyIncome = 0d;
@@ -471,6 +521,30 @@ public class OrderController extends BaseController {
 				ImmutableMap result3 = new ImmutableMap.Builder<>().put("income",dayIncome).put("visitShopLog", 99).put("paymentOrder", dayPayOrder).build();
 				return rtnParam(0,result3);
 
+		}
+	}
+
+	static class  ModifyPrice implements Serializable{
+
+		private Double modifyPrice;
+
+		private Double modifyPost;
+
+
+		public Double getModifyPost() {
+			return modifyPost;
+		}
+
+		public void setModifyPost(Double modifyPost) {
+			this.modifyPost = modifyPost;
+		}
+
+		public Double getModifyPrice() {
+			return modifyPrice;
+		}
+
+		public void setModifyPrice(Double modifyPrice) {
+			this.modifyPrice = modifyPrice;
 		}
 	}
 }

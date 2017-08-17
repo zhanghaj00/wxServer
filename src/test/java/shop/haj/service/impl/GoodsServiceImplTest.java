@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import shop.haj.entity.*;
 import shop.haj.service.GoodsService;
+import shop.haj.service.OrderService;
 
 import java.util.List;
 
@@ -28,6 +29,9 @@ public class GoodsServiceImplTest {
 	
 	@Autowired
 	private GoodsService goodsService;
+
+	@Autowired
+	private OrderService orderService;
 	
 	@Test
 	public void findAll() throws Exception {
@@ -199,5 +203,13 @@ public class GoodsServiceImplTest {
 	public void deleteGoods(){
 		
 		goodsService.deleteGoods("", "276552");
+	}
+
+	@Test
+	public void testGroupQuery(){
+
+		List<CustomerCount> O = orderService.countPriceGroupByCustomerId("598189c0763a1b23446d6b57");
+
+		System.out.println("FSDFSDFSD"+O);
 	}
 }

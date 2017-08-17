@@ -31,10 +31,10 @@ public interface OrderService {
 	List<OrderListInfo> findOrderListByCustomerID(String customer_id, int status, Pagination page);
 	/**
 	 * 查找某买家全部订单列表
-	 * @param shop_id
+	 * @param order
 	 * @return
 	 */
-	List<Order> findOrderListShopIdAndPage(String shop_id, Pagination page);
+	public List<Order> findOrderListByPage(Order order, Pagination page);
 
 	/**
 	 * 查找某买家全部订单列表
@@ -130,4 +130,18 @@ public interface OrderService {
 	 * @return
 	 */
 	int updateOrderRefundStatusToClose(String refund_uuid);
+
+
+	/**
+	 * 统计用户客户订单状态
+	 * @param shopId
+	 * @return
+	 */
+	public List<CustomerCount> countPriceGroupByCustomerId(String shopId);
+
+	public List<CustomerCount> countTimeGroupByCustomerId(String shopId);
+
+	public List<CustomerCount> countTimesGroupByCustomerId(String shopId);
+
+	public Order updateOrder(Order order);
 }

@@ -1,13 +1,22 @@
 package shop.haj.service.impl;
 
 import com.google.common.collect.Lists;
+import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Example;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.mapreduce.GroupBy;
+import org.springframework.data.mongodb.core.mapreduce.GroupByResults;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -17,12 +26,14 @@ import shop.haj.mongo_repository.MongoGoodsRepository;
 import shop.haj.mongo_repository.MongoOrderListRepository;
 import shop.haj.mongo_repository.MongoOrderRefundRepository;
 import shop.haj.mongo_repository.MongoOrderRepository;
+import shop.haj.service.CustomerService;
 import shop.haj.service.OrderService;
 import shop.haj.utils.OrderPayType;
 import shop.haj.utils.OrderStatus;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,7 +64,14 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Autowired
 	private CacheManage cacheManage;
-	
+
+	@Autowired
+	private MongoTemplate mongoTemplate;
+
+	@Autowired
+	private CustomerService customerService;
+
+
 	@Autowired
 	private MongoOrderRefundRepository mongoOrderRefundRepository;
 	
@@ -95,8 +113,13 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public List<Order> findOrderListShopIdAndPage(String shop_id, Pagination page) {
-		return mongoOrderRepository.findByShopId(shop_id,page.getRequest()).getContent();
+	public List<Order> findOrderListByPage(Order order, Pagination page) {
+		Example<Order> example = Example.of(order);
+
+		List<Order> orderList = mongoOrderRepository.findAll(example, page.getRequest()).getContent();
+
+
+		return orderList;
 	}
 
 
@@ -503,6 +526,66 @@ public class OrderServiceImpl implements OrderService {
 		if(result <= 0) return 0;
 		return 1;
 	}
+
+	@Override
+	public List<CustomerCount> countPriceGroupByCustomerId(String shopId){
+		Criteria criteria =new Criteria();
+		criteria.where("shopId").is(shopId);
+		Aggregation aggregation = Aggregation.newAggregation(Aggregation
+				.group("customerId").sum("finalPrice").as("totalPrice"),Aggregation.match(criteria));
+
+		AggregationResults<CustomerCount> r = mongoTemplate.aggregate(aggregation,"wx_order", CustomerCount.class);
+		List<CustomerCount> result = r.getMappedResults();
+		for (CustomerCount customerCount:result) {
+			if(!StringUtils.isEmpty(customerCount.get_id())){
+				Customer customer = customerService.findById(customerCount.get_id());
+				customerCount.setCustomer(customer);
+			}
+		}
+		return result;
+	}
+
+
+	@Override
+	public List<CustomerCount> countTimesGroupByCustomerId(String shopId){
+		Criteria criteria =new Criteria();
+		criteria.where("shopId").is(shopId);
+		Aggregation aggregation = Aggregation.newAggregation(Aggregation
+				.group("customerId").count().as("times"),Aggregation.match(criteria));
+
+		AggregationResults<CustomerCount> r = mongoTemplate.aggregate(aggregation,"wx_order", CustomerCount.class);
+		List<CustomerCount> result = r.getMappedResults();
+		for (CustomerCount customerCount:result) {
+			if(!StringUtils.isEmpty(customerCount.get_id())){
+				Customer customer = customerService.findById(customerCount.get_id());
+				customerCount.setCustomer(customer);
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public Order updateOrder(Order order) {
+		return mongoOrderRepository.save(order);
+	}
+
+	@Override
+	public List<CustomerCount> countTimeGroupByCustomerId(String shopId){
+		Criteria criteria =new Criteria();
+		criteria.where("shopId").is(shopId);
+		Aggregation aggregation = Aggregation.newAggregation(Aggregation
+				.group("customerId").max("orderTime").as("time"),Aggregation.match(criteria));
+
+		AggregationResults<CustomerCount> r = mongoTemplate.aggregate(aggregation,"wx_order", CustomerCount.class);
+		List<CustomerCount> result = r.getMappedResults();
+		for (CustomerCount customerCount:result) {
+			if(!StringUtils.isEmpty(customerCount.get_id())){
+				Customer customer = customerService.findById(customerCount.get_id());
+				customerCount.setCustomer(customer);
+			}
+		}
+		return result;
+	}
 	
 	/**
 	 * 清除订单集合缓存
@@ -553,4 +636,6 @@ public class OrderServiceImpl implements OrderService {
 		
 		cacheManage.clearGoodsCache(goods_id);
 	}
+
+
 }

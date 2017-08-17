@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import shop.haj.entity.Customer;
 import shop.haj.entity.Pagination;
 import shop.haj.service.CustomerService;
+import shop.haj.service.OrderService;
 import shop.haj.utils.ResultUtil;
 
 import java.util.List;
@@ -27,7 +28,10 @@ public class CustomerController {
 	
 	@Autowired
 	private CustomerService customerService;
-	
+
+	@Autowired
+	private OrderService orderService;
+
 	/**
 	 * 查询全部买家信息
 	 * @param from
@@ -102,4 +106,7 @@ public class CustomerController {
 		int result = customerService.delete(id);
 		return ResultUtil.getJson(result);
 	}
+
+
+
 }

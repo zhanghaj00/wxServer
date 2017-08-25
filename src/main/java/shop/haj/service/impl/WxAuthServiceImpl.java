@@ -33,7 +33,7 @@ public class WxAuthServiceImpl implements WxAuthService{
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<String,Object> getWxSession(String wxCode){
-		
+
 		StringBuffer sb = new StringBuffer();
 		sb.append("appid=").append(wxAuth.getAppId());
 		sb.append("&secret=").append(wxAuth.getSecret());
@@ -55,6 +55,7 @@ public class WxAuthServiceImpl implements WxAuthService{
 	 * @param expires		会话有效期, 以秒为单位, 例如2592000代表会话有效期为30天
 	 * @return
 	 */
+
 	public String create3rdSession(String wxOpenId, String wxSessionKey, Long expires){
 		
 		String thirdSessionKey = RandomStringUtils.randomAlphanumeric(64);
@@ -65,7 +66,6 @@ public class WxAuthServiceImpl implements WxAuthService{
 		} catch (UnsupportedEncodingException e) {
 			logger.error(e.toString(), e);
 		}
-		
 		logger.info("create3rdSession:{}, openId:{}, sessionKey:{}, expires:{}", thirdSessionKey, wxOpenId, wxSessionKey, expires);
 		
 		return thirdSessionKey;

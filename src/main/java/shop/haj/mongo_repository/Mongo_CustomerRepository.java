@@ -17,4 +17,6 @@ public interface Mongo_CustomerRepository extends MongoRepository<Customer, Stri
     Customer findByIdAndOpenId(String id, String open_id);
 
     Customer findByOpenId(String open_id);
+
+
 }

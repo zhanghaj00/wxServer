@@ -8,6 +8,8 @@ import org.springframework.cache.annotation.EnableCaching;
 
 @SpringBootApplication
 @EnableCaching
+//@EnableHystrix
+//@EnableHystrixDashboard
 public class LeshareserviceApplication{
 	private Logger logger = LogManager.getLogger(LeshareserviceApplication.class);
 	

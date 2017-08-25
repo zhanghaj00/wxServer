@@ -10,22 +10,19 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import shop.haj.entity.*;
 import shop.haj.entity.wxPay.WxPayConfig;
 import shop.haj.entity.wxPay.request.WxPayRefundRequest;
 import shop.haj.entity.wxPay.result.WxPayRefundResult;
-import shop.haj.service.CustomerService;
-import shop.haj.service.OrderService;
-import shop.haj.service.ShopService;
-import shop.haj.service.WxPayService;
+import shop.haj.service.*;
 import shop.haj.utils.*;
 
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>Title: shop.ha.controller</p>
@@ -55,6 +52,9 @@ public class OrderController extends BaseController {
 
 	@Autowired
 	private CustomerService customerService;
+
+	@Autowired
+	private DeliveryService deliveryService;
 
 	/**
 	 * 根据卖家ID来进行查询买家的全部订单
@@ -97,19 +97,19 @@ public class OrderController extends BaseController {
 																@RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
 																@RequestParam(value = "by", defaultValue = "order_id") String by,
 																@RequestParam(value = "sort", defaultValue = "desc") String sort,
-																OrderListSingleInfo orderListSingleInfo) {
+															   Order order) {
 
 		Pagination page = new Pagination();
 		page.setFrom(pageNum);
 		page.setLimit(pageSize);
 		page.setBy(by);
 		page.setSort(sort);
-		orderListSingleInfo.setShopId(shop_id);
-		orderListSingleInfo.setCustomerId(customer_id);
-		if(orderListSingleInfo.getStatus()!=null && 0 == orderListSingleInfo.getStatus()){
-			orderListSingleInfo.setStatus(null);
+		order.setShopId(shop_id);
+		order.setCustomerId(customer_id);
+		if(order.getStatus()!=null && 0 == order.getStatus()){
+			order.setStatus(null);
 		}
-		return rtnParam(0, orderService.findOrderListInfo(orderListSingleInfo, page));
+		return rtnParam(0, orderService.findOrderListByPage(order, page));
 	}
 
 	/**
@@ -117,18 +117,40 @@ public class OrderController extends BaseController {
 	 *
 	 * @return
 	 */
-	@ApiOperation(value = "查找订单详细信息", notes = "查找订单详细信息")
+	@ApiOperation(value = "查找订单运费信息", notes = "查找订单运费信息")
 	@PostMapping(value = "/customer/orders/delivery")
-	public Map<String,Object> findShopOrderByID() {
+	public Map<String,Object> findShopOrderByID(@RequestHeader("shop_id")String shop_id,@RequestAttribute("customer_id")String customerId
+												,@RequestBody Map<String,Object> requestBody) {
 
-		List<Deliver> delivers = Lists.newArrayList();
-		delivers.add(new Deliver("1","顺丰","顺丰",true,10.0));
+
+		Set<String> innerCid = new HashSet<>();
+		Map<String,List<Delivery>> delilveryList = new HashMap<>();
+		if(!CollectionUtils.isEmpty(requestBody)){
+			Object goodList = requestBody.get("goodsList");
+			if(goodList instanceof List){
+				for(Object c:(List)goodList){
+
+					innerCid.add(((Map) c).get("innerCid").toString());
+				}
+			}
+		}
+		//List<Delivery> delivers = Lists.newArrayList();
+
+		for(String cid:innerCid){
+			Delivery condition = new Delivery();
+			condition.setInnerCid(cid);
+			List<Delivery> result = deliveryService.findAll(condition);
+
+			delilveryList.put(result.get(0).getInnerCidName(),result);
+
+		}
+		//delivers.add(new Delivery("1","顺丰","顺丰",true,10.0));
 		/*delivers.add(new Deliver("2","天天","天天",false,12.66));
 		delivers.add(new Deliver("3","神通","神通",false,125.6));
 		delivers.add(new Deliver("4","光通","光通",false,123.6));
 		delivers.add(new Deliver("5","快递沙发","快递沙发",false,121.6));*/
 
-		ImmutableMap<String,Object> result = new ImmutableMap.Builder<String,Object>().put("dilivery",true).put("delilveryList", delivers).build();
+		ImmutableMap<String,Object> result = new ImmutableMap.Builder<String,Object>().put("delivery",true).put("delilveryList", delilveryList).build();
 		return rtnParam(0,result);
 	}
 

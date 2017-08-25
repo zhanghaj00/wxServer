@@ -37,7 +37,7 @@ public class WxAuthController extends BaseController{
 	
 	@Autowired
 	private CustomerService customerService;
-	
+
 	/**
 	 * 根据客户端传过来的code从微信服务器获取appid和session_key，然后生成3rdkey返回给客户端，后续请求客户端传3rdkey来维护客户端登录态
 	 * @param wxCode	小程序登录时获取的code
@@ -47,11 +47,14 @@ public class WxAuthController extends BaseController{
 	@ApiImplicitParam(name = "code", value = "用户登录回调内容会带上 ", required = true, dataType = "String")
 	@Api(name = ApiConstant.WX_CODE)
 	@GetMapping(value = "/customer/auth/session")
+	//@HystrixCommand(fallbackMethod = "errorParam",commandProperties={@HystrixProperty(name = "fallback.enabled",value = "true")
+	//		,@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "6000")})
 	public Map<String,Object> createSssion(@RequestParam(value = "code")String wxCode){
-		
-		/*Map<String,Object> wxSessionMap = wxAuthService.getWxSession(wxCode);
 
-		if(null == wxSessionMap){
+
+		//Map<String,Object> wxSessionMap = wxAuthService.getWxSession(wxCode);
+
+		/*if(null == wxSessionMap){
 			logger.error("can not find session with wxCode: {}, errCode:{}", wxCode, "50010");
 			return rtnParam(50010, null);
 		}
@@ -60,8 +63,9 @@ public class WxAuthController extends BaseController{
 		if(wxSessionMap.containsKey("errcode")){
 			logger.error("find error code in response, return code:50020");
 			return rtnParam(50020, null);
-		}
-		String wxOpenId = (String)wxSessionMap.get("openid");
+		}*/
+
+		/*String wxOpenId = (String)wxSessionMap.get("openid");
 		String wxSessionKey = (String)wxSessionMap.get("session_key");
 		
 		logger.info("openid={}, session_key={}", wxOpenId, wxSessionKey);
@@ -85,6 +89,8 @@ public class WxAuthController extends BaseController{
 
 
 	}
+
+
 
 	@ApiOperation(value = "检查SessionId是否有效", notes = "检查SessionId是否有效")
 	@GetMapping(value = {"/customer/auth/checkSession","/seller/auth/check"})

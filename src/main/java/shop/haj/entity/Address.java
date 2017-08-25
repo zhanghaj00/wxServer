@@ -33,7 +33,14 @@ public class Address implements Serializable{
 	private String createTime;
 	private String updateTime;
 
+	private String fullAddress;
+
+
 	public Address() {
+	}
+
+	public String getFullAddress() {
+		return province+city+country+town+detail;
 	}
 
 	/**

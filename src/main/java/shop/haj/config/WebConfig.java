@@ -41,7 +41,8 @@ public class WebConfig extends WebMvcConfigurerAdapter{
 						"/v1/customer/coupons/**",
 						"/v1/customer/carts/**",
 						"/v1/customer/favorite_goods/**",
-						"/v1/customer/visit_shops/**"
+						"/v1/customer/visit_shops/**",
+						"/v1/customer/comments/**"
 				});
 	}
 	

@@ -25,4 +25,6 @@ public abstract class BaseController {
 			return ImmutableMap.of("errorCode", errorCode, "errmsg", String.valueOf(data));
 		}
 	}
+
+
 }

@@ -52,9 +52,9 @@ public class WxAuthController extends BaseController{
 	public Map<String,Object> createSssion(@RequestParam(value = "code")String wxCode){
 
 
-		//Map<String,Object> wxSessionMap = wxAuthService.getWxSession(wxCode);
+		/*Map<String,Object> wxSessionMap = wxAuthService.getWxSession(wxCode);
 
-		/*if(null == wxSessionMap){
+		if(null == wxSessionMap){
 			logger.error("can not find session with wxCode: {}, errCode:{}", wxCode, "50010");
 			return rtnParam(50010, null);
 		}
@@ -63,18 +63,18 @@ public class WxAuthController extends BaseController{
 		if(wxSessionMap.containsKey("errcode")){
 			logger.error("find error code in response, return code:50020");
 			return rtnParam(50020, null);
-		}*/
+		}
 
-		/*String wxOpenId = (String)wxSessionMap.get("openid");
+		String wxOpenId = (String)wxSessionMap.get("openid");
 		String wxSessionKey = (String)wxSessionMap.get("session_key");
 		
 		logger.info("openid={}, session_key={}", wxOpenId, wxSessionKey);
 		
 		Long expires = Long.valueOf(String.valueOf(wxSessionMap.get("expires_in")));
 		String thirdSession = wxAuthService.create3rdSession(wxOpenId, wxSessionKey, expires);
-		logger.info("thirdSession={}, expires time is {}", thirdSession, expires);
+		logger.info("thirdSession={}, expires time is {}", thirdSession, expires);*/
 		
-		return rtnParam(0, ImmutableMap.of("sessionId",thirdSession));*/
+		/*return rtnParam(0, ImmutableMap.of("sessionId",thirdSession));*/
 		Map<String,Object> wxSessionMap = new HashMap<>();
 		wxSessionMap.put("openid","wx1cebfdebba0a65ab");
 		wxSessionMap.put("session_key","bc45f5cbf6b5bd2d79df496b3906b07c");
@@ -245,12 +245,33 @@ public class WxAuthController extends BaseController{
 	@Api(name = ApiConstant.WX_CODE)
 	@GetMapping(value = "/seller/auth/login")
 	public Map<String,Object> sellerAuthLogin(@RequestParam(value = "code")String wxCode){
+		/*Map<String,Object> wxSessionMap = wxAuthService.getWxSession(wxCode);
+
+		if(null == wxSessionMap){
+			logger.error("can not find session with wxCode: {}, errCode:{}", wxCode, "50010");
+			return rtnParam(50010, null);
+		}
+
+		//获取异常
+		if(wxSessionMap.containsKey("errcode")){
+			logger.error("find error code in response, return code:50020");
+			return rtnParam(50020, null);
+		}
+
+		String wxOpenId = (String)wxSessionMap.get("openid");
+		String wxSessionKey = (String)wxSessionMap.get("session_key");
+
+		logger.info("openid={}, session_key={}", wxOpenId, wxSessionKey);
+
+		Long expires = Long.valueOf(String.valueOf(wxSessionMap.get("expires_in")));
+		String thirdSession = wxAuthService.create3rdSession(wxOpenId, wxSessionKey, expires);
+		logger.info("thirdSession={}, expires time is {}", thirdSession, expires);*/
+
+		/*return rtnParam(0, ImmutableMap.of("sessionId",thirdSession));*/
 		Map<String,Object> wxSessionMap = new HashMap<>();
 		wxSessionMap.put("openid","wx1cebfdebba0a65ab");
-		wxSessionMap.put("session_key","bc45f5cbf6b5bd2d79df496b3906b07c");
-		wxSessionMap.put("expires_in",10000L);
-
-		//判断这个ID是否可以登录 返回session
+		wxSessionMap.put("session_key", "bc45f5cbf6b5bd2d79df496b3906b07c");
+		wxSessionMap.put("expires_in", 10000L);
 
 		String thirdSession = wxAuthService.create3rdSession("wx1cebfdebba0a65ab", "bc45f5cbf6b5bd2d79df496b3906b07c", 100000L);
 

@@ -136,14 +136,14 @@ public class OrderController extends BaseController {
 		}
 		//List<Delivery> delivers = Lists.newArrayList();
 
-		for(String cid:innerCid){
+		/*for(String cid:innerCid){
 			Delivery condition = new Delivery();
 			condition.setInnerCid(cid);
 			List<Delivery> result = deliveryService.findAll(condition);
 
 			delilveryList.put(result.get(0).getInnerCidName(),result);
 
-		}
+		}*/
 		//delivers.add(new Delivery("1","顺丰","顺丰",true,10.0));
 		/*delivers.add(new Deliver("2","天天","天天",false,12.66));
 		delivers.add(new Deliver("3","神通","神通",false,125.6));

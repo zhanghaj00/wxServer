@@ -44,8 +44,7 @@ public class AddressServiceImpl implements AddressService {
 		if( address.getIsDefault() == 1){
 			if (StringUtils.isEmpty(address.getCustomerId())) return null;
 			Address address_old = mongoAddressRepository.findByCustomerIdAndIsDefault(address.getCustomerId(),1);
-			address_old.setIsDefault(0);
-			mongoAddressRepository.save(address_old);
+			if(address_old != null){address_old.setIsDefault(0);mongoAddressRepository.save(address_old);}
 			address = mongoAddressRepository.insert(address);
 		}else{
 			address = mongoAddressRepository.insert(address);

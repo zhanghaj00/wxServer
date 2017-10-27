@@ -74,11 +74,16 @@ public class ShopCartServiceImpl implements ShopCartService {
 							 String goods_id, String sku) {
 		logger.debug("findShopCart >>> customer_id={}, shop_id={}, goods_id={}, sku={}",
 				customer_id, shop_id, goods_id, sku);
-		/*Cart cart = mongoCartRepository.findShopCart(customer_id, shop_id, goods_id, sku);
+		Cart cart = new Cart();
+		cart.setCustomerId(customer_id);
+		cart.setShopId(shop_id);
+		cart.setGoodsId(goods_id);
+		cart.setGoodsSku(sku);
+		Example<Cart> example = Example.of(cart);
+		Cart result = mongoCartRepository.findOne(example);
 		logger.info("findShopCart >>> result = {}", cart);
 		
-		return cart;*/
-		return null;
+		return result;
 	}
 	
 	/**

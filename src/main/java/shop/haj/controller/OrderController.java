@@ -56,6 +56,9 @@ public class OrderController extends BaseController {
 	@Autowired
 	private DeliveryService deliveryService;
 
+	@Autowired
+	private VisitLogService visitLogService;
+
 	/**
 	 * 根据卖家ID来进行查询买家的全部订单
 	 *
@@ -119,38 +122,32 @@ public class OrderController extends BaseController {
 	 */
 	@ApiOperation(value = "查找订单运费信息", notes = "查找订单运费信息")
 	@PostMapping(value = "/customer/orders/delivery")
-	public Map<String,Object> findShopOrderByID(@RequestHeader("shop_id")String shop_id,@RequestAttribute("customer_id")String customerId
+	public Map<String,Object> findDeliveryByID(@RequestHeader("shop_id")String shop_id,@RequestAttribute("customer_id")String customerId
 												,@RequestBody Map<String,Object> requestBody) {
 
 
-		Set<String> innerCid = new HashSet<>();
-		Map<String,List<Delivery>> delilveryList = new HashMap<>();
+		Set<String> supplierIds = new HashSet<>();
+		Map<String,String> delilveryMap = new HashMap<>();
+		Double totalFee = 0.0D;
 		if(!CollectionUtils.isEmpty(requestBody)){
 			Object goodList = requestBody.get("goodsList");
 			if(goodList instanceof List){
 				for(Object c:(List)goodList){
-
-					innerCid.add(((Map) c).get("innerCid").toString());
+					String supplierId = ((Map) c).get("supplierId").toString();
+					if(!supplierIds.contains(supplierId)){
+						List<Delivery> fee = deliveryService.findBySupplierId(supplierId);
+						if(null != fee && fee.size()>0) {totalFee += (fee.stream().filter(item->(null!=item.getDef()&&item.getDef())).findFirst().get().getFee());}
+						supplierIds.add(supplierId);
+						String goodName = ((Map) c).get("goodsName").toString();
+						delilveryMap.put(supplierId,goodName +"  ￥" + fee.stream().filter(item->null!=item.getDef()&&item.getDef()).findFirst().get().getFee());
+					}else{
+						String desc = delilveryMap.get(supplierId).split("￥")[0].trim()+" 等"+ delilveryMap.get(supplierId).split("￥")[1].trim();
+						delilveryMap.put(supplierId,desc);
+					}
 				}
 			}
 		}
-		//List<Delivery> delivers = Lists.newArrayList();
-
-		/*for(String cid:innerCid){
-			Delivery condition = new Delivery();
-			condition.setInnerCid(cid);
-			List<Delivery> result = deliveryService.findAll(condition);
-
-			delilveryList.put(result.get(0).getInnerCidName(),result);
-
-		}*/
-		//delivers.add(new Delivery("1","顺丰","顺丰",true,10.0));
-		/*delivers.add(new Deliver("2","天天","天天",false,12.66));
-		delivers.add(new Deliver("3","神通","神通",false,125.6));
-		delivers.add(new Deliver("4","光通","光通",false,123.6));
-		delivers.add(new Deliver("5","快递沙发","快递沙发",false,121.6));*/
-
-		ImmutableMap<String,Object> result = new ImmutableMap.Builder<String,Object>().put("delivery",true).put("delilveryList", delilveryList).build();
+		ImmutableMap<String,Object> result = new ImmutableMap.Builder<String,Object>().put("delivery",true).put("totalFee",totalFee).put("deliveryList", delilveryMap.values()).build();
 		return rtnParam(0,result);
 	}
 
@@ -456,11 +453,11 @@ public class OrderController extends BaseController {
 		if (StringUtils.isEmpty(shop_id)) return rtnParam(0, null);
 		switch (count_type) {
 			case "TODAY":
-				return countIncome(orderService.findOrderListShopId(shop_id), count_type);
+				return countIncome(orderService.findOrderListShopId(shop_id), count_type,shop_id);
 			case "MONTH":
-				return countIncome(orderService.findOrderListShopId(shop_id), count_type);
+				return countIncome(orderService.findOrderListShopId(shop_id), count_type,shop_id);
 			default:
-				return countIncome(orderService.findOrderListShopId(shop_id), count_type);
+				return countIncome(orderService.findOrderListShopId(shop_id), count_type,shop_id);
 
 		}
 
@@ -513,7 +510,7 @@ public class OrderController extends BaseController {
 		return rtnParam(0,orders);
 	}
 
-	private Map<String, Object> countIncome(List<Order> orders,String count_type){
+	private Map<String, Object> countIncome(List<Order> orders,String count_type,String shop_id){
 		Double dayIncome = 0d;
 		Double montyIncome = 0d;
 		Integer dayPayOrder = 0;
@@ -534,13 +531,13 @@ public class OrderController extends BaseController {
 		}
 		switch (count_type) {
 			case "TODAY":
-				ImmutableMap result = new ImmutableMap.Builder<>().put("income",dayIncome).put("paymentGoods",paymentGoods).put("visitShopLog",99).put("paymentOrder",dayPayOrder).build();
+				ImmutableMap result = new ImmutableMap.Builder<>().put("income",dayIncome).put("paymentGoods",paymentGoods).put("visitShopLog",visitLogService.countShopVisit(count_type,shop_id)).put("paymentOrder",dayPayOrder).build();
 				return rtnParam(0,result);
 			case "MONTH":
-				ImmutableMap result1 = new ImmutableMap.Builder<>().put("income",montyIncome).put("visitShopLog",99).put("paymentOrder", monthPayOrder).build();
+				ImmutableMap result1 = new ImmutableMap.Builder<>().put("income",montyIncome).put("visitShopLog",visitLogService.countShopVisit(count_type,shop_id)).put("paymentOrder", monthPayOrder).build();
 				return rtnParam(0,result1);
 			default:
-				ImmutableMap result3 = new ImmutableMap.Builder<>().put("income",dayIncome).put("visitShopLog", 99).put("paymentOrder", dayPayOrder).build();
+				ImmutableMap result3 = new ImmutableMap.Builder<>().put("income",dayIncome).put("visitShopLog", visitLogService.countShopVisit(count_type,shop_id)).put("paymentOrder", dayPayOrder).build();
 				return rtnParam(0,result3);
 
 		}

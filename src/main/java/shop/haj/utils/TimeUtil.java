@@ -3,7 +3,6 @@
  */
 package shop.haj.utils;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -45,10 +44,16 @@ public class TimeUtil {
                     return (int) (millisecond / (1000 * 60 * 60));
                 case 3: // day
                     return (int) (millisecond / (1000 * 60 * 60 * 24));
+                default:
+
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return hours;
+    }
+
+    public static String getTimeStamp(){
+        return dataFormat.format(new Date());
     }
 }

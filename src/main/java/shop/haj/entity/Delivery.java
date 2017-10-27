@@ -39,6 +39,8 @@ public class Delivery implements Serializable {
 
     private String supplierId;
 
+    private String supplierName;
+
     public Delivery() {
     }
 

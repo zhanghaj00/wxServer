@@ -15,9 +15,12 @@ import java.util.List;
  */
 public interface DeliveryService {
 
-    public Delivery insert(Delivery delivery);
+     Delivery insert(Delivery delivery);
 
-    public List<Delivery> pageDelivery(Delivery delivery,Pagination pagination);
+     List<Delivery> pageDelivery(Delivery delivery,Pagination pagination);
 
-    public List<Delivery> findAll(Delivery delivery);
+     List<Delivery> findAll(Delivery delivery);
+
+     List<Delivery> findBySupplierId(String supplierId);
+
 }

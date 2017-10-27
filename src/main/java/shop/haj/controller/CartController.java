@@ -2,6 +2,7 @@ package shop.haj.controller;
 
 import com.google.common.collect.Maps;
 import io.swagger.annotations.ApiOperation;
+import jodd.util.StringUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import shop.haj.service.ShopService;
 import shop.haj.utils.ResultUtil;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,7 +69,7 @@ public class CartController extends BaseController {
 		page.setSort(sort);
 		cart.setCustomerId(customer_id);
 		cart.setShopId(shop_id);
-		return rtnParam(0, shopCartService.findShopCarts(cart, page));
+		return rtnParam(0,shopCartService.findShopCarts(cart, page));
 	}
 	
 	@ApiOperation(value = "添加商品到购物车", notes = "添加商品到购物车")
@@ -98,12 +101,12 @@ public class CartController extends BaseController {
 				cart.setCustomerId(customer_id);
 				cart.setShopId(shop_id);
 				cart.setShopName(shop.getName());
-				
+
 				Goods goods = goodsService.findGoodsByID(shop_id, cart.getGoodsId());
 				cart.setGoodsName(goods.getName());
 				cart.setGoodsPrice(goods.getSellPrice());
 				cart.setGoodsImage(goods.getImages().get(0).getUrl());
-				
+				cart.setSupplierId(goods.getSupplierId());
 				result = shopCartService.addCart(cart);
 				
 			} else {
@@ -195,6 +198,27 @@ public class CartController extends BaseController {
 		public void setCartId(List<String> cartId) {
 			this.cartId = cartId;
 		}
+	}
+
+
+	private Map<String,List<Cart>> spCartBySupplierId(List<Cart> carts){
+
+		Map<String,List<Cart>> result = new HashMap<>();
+
+		carts.forEach(item->{
+			if(!StringUtil.isEmpty(item.getSupplierId())){
+				if(result.get(item.getSupplierId()) == null){
+					List<Cart> newList = new ArrayList<Cart>();
+					newList.add(item);
+					result.put(item.getSupplierId(),newList);
+				}else{
+					List<Cart> oldList = result.get(item.getSupplierId());
+					oldList.add(item);
+					result.put(item.getSupplierId(),oldList);
+				}
+			}
+		});
+		return  result;
 	}
 
 }

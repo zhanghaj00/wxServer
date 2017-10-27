@@ -5,7 +5,9 @@ package shop.haj.mongo_repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
-import shop.haj.entity.Customer;
+import shop.haj.entity.VisitShop;
+
+import java.util.List;
 
 /**
  * Created by Hao on .
@@ -13,11 +15,7 @@ import shop.haj.entity.Customer;
  * @since 1.9.0
  */
 @Repository
-public interface Mongo_CustomerRepository extends MongoRepository<Customer, String> {
+public interface MongoVisitLogRepository extends MongoRepository<VisitShop,String> {
 
-    Customer findByIdAndOpenId(String id, String open_id);
-
-    Customer findByOpenId(String open_id);
-
-
+    List<VisitShop> findByShopId(String shopId);
 }

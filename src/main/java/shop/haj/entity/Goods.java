@@ -22,6 +22,7 @@ import java.util.List;
 @Data
 public class Goods implements Serializable{
 
+
 	@Id
 	private String id;
 	
@@ -51,7 +52,7 @@ public class Goods implements Serializable{
 	
 	private Integer isRecommend;
 	
-	private Integer isDeleted;
+	private Integer isDeleted ; //1是正常  0 是下架
 	
 	private String createTime;
 	

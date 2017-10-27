@@ -1,5 +1,7 @@
 package shop.haj.entity;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -15,7 +17,10 @@ import java.util.List;
  *         CreateTime：5/22/17
  */
 public class GoodsSkuInfo implements Serializable{
-	
+
+
+	private static final long serialVersionUID = -3649859486530941612L;
+
 	private String prop1;
 	private String value1;
 	private String prop2;

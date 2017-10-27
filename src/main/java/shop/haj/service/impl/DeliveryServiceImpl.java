@@ -40,4 +40,9 @@ public class DeliveryServiceImpl implements DeliveryService {
         Example<Delivery> condition = Example.of(delivery);
         return mongoDeliveryRepository.findAll(condition);
     }
+
+    @Override
+    public List<Delivery> findBySupplierId(String supplierId) {
+        return mongoDeliveryRepository.findBySupplierId(supplierId);
+    }
 }

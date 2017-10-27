@@ -91,7 +91,8 @@ public class AddressController extends BaseController{
 	public Map<String,Object> findDefaultAddress(@RequestAttribute(value = "customer_id", required = false) String customer_id){
 		
 		logger.info("findDefaultAddress controller >>> customer_id={}", customer_id);
-		return rtnParam(0,addressService.findDefaultAddress(customer_id));
+		Address address = addressService.findDefaultAddress(customer_id);
+		return rtnParam(0, address == null? "": address);
 	}
 	
 	/**

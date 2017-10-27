@@ -4,11 +4,13 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.haj.entity.Goods;
+import shop.haj.entity.GoodsSkuInfo;
 import shop.haj.entity.Image;
 import shop.haj.entity.Pagination;
 import shop.haj.manage.CacheManage;
@@ -60,16 +62,19 @@ public class GoodsServiceImpl implements GoodsService{
 	}
 	
 	@Override
-//	@Cacheable(value = "goods", key = "#goods_id")
+	//@Cacheable(value = "goods", key = "#goods_id")
 	public Goods findGoodsByID(String shop_id, String goods_id) {
 		Goods goods = mongoGoodsRepository.findByIdAndShopId(goods_id, shop_id);
 		
 		if(goods == null) return new Goods();
 
+		//goods.setGoodsDetails(goodsDetailRepository.findGoodsDetailByGoodsID(goods.getId(), DefaultPagination.getGoodsDetail()));
+		//goods.setGoodsSkuInfo(findSkuInfo(goods_id));
+
 		return goods;
 	}
 	
-	/*private GoodsSkuInfo findSkuInfo(int goods_id){
+	/*private GoodsSkuInfo findSkuInfo(String goods_id){
 		GoodsSkuInfo goodsSkuInfo = goodsSkuRepository.findInfo(goods_id);
 		
 		if(goodsSkuInfo != null){
@@ -188,7 +193,7 @@ public class GoodsServiceImpl implements GoodsService{
 	 * @Param goods_id
 	 */
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = RuntimeException.class)
 	public int addGoodsImage(String shop_id, Image image, String goods_id) {
 
 		if(null == image) return 0;

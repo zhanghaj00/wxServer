@@ -103,6 +103,7 @@ public class GoodsController extends  BaseController{
 	public Map<String,Object>  addGoods(@RequestHeader("shop_id") String shop_id,
 	                      @RequestBody Goods goods){
 		goods.setShopId(shop_id);
+		goods.setIsDeleted(1);
 		return rtnParam(0, goodsService.addGoods(goods));
 	}
 	

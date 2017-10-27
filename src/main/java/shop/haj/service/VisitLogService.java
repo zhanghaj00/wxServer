@@ -2,6 +2,7 @@ package shop.haj.service;
 
 import shop.haj.entity.Pagination;
 import shop.haj.entity.Shop;
+import shop.haj.entity.VisitShop;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public interface VisitLogService {
 	 * @param page
 	 * @return
 	 */
-	List<Shop> findVisitShopsByCusomterID(int id, Pagination page);
+	List<VisitShop> findVisitShopsByShopId(String id);
 	
 	/**
 	 * 新增访问记录
@@ -32,6 +33,8 @@ public interface VisitLogService {
 	 * @param shop_id
 	 * @return
 	 */
-	int addVisitShopLog(int customer_id, int shop_id);
+	int addVisitShopLog(String customer_id, String shop_id);
+
+	Integer countShopVisit(String countType ,String shopId);
 	
 }

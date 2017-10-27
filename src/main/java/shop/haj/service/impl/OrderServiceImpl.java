@@ -285,15 +285,25 @@ public class OrderServiceImpl implements OrderService {
 			if(images != null && images.size() > 0) {
 				orderGoodsInfo.setImageUrl(images.get(0).getUrl());//选择首张图片作为默认
 			}
-			
-			final_price += goods.getSellPrice() * orderGoodsInfo.getCount();
+
+			if(!StringUtils.isEmpty(orderGoodsInfo.getGoodsSku())){
+				for(GoodsSkuDetail detail:goods.getGoodsSkuInfo().getGoodsSkuDetails()){
+					if(detail.getSku().equals(orderGoodsInfo.getGoodsSku())){
+						final_price  += detail.getGoodsSkuDetailBase().getPrice() * orderGoodsInfo.getCount();
+					}
+				}
+			}else{
+				final_price += goods.getSellPrice() * orderGoodsInfo.getCount();
+			}
+
+
 			logger.info("订单统计当前价格：店铺:{}, 买家:{}, 商品:{}，单价:{}, 个数:{}，当前总价:{}",
 					order.getShopId(), order.getCustomerId(), goods.getId(), goods.getSellPrice(),
 					orderGoodsInfo.getCount(), final_price);
 		}
 		logger.info("订单统计总价：店铺:{}, 买家:{}, 最终价格:{}",
 				order.getShopId(), order.getCustomerId(), final_price);
-		
+		final_price += order.getPostFee();
 		order.setFinalPrice(final_price);
 		
 		

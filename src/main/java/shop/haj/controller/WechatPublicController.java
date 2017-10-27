@@ -61,7 +61,7 @@ public class WechatPublicController {
 				TextMessage textMessage = new TextMessage();
 				textMessage.setToUserName(xmlMap.get("FromUserName"));
 				textMessage.setFromUserName(xmlMap.get("ToUserName"));
-				textMessage.setCreateTime(new Date().getTime());
+				textMessage.setCreateTime(System.currentTimeMillis());
 				textMessage.setMsgType("text");
 				textMessage.setContent("您发送的消息: " + xmlMap.get("Content"));
 				responseXml = MessageUtil.textMessageToXml(textMessage);
@@ -74,7 +74,7 @@ public class WechatPublicController {
 				TextMessage textMessage = new TextMessage();
 				textMessage.setToUserName(xmlMap.get("FromUserName"));
 				textMessage.setFromUserName(xmlMap.get("ToUserName"));
-				textMessage.setCreateTime(new Date().getTime());
+				textMessage.setCreateTime(System.currentTimeMillis());
 				textMessage.setMsgType("text");
 				textMessage.setContent(eventKey + "功能暂未开放，尽请期待!");
 				responseXml = MessageUtil.textMessageToXml(textMessage);

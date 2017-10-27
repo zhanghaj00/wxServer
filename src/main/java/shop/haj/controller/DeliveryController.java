@@ -49,8 +49,20 @@ public class DeliveryController  extends  BaseController{
                                           @RequestBody Delivery delivery){
         if(null != delivery){
             delivery.setShopId(shopId);
+            delivery.setDef(true);
 
         }
         return rtnParam(0,deliveryService.insert(delivery));
+    }
+
+    @ApiOperation(value = "根据供应商ID查找运费",notes = "")
+    @PostMapping(value = {"/seller/supplier_delivery"})
+    public Map<String,Object> findDeliveryBySupplierId(@RequestHeader("shop_id") String shopId,
+                                          @RequestBody Delivery delivery){
+        if(null != delivery){
+            delivery.setShopId(shopId);
+
+        }
+        return rtnParam(0,deliveryService.findAll(delivery));
     }
 }

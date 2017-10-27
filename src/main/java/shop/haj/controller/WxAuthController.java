@@ -8,12 +8,10 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import shop.haj.entity.Customer;
 import shop.haj.service.CustomerService;
+import shop.haj.service.VisitLogService;
 import shop.haj.service.WxAuthService;
 import shop.haj.utils.Api;
 import shop.haj.utils.ApiConstant;
@@ -38,6 +36,9 @@ public class WxAuthController extends BaseController{
 	@Autowired
 	private CustomerService customerService;
 
+	@Autowired
+	private VisitLogService visitLogService;
+
 	/**
 	 * 根据客户端传过来的code从微信服务器获取appid和session_key，然后生成3rdkey返回给客户端，后续请求客户端传3rdkey来维护客户端登录态
 	 * @param wxCode	小程序登录时获取的code
@@ -52,7 +53,7 @@ public class WxAuthController extends BaseController{
 	public Map<String,Object> createSssion(@RequestParam(value = "code")String wxCode){
 
 
-		/*Map<String,Object> wxSessionMap = wxAuthService.getWxSession(wxCode);
+		Map<String,Object> wxSessionMap = wxAuthService.getWxSession(wxCode);
 
 		if(null == wxSessionMap){
 			logger.error("can not find session with wxCode: {}, errCode:{}", wxCode, "50010");
@@ -72,21 +73,10 @@ public class WxAuthController extends BaseController{
 		
 		Long expires = Long.valueOf(String.valueOf(wxSessionMap.get("expires_in")));
 		String thirdSession = wxAuthService.create3rdSession(wxOpenId, wxSessionKey, expires);
-		logger.info("thirdSession={}, expires time is {}", thirdSession, expires);*/
-		
-		/*return rtnParam(0, ImmutableMap.of("sessionId",thirdSession));*/
-		Map<String,Object> wxSessionMap = new HashMap<>();
-		wxSessionMap.put("openid","wx1cebfdebba0a65ab");
-		wxSessionMap.put("session_key","bc45f5cbf6b5bd2d79df496b3906b07c");
-		wxSessionMap.put("expires_in",10000L);
-
-		String thirdSession = wxAuthService.create3rdSession("wx1cebfdebba0a65ab", "bc45f5cbf6b5bd2d79df496b3906b07c", 100000L);
+		logger.info("thirdSession={}, expires time is {}", thirdSession, expires);
 
 		Map<String,Object> result = new ImmutableMap.Builder<String,Object>().put("third_session",thirdSession).build();
 		return rtnParam(0, result);
-
-
-
 
 	}
 
@@ -158,7 +148,9 @@ public class WxAuthController extends BaseController{
 	 */
 	@Api(name = ApiConstant.WX_DECODE_USERINFO)
 	@GetMapping(value = "/customer/auth/decodeUserInfo")
-	public Map<String,Object> decodeUserInfo(@RequestParam(value = "encryptedData")String encryptedData,
+	public Map<String,Object> decodeUserInfo(
+			@RequestParam(value = "shop_code")String shop_id,
+			@RequestParam(value = "encryptedData")String encryptedData,
 			@RequestParam(value = "iv")String iv,
 			@RequestParam(value = "sessionId")String sessionId){
 		
@@ -206,7 +198,7 @@ public class WxAuthController extends BaseController{
 		return rtnParam(50021, null);*/
 
 		Gson gson = new Gson();
-		Customer customer = addCustomer(gson.fromJson(encryptedData, Customer.class), open_id);
+		Customer customer = addCustomer(gson.fromJson(encryptedData, Customer.class), open_id,shop_id);
 		if(customer.getId()!= null){
 
 			//加密信息
@@ -215,22 +207,22 @@ public class WxAuthController extends BaseController{
 			Map<String, Object> data = Maps.newHashMap();
 			data.put("wx_login_code", wxLoginCode);
 			data.put("user", customer);
-
-			logger.info("customer={}, wxLoginCode={}", customer, wxLoginCode);
-
 			return rtnParam(0, data);
 		}else{
 			return rtnParam(50021, null);
 		}
 	}
 	
-	private Customer addCustomer(Customer customer, String open_id){
+	private Customer addCustomer(Customer customer, String open_id,String shop_id){
 		if(customer == null) return null;
 		
 		//如果open_id已经被记录过，则更新数据，否则新增用户
 		if(customerService.findByOpenID(open_id) == null){
+			visitLogService.addVisitShopLog(customer.getId(),shop_id);
 			customer.setOpenId(open_id);
 			return customerService.add(customer);
+			//记录加入日志
+
 		}else {
 			if(customer.getId() == null){
 				Customer new_customer = customerService.findByOpenID(open_id);
@@ -244,18 +236,23 @@ public class WxAuthController extends BaseController{
 	@ApiImplicitParam(name = "code", value = "用户登录回调内容会带上 ", required = true, dataType = "String")
 	@Api(name = ApiConstant.WX_CODE)
 	@GetMapping(value = "/seller/auth/login")
-	public Map<String,Object> sellerAuthLogin(@RequestParam(value = "code")String wxCode){
-		/*Map<String,Object> wxSessionMap = wxAuthService.getWxSession(wxCode);
+	public Map<String,Object> sellerAuthLogin(@RequestParam(value = "code")String wxCode,@RequestParam(value = "phone")String phone){
+
+		if(!"13718699210".equals(phone)){
+			logger.error("不合法的用户 {}", "50010");
+			return rtnParam(50010, "非法用户");
+		}
+		Map<String,Object> wxSessionMap = wxAuthService.getWxSession(wxCode);
 
 		if(null == wxSessionMap){
 			logger.error("can not find session with wxCode: {}, errCode:{}", wxCode, "50010");
-			return rtnParam(50010, null);
+			return rtnParam(50010, "非法用户");
 		}
 
 		//获取异常
 		if(wxSessionMap.containsKey("errcode")){
 			logger.error("find error code in response, return code:50020");
-			return rtnParam(50020, null);
+			return rtnParam(50020, "非法用户");
 		}
 
 		String wxOpenId = (String)wxSessionMap.get("openid");
@@ -265,33 +262,9 @@ public class WxAuthController extends BaseController{
 
 		Long expires = Long.valueOf(String.valueOf(wxSessionMap.get("expires_in")));
 		String thirdSession = wxAuthService.create3rdSession(wxOpenId, wxSessionKey, expires);
-		logger.info("thirdSession={}, expires time is {}", thirdSession, expires);*/
-
-		/*return rtnParam(0, ImmutableMap.of("sessionId",thirdSession));*/
-		Map<String,Object> wxSessionMap = new HashMap<>();
-		wxSessionMap.put("openid","wx1cebfdebba0a65ab");
-		wxSessionMap.put("session_key", "bc45f5cbf6b5bd2d79df496b3906b07c");
-		wxSessionMap.put("expires_in", 10000L);
-
-		String thirdSession = wxAuthService.create3rdSession("wx1cebfdebba0a65ab", "bc45f5cbf6b5bd2d79df496b3906b07c", 100000L);
+		logger.info("thirdSession={}, expires time is {}", thirdSession, expires);
 
 		Map<String,Object> result = new ImmutableMap.Builder<String,Object>().put("third_session",thirdSession).build();
 		return rtnParam(0, result);
 	}
-
-	/*@ApiOperation(value = "获取sessionId", notes = "小用户允许登录后，使用code 换取 session_key api，将 code 换成 openid 和 session_key")
-	@ApiImplicitParam(name = "code", value = "用户登录回调内容会带上 ", required = true, dataType = "String")
-	@Api(name = ApiConstant.WX_CODE)
-	@GetMapping(value = "/seller/auth/check")
-	public Map<String,Object> sellerAuthCheck(@RequestParam(value = "sessionId")String sessionId){
-
-		String sessionCode = wxAuthService.getSessionKey(sessionId);
-
-		if(sessionCode == null) {
-			logger.error("customer not exists, by wxLoginCode:{}", sessionCode);
-			return rtnParam(40010, "session is expired.");
-		}
-
-		return rtnParam(0, true);
-	}*/
 }

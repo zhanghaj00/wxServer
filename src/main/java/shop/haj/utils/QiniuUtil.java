@@ -23,10 +23,10 @@ import java.util.Random;
 public class QiniuUtil {
 
 
-    private  final String ACCESS_KEY = "FNV3gT8EXDEL56C1Jk9GQrmoDX_M65n6IFdV0whY";
-    private  final String SECRET_KEY = "7VSgn-TbqspJpbvlE0s4k0iHgCBXEF6Z3ccXqoEv";
+    private  final String ACCESS_KEY = "bc-FkbYM85lVY4QT3S8QZ1hdD1jpDRQsHHStugDb";
+    private  final String SECRET_KEY = "hzUdpLFaZo3y-zkwKIvxINClCJAUa1PUCQ05NYfx";
 
-    private  final String bucketName = "dsz-shop";
+    private  final String bucketName = "benmo";
 
     final  Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
 

@@ -1,5 +1,6 @@
 package shop.haj.entity;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -40,7 +41,12 @@ public class Address implements Serializable{
 	}
 
 	public String getFullAddress() {
-		return province+city+country+town+detail;
+		StringBuffer buffer = new StringBuffer(StringUtils.isEmpty(province)?"":province);
+		buffer.append(StringUtils.isEmpty(city)?"":city);
+		buffer.append(StringUtils.isEmpty(country)?"":country);
+		buffer.append(StringUtils.isEmpty(town)?"":town);
+		buffer.append(StringUtils.isEmpty(detail)?"":detail);
+		return buffer.toString();
 	}
 
 	/**

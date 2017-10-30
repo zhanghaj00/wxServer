@@ -1,6 +1,7 @@
 package shop.haj.service.impl;
 
 import com.google.common.collect.Lists;
+import jodd.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import shop.haj.entity.Goods;
 import shop.haj.entity.GoodsSkuInfo;
 import shop.haj.entity.Image;
@@ -20,6 +22,8 @@ import shop.haj.service.GoodsService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -113,7 +117,7 @@ public class GoodsServiceImpl implements GoodsService{
 		
 		goods.setCreateTime(format.format(System.currentTimeMillis()));
 		goods.setUpdateTime(format.format(System.currentTimeMillis()));
-
+		goods.setImageUrl(CollectionUtils.isEmpty(goods.getImages())?null:goods.getImages().get(0).getUrl());
 		//首先添加商品基本信息，如果成功，goods的id会被设置
 		goods = mongoGoodsRepository.insert(goods);
 		
@@ -126,13 +130,13 @@ public class GoodsServiceImpl implements GoodsService{
 				goodsSkuRepository.addDetail(goods.getGoodsSkuInfo().getGoodsSkuDetails(), goods.getId());
 			}
 		}*/
-		List<Image> goodsImage = goods.getImages();
+		/*List<Image> goodsImage = goods.getImages();
 		for(Image image:goodsImage){
 			image.setGoodsId(goods.getId());
 			image.setShopId(goods.getShopId());
 		}
 		//在新增商品成功后，保存图片信息
-		mongoImageRepository.insert(goodsImage);
+		mongoImageRepository.insert(goodsImage);*/
 
 		//重置分页缓存
 		clearShopPageCache(goods.getShopId());
@@ -141,7 +145,7 @@ public class GoodsServiceImpl implements GoodsService{
 	}
 	
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = RuntimeException.class)
 	public Goods updateGoods(Goods goods) {
 		
 		/*GoodsSkuInfo skuInfo = goods.getGoodsSkuInfo();
@@ -164,6 +168,8 @@ public class GoodsServiceImpl implements GoodsService{
 		//清除缓存
 		clearShopPageCache(goods.getShop_id());
 		clearGoodsCache(goods.getId());*/
+
+		mongoGoodsRepository.save(goods);
 		
 		return goods;
 	}
@@ -171,16 +177,10 @@ public class GoodsServiceImpl implements GoodsService{
 	@Override
 	@Transactional
 	public int deleteGoods(String shop_id, String goods_id) {
-		
-		//删除关联的图片,目前商品是假删除，暂时注释
-//		goodsRepository.deleteImageByGoodsID(goods_id);
-//		goodsSkuRepository.deleteInfo(goods_id);
-		//int result = mongoGoodsRepository.deleteGoods(shop_id, goods_id);
-
-		//清除缓存
-		//clearShopPageCache(shop_id);
-		//(goods_id);
-		
+		Goods goods = new Goods();
+		goods.setShopId(shop_id);
+		goods.setId(goods_id);
+		mongoGoodsRepository.delete(goods);
 		return 0;
 	}
 	
@@ -197,10 +197,16 @@ public class GoodsServiceImpl implements GoodsService{
 	public int addGoodsImage(String shop_id, Image image, String goods_id) {
 
 		if(null == image) return 0;
-		image.setShopId(shop_id);
-		image.setGoodsId(goods_id);
-		mongoImageRepository.insert(Lists.newArrayList(image));
-		
+		Goods goods = mongoGoodsRepository.findByIdAndShopId(goods_id,shop_id);
+		List<Image> images = goods.getImages();
+		if(!CollectionUtils.isEmpty(images)){
+			images.add(image);
+		}else{
+			goods.setImageUrl(image.getUrl());
+			goods.setImages(Lists.newArrayList(image));
+		}
+		//mongoImageRepository.insert(Lists.newArrayList(image));
+		mongoGoodsRepository.save(goods);
 		//清除缓存
 		clearShopPageCache(shop_id);
 		clearGoodsCache(goods_id);
@@ -216,13 +222,26 @@ public class GoodsServiceImpl implements GoodsService{
 	 * @return
 	 */
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = RuntimeException.class)
 	public int deleteGoodsImage(String shop_id, String image_id, String goods_id) {
-		//int result = mongoGoodsRepository.deleteSingleGoodsImage(image_id, goods_id);
-		
+
+		if(StringUtil.isEmpty(image_id)){return 0;}
+
+		Goods goods = mongoGoodsRepository.findByIdAndShopId(goods_id,shop_id);
+		List<Image> images = goods.getImages();
+		if(!CollectionUtils.isEmpty(images)){
+			Iterator<Image> it = images.iterator();
+			while (it.hasNext()){
+				if(image_id.equals(it.next().getId())){
+					it.remove();
+				}
+			}
+		}
+		goods.setImages(images);
+		mongoGoodsRepository.save(goods);
 		//清除缓存
-		//clearShopPageCache(shop_id);
-		//clearGoodsCache(goods_id);
+		clearShopPageCache(shop_id);
+		clearGoodsCache(goods_id);
 		
 		return 1;
 	}

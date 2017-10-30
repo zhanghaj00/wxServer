@@ -20,7 +20,7 @@ public abstract class BaseController {
 	protected Map<String,Object> rtnParam(Integer errorCode,Object data) {
 		//正常的业务逻辑
 		if(errorCode == 0){
-			return ImmutableMap.of("code", errorCode,"data", (data == null)? new Object() : data);
+			return ImmutableMap.of("code", errorCode,"data", (data == null)? new String() : data);
 		}else{
 			return ImmutableMap.of("errorCode", errorCode, "errmsg", String.valueOf(data));
 		}

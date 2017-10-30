@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.Random;
 
 /**
  * <p>图片实体</p>
@@ -20,7 +21,7 @@ import java.io.Serializable;
 public class Image implements Serializable{
 
 	@Id
-	private String id;
+	private String id = System.currentTimeMillis()+ "" + new Random().nextInt(10000);
 
 	private String shopId;
 

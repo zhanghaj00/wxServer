@@ -46,6 +46,8 @@ public class Goods implements Serializable{
 	
 	private String innerCid;
 
+	private String imageUrl;
+
 	private String innerCidName;
 	
 	private String globalCid;
